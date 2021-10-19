@@ -1,0 +1,27 @@
+{
+  "name": "elemental4game",
+  "version": "1.0.0",
+  "description": "Web Game",
+  "main": "server/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/umarraj008/Elemental4Game.git"
+  },
+  "keywords": [
+    "Web",
+    "Game"
+  ],
+  "author": "Cybercloud Studios",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/umarraj008/Elemental4Game/issues"
+  },
+  "homepage": "https://github.com/umarraj008/Elemental4Game#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^4.3.1"
+  }
+}
