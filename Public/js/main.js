@@ -1,17 +1,21 @@
 const c = document.getElementById("canvas");
 const ctx = c.getContext("2d");
 
+var scene = 0;
+var dt = 0, lastTime = 0;
+var sceneManager = new SceneManager(0);
+
 function setup() {
     c.width = 1920;
     c.height = 1080;
 }
 
-function main() {
+function main(time = 0) {
     requestAnimationFrame(main);
+    dt = time - lastTime;
+    lastTime = time;
     
-    //test
-    ctx.fillStyle = "lime";
-    ctx.fillRect(0,0,500,500);
+    sceneManager.run(dt);
 }
 
 setup();
