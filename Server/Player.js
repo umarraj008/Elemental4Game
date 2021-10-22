@@ -1,5 +1,5 @@
-class Player {
-    constructor() {
+module.exports = class Player {
+    constructor(s) {
         this.health = 100;
         this.points = 5;
         this.totalDamage = 0;
@@ -11,6 +11,8 @@ class Player {
             {name: "", cost: 0, damage: ""},
             {name: "", cost: 0, damage: ""},
         ];
+
+        this.socket = s;
     }
     
     takeDamage(ammount) {
