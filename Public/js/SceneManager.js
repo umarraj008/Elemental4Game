@@ -55,8 +55,11 @@ class SceneManager {
         ctx.font = "50px Arial";
         ctx.fillText("Play", c.width/2, c.height/2);
         ctx.fillText("Settings", c.width/2, c.height/2+100);
-    
+        
+
+        
     }
+
 
     mouseClick() {
         switch(scene) {
