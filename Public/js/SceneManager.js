@@ -42,21 +42,21 @@ class SceneManager {
         //draw title text
         ctx.fillStyle = "white";
         ctx.textAlign = "center";
-        ctx.font = "100px Arial";
+        ctx.font = "100px Arial white";
         ctx.fillText("Elemental 4", c.width/2, c.height/2-200);
         
-        //play button
-        //this.playButton.draw(dt);
+        // play button
+        this.playButton.draw(dt);
 
-        //settings button
-        //this.settingsButton.draw(dt);
+        // settings button
+        this.settingsButton.draw(dt);
 
         //placeholder
         ctx.font = "50px Arial";
+        ctx.fillStyle = "blue";
         ctx.fillText("Play", c.width/2, c.height/2);
+        ctx.fillStyle = 'blue';
         ctx.fillText("Settings", c.width/2, c.height/2+100);
-        
-
         
     }
 
