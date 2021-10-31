@@ -17,18 +17,21 @@ class SceneManager {
                 this.drawTitleScreen(dt);
                 break;
             case 2: //settings screen
-                // this.drawSettings();
+                this.drawSettings();
                 break;
             case 3: //credits screen
-                // this.drawCredits();
+                this.drawCredits();
                 break;
             case 4: //menu screen
-                // this.drawMenu();
+                this.drawMenu();
                 break;
-            case 5: //game screen
+            case 5: //perk screen
+                this.drawPerkScreen();
+                break;
+            case 6: //game screen
                 // this.drawGame();
                 break;
-            case 6: //results screen
+            case 7: //results screen
                 // this.drawGameResults();
                 break;
         }
@@ -56,6 +59,49 @@ class SceneManager {
         ctx.fillText("Play", c.width/2, c.height/2);
         ctx.fillText("Settings", c.width/2, c.height/2+100);
     
+    }
+    drawSettings() {
+        ctx.fillStyle = "black";
+        ctx.fillRect (0,0,c.width, c.height);
+        
+        //this will be draw title text 
+        ctx.fillStyle = "white";
+        ctx.font = "100px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("Settings",c.width/2, 200);
+    }
+
+    drawCredits(){
+        ctx.fillStyle = "black";
+        ctx.fillRect (0,0,c.width, c.height);
+        
+        //this will draw the credit title screen.
+        ctx.fillStyle= "white";
+        ctx.font = "100px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("Game Credits",c.width/2, 200);
+    }
+    
+    drawMenu() {
+        ctx.fillStyle = "black";
+        ctx.fillRect (0,0,c.width, c.height);
+
+        //this will draw the Menu screen text.
+        ctx.fillStyle= "white";
+        ctx.font = "100px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("Menu",c.width/2, 200);
+    }
+
+    drawPerkScreen() {
+        ctx.fillStyle = "black";
+        ctx.fillRect (0,0,c.width, c.height);
+
+        //this will draw the Perk screen text
+        ctx.fillStyle= "white";
+        ctx.font = "100px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("Perk Screen",c.width/2, 200);
     }
 
     mouseClick() {
