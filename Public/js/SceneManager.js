@@ -3,8 +3,8 @@ class SceneManager {
         this.scene = start;
         this.splash = new Splash();
 
-        this.playButton = new Button();
-        this.settingsButton = new Button();
+        this.playButton = new Button(100,100,100,100);
+        this.settingsButton = new Button(400,400,400,400);
     }
 
     run(dt) {
@@ -46,10 +46,10 @@ class SceneManager {
         ctx.fillText("Elemental 4", c.width/2, c.height/2-200);
         
         // play button
-        this.playButton.draw(dt);
+        this.playButton.draw(dt,mouseX,mouseY);
 
         // settings button
-        this.settingsButton.draw(dt);
+        this.settingsButton.draw(dt,mouseX,mouseY);
 
         //placeholder
         ctx.font = "50px Arial";
@@ -62,9 +62,12 @@ class SceneManager {
 
 
     mouseClick() {
-        switch(scene) {
+        switch(this.scene) {
             case 1: //title screen
-
+                if (this.playButton.mouseOver(mouseX,mouseY)) {
+                    this.scene++;
+                }
+                console.log("test");
                 break;
             case 2: //settings screen
                 

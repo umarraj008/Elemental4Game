@@ -1,19 +1,29 @@
 class Button {
-    constructor() {
-        this.x = 0;
-        this.y = 0;
-        this.width = 0;
-        this.height = 0;
+    constructor(x1,y1,width1,height1) {
+        this.x = x1;
+        this.y = y1;
+        this.width = width1;
+        this.height = height1;
     }
 
-    draw() {
-        // ctx.fillStyle = '#00176E';
-        ctx.fillRect(890,490,140,75);
+    draw(dt,mx,my) {
 
-        ctx.fillRect(865,595,190,60,);
+        if (this.mouseOver(mx,my)) {
+            ctx.fillStyle = 'red';
+        } else {
+            ctx.fillStyle = '#FFFFFF';
+        }
+
+        ctx.fillRect(this.x,this.y,this.width,this.height);
+
+
     }
 
-    mouseOver() {
-
+    mouseOver(mx,my) {
+        if (mx >= this.x && mx <= this.x + this.width && my >= this.y && my <= this.y + this.height) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
