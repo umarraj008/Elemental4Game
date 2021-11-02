@@ -14,3 +14,7 @@ canvas {
 body {
     background-color: black;
 }
+
+.playButton {
+    position: absolute;
+}
