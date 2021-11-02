@@ -46,7 +46,7 @@ window.onmousemove = function(e) {
 //event listening for mouse click
 window.onclick = function(e) {
     sceneManager.mouseClick();
-    console.log("test2");
+    //console.log("test2");
 }
 
 setup();
