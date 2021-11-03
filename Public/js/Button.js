@@ -19,7 +19,8 @@ class Button {
 
         ctx.fillRect(this.x,this.y,this.width,this.height);
 
-        ctx.fillStyle = "lime";
+        ctx.font = "20px Arial";
+        ctx.fillStyle = "black";
         ctx.textAlign = "center";
         ctx.fillText(this.text, this.x + this.width/2, this.y + this.height / 2);
 

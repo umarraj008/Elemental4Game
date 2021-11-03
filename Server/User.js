@@ -3,7 +3,7 @@ module.exports = class User {
         this.socket = s;
         this.name;
         this.xp;
-        this.gameID;
+        this.gameID = null;
     }
     
 }

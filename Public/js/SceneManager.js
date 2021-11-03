@@ -2,6 +2,7 @@ class SceneManager {
     constructor(start) {
         this.scene = start;
         this.splash = new Splash();
+        this.matchmaking = false;
 
         this.playButton = new Button(c.width/2-150,c.height/2-75,300,150, "Play");
         this.settingsButton = new Button(c.width/2-150,c.height/2+100,300,150, "Settings");
@@ -9,11 +10,11 @@ class SceneManager {
 
         this.actionButtons = {
             wait: new Button(20,600,200,100,"Wait +2p + 10hp"),
-            heal: new Button(200+40,600,200,100,"Heal -6p + 30hp"),
-            attack1: new Button(400+60,600,200,100,"Attack 1 -3p +10dam"),
-            attack2: new Button(600+80,600,200,100,"Attack 2 -4p +20dam"),
-            attack3: new Button(800+100,600,200,100,"Attack 3 -5p +30dam"),
-            ultimate: new Button(1000+120,600,200,100,"Ultimate -15p +70dam"),
+            heal: new Button(200+80,600,200,100,"Heal -6p + 30hp"),
+            attack1: new Button(400+100,600,200,100,"Attack 1 -3p +10dam"),
+            attack2: new Button(600+120,600,200,100,"Attack 2 -4p +20dam"),
+            attack3: new Button(800+140,600,200,100,"Attack 3 -5p +30dam"),
+            ultimate: new Button(1000+160,600,200,100,"Ultimate -15p +70dam"),
         };
 
         this.characterSelect = {
@@ -54,6 +55,19 @@ class SceneManager {
             case 8: //results screen
                 // this.drawGameResults();
                 break;
+        }
+
+        //tell user if they are connected to server
+        if (socket.connected) {
+            ctx.fillStyle = "lime";
+            ctx.textAlign = "left";
+            ctx.font = "30px Arial";
+            ctx.fillText("Connected to Server", 50, c.height-100);
+        } else {
+            ctx.fillStyle = "red";
+            ctx.textAlign = "left";
+            ctx.font = "30px Arial";
+            ctx.fillText("Not Connected to Server", 50, c.height-100);
         }
     }
 
@@ -114,7 +128,12 @@ class SceneManager {
         ctx.textAlign = "center";
         ctx.fillText("Menu",c.width/2, 200);
 
-        this.matchmakeButton.draw(dt, mouseX, mouseY);
+        if (this.matchmaking) {
+            ctx.fillStyle = "white";
+            ctx.fillText("Matchmaking...", c.width/2, c.height/2);
+        } else {
+            this.matchmakeButton.draw(dt, mouseX, mouseY);
+        }
     }
 
     drawPerkScreen() {
@@ -142,7 +161,15 @@ class SceneManager {
         ctx.fillStyle = "black";
         ctx.fillRect(0,0,c.width,c.height);
 
+        //which player am i 
+        ctx.fillStyle = "white";
+        ctx.textAlign = "center";
+        ctx.font = "50px Arial";
+        ctx.fillText("Player " + game.whichPlayerAmI, c.width/2, 100);
+
         if (game.turn) {
+            ctx.fillText("Your Turn!", c.width/2, 200);
+
             this.actionButtons.wait.draw(dt, mouseX, mouseY);
             this.actionButtons.heal.draw(dt, mouseX, mouseY);
             this.actionButtons.attack1.draw(dt, mouseX, mouseY);
@@ -156,8 +183,14 @@ class SceneManager {
         ctx.font = "40px Arial";
         ctx.fillText("health: " + game.health, 50, 200);
         ctx.fillText("points: " + game.points, 50, 250);
-        ctx.fillText("turn: " + game.turn, 50, 300);
 
+        if (game.over) {
+            ctx.fillStyle = "red";
+            ctx.textAlign = "center";
+            ctx.font = "100px Arial";
+            ctx.fillText("Game Over!", c.width/2,c.height/2);
+            ctx.fillText(game.winner + " Wins!", c.width/2,c.height/2+100);
+        }
     }
 
     mouseClick() {
@@ -178,7 +211,6 @@ class SceneManager {
             case 4: //menu screen
                 if (this.matchmakeButton.mouseOver(mouseX, mouseY)) {
                     matchmake();
-                    this.scene = 6;
                 }
                 break;
             case 5:

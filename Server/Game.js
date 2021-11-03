@@ -1,15 +1,15 @@
 const Player = require("./Player");
 
 module.exports = class Game {
-    constructor(id, p1, p2) {
+    constructor(id, p1, p1Name, p2, p2Name) {
         this.id = id;
         this.player1Socket = p1;
         this.player2Socket = p2;
         this.winner = null;
         this.gameId = null;
         
-        this.player1 = new Player(this.player1Socket);
-        this.player2 = new Player(this.player2Socket);
+        this.player1 = new Player(this.player1Socket, "Player 1");
+        this.player2 = new Player(this.player2Socket, "Player 2");
 
         this.ready = 0;
     }
@@ -17,6 +17,8 @@ module.exports = class Game {
     startGame() {
         //tell players to pick characters
         this.sendMessageToBothPlayers("pick-character", this.id);
+        this.player1.sendMessage("your-player", 1);
+        this.player2.sendMessage("your-player", 2);
     }
 
     pickRandomPlayer() {
@@ -49,35 +51,39 @@ module.exports = class Game {
             //tell player 1 its their turn
             this.player1.setTurn(false);
             this.player2.setTurn(true);
-            
         } else if (this.player2.getTurn()) {
             //tell player 2 its their turn
             this.player1.setTurn(true);
             this.player2.setTurn(false);
-            
         }
 
+        //give 2 points to each player
         this.player1.points += 2;
         this.player2.points += 2;
 
+        //give 1 extra point if players health is low
         if (this.player1.health <= 40) {
             this.player1.points++;
         }
-
+        
+        //give 1 extra point if players health is low
         if (this.player2.health <= 40) {
             this.player2.points++;
         }
+    
+        //update player data
+        this.player1.gameUpdate();
+        this.player2.gameUpdate();
 
+        //check for game over
         if (this.player1.health <= 0) {
-            this.winner = 2;
+            this.winner = this.player2.name;
             this.sendResults();
         } else if (this.player2.health <= 0) {
-            this.winner = 1;
+            this.winner = this.player1.name;
             this.sendResults();
         }
 
-        this.player1.gameUpdate();
-        this.player2.gameUpdate();
     }
 
     playerAction(action) {
@@ -96,9 +102,11 @@ module.exports = class Game {
                     this.player1.points -= this.player1.attacks[action].cost;
                     this.player2.takeDamage(this.player1.attacks[action].damage);
                 }
-                this.nextTurn();
+            } else {
+                console.log("costs too much");
+                return;
             }
-        } else {
+        } else if (this.player2.getTurn()) {
             if (this.player2.points >= this.player2.attacks[action].cost) {
                 if (action == 0) { //wait
                     this.player2.health += this.player2.attacks[0].heal;
@@ -111,24 +119,12 @@ module.exports = class Game {
                     this.player2.points -= this.player2.attacks[action].cost;
                     this.player1.takeDamage(this.player2.attacks[action].damage);
                 }
-                this.nextTurn();
+            } else {
+                console.log("costs too much");
+                return;
             }
         }
 
-        //if players are dead
-        if (this.player1.health <= 0) {
-            this.winner = this.player2.name;
-            this.sendResults();
-            return;
-        } else if (this.player2.health <= 0) {
-            this.winner = this.player1.name;
-            this.sendResults();
-            return;
-        }
-
-        //switch player turns
-        this.player1.setTurn(!this.player1.getTurn());
-        this.player2.setTurn(!this.player2.getTurn());
         this.nextTurn();
     }
 
@@ -137,6 +133,7 @@ module.exports = class Game {
         //xp calc
         //skill calc
         //upload reslults to database
+        this.sendMessageToBothPlayers("game-winner", {winner: this.winner});
     }
 
     sendMessageToBothPlayers(message, data) {
@@ -157,6 +154,14 @@ module.exports = class Game {
         
         if (this.ready == 2) {
             this.pickRandomPlayer();      
+        }
+    }
+
+    matchCancelled(whoLeft) {
+        if (whoLeft == this.player1Socket.id) {
+            this.player2.sendMessage("game-cancelled");
+        } else if (whoLeft == this.player2Socket.id) {
+            this.player1.sendMessage("game-cancelled");
         }
     }
 }

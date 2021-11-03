@@ -50,7 +50,7 @@ io.sockets.on("connection", function(socket) {
             //matchmakingQueue[1].socket.join(gameID);
             
             //make new game
-            var game = new Game(gameID, matchmakingQueue[0].socket, matchmakingQueue[1].socket);
+            var game = new Game(gameID, matchmakingQueue[0].socket, matchmakingQueue[0].name, matchmakingQueue[1].socket, matchmakingQueue[1].name);
             findPlayer(matchmakingQueue[0].socket.id).gameID = gameID;
             findPlayer(matchmakingQueue[1].socket.id).gameID = gameID;
             
@@ -63,16 +63,14 @@ io.sockets.on("connection", function(socket) {
         }
     });
 
-    socket.on("disconnect", function(socket) {
-        //remove player
-        // try {
-        //     var gameID = findPlayer(socket.id).gameID;
-        //     if (gameID != null) {
-        //         games[gameID].sendMessageToBothPlayers("game-canceled");
-        //     }
-        // } catch(e) {
-
-        // }
+    socket.on("disconnect", function() {
+        //if player was in a game then end match
+        let player = findPlayer(socket.id);
+        if (games[player.gameID] != null || games[player.gameID] != undefined) {
+            games[player.gameID].matchCancelled(socket.id);
+            delete games[player.gameID];
+            console.log("match cancelled");
+        }
         players.delete(socket.id);
     });
 
@@ -86,7 +84,7 @@ io.sockets.on("connection", function(socket) {
 });
 
 function findGame(id) {
-    return games.get(id);
+    return games[id];
 }
 
 function findPlayer(id) {

@@ -1,4 +1,4 @@
-const address = "http://localhost";
+const address = "http://192.168.1.176";
 const port = "3000";
 const socket = io(address + ":" + port, { transports : ['websocket'] });
 var gameID = "";
@@ -6,6 +6,9 @@ var game = {
     points: 0,
     health: 0,
     turn: false,
+    winner: null,
+    over: false,
+    whichPlayerAmI: null,
 }
 
 socket.on("connect", function() {
@@ -19,6 +22,7 @@ socket.on("disconnect", function() {
 
 socket.on("pick-character", function(gID) {
     console.log("pick your character");
+    sceneManager.scene = 6;
     gameID = gID;
 });
 
@@ -37,13 +41,32 @@ socket.on("game-update", function(data) {
     game.turn = data.turn;
 });
 
-socket.on("game-canceled", function() {
-    sceneManager.scene = 4
+socket.on("game-winner", function(data) {
+    game.over = true;
+    game.winner = data.winner;
+});
+
+socket.on("game-cancelled", function() {
+    sceneManager.scene = 4;
+    console.log("Game was cancelled");
     gameID = "";
+    game = {
+        points: 0,
+        health: 0,
+        turn: false,
+        winner: null,
+        over: false,
+    }
+    sceneManager.matchmaking = false;
+});
+
+socket.on("your-player", function(which) {
+    game.whichPlayerAmI = which;
 });
 
 function matchmake() {
     socket.emit("matchmake");
+    sceneManager.matchmaking = true;
 }
 
 function selectPlayer(which) {
