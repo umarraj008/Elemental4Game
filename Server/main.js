@@ -1,5 +1,5 @@
 //Constant variables for server
-const Player = require("./Player");
+const User = require("./User");
 const Game = require("./Game");
 const express = require("express");
 const app = express();
@@ -25,12 +25,14 @@ const io = require("socket.io")(server);
 //list of players connected to the server
 var players = new Map();
 var matchmakingQueue = [];
+var games = {};
+//var rooms = io.sockets.adapter.rooms;
 
 io.sockets.on("connection", function(socket) {
     console.log("Player has connected to the server");
 
     socket.on("join-server", function() {
-        let player = new Player(socket);
+        let player = new User(socket);
         players.set(socket.id, player);
     });
 
@@ -39,19 +41,51 @@ io.sockets.on("connection", function(socket) {
         matchmakingQueue.push(player);
 
         if (matchmakingQueue.length >= 2) {
+
+            //make game id
             let gameID = makeGameID();
-            matchmakingQueue[0].socket.join(gameID);
-            matchmakingQueue[1].socket.join(gameID);
+
+            //make players join room
+            //matchmakingQueue[0].socket.join(gameID);
+            //matchmakingQueue[1].socket.join(gameID);
+            
+            //make new game
+            var game = new Game(gameID, matchmakingQueue[0].socket, matchmakingQueue[0].name, matchmakingQueue[1].socket, matchmakingQueue[1].name);
+            findPlayer(matchmakingQueue[0].socket.id).gameID = gameID;
+            findPlayer(matchmakingQueue[1].socket.id).gameID = gameID;
+            
+            //remove players from matchmaking queue
             matchmakingQueue.splice(0,2);
-            console.log("room created: " + gameID);
+
+            //set game
+            games[gameID] = game;
+            games[gameID].startGame();
         }
     });
 
-    socket.on("disconnect", function(socket) {
-        //remove player
+    socket.on("disconnect", function() {
+        //if player was in a game then end match
+        let player = findPlayer(socket.id);
+        if (games[player.gameID] != null || games[player.gameID] != undefined) {
+            games[player.gameID].matchCancelled(socket.id);
+            delete games[player.gameID];
+            console.log("match cancelled");
+        }
         players.delete(socket.id);
     });
+
+    socket.on("player-selected", function(data) {
+        games[data.id].playerSelected(socket.id, data.type);
+    });
+
+    socket.on("player-action", function(data) {
+        games[data.id].playerAction(data.action);
+    });
 });
+
+function findGame(id) {
+    return games[id];
+}
 
 function findPlayer(id) {
     return players.get(id);
