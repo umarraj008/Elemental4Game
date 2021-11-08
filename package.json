@@ -4,7 +4,7 @@
   "description": "Web Game",
   "main": "server/main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server/main.js"
   },
   "repository": {
     "type": "git",
