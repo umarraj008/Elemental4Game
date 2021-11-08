@@ -5,9 +5,8 @@ class SceneManager {
         this.matchmaking = false;
 
         this.playButton = new Button(c.width/2-150,c.height/2-75,300,150, "Play");
-        this.settingsButton = new Button(c.width/2-150,c.height/2+100,300,150, "Settings");
-        
-        c
+        this.settingsButton = new Button(c.width/2+300,c.height/2-100,300,150, "Settings");
+        this.matchmakeButton =  new Button(c.width/2-600,c.height/2-100,300,150, "Matchmake");
         this.actionButtons = {
             wait: new Button(20,600,200,100,"Wait +2p + 10hp"),
             heal: new Button(200+80,600,200,100,"Heal -6p + 30hp"),
@@ -27,6 +26,9 @@ class SceneManager {
         this.settingBackButton = new Button(c.width/2-150,c.height/2+300,300,150, "Back");
         this.settingCreditButton = new Button(c.width/2-150,c.height/2+100,300,150, "Credits");
         this.creditBackButton = new Button(c.width/2-150,c.height/2+300,300,150, "Back");
+        this.perkScreenButton = new Button(c.width/2-150,c.height/2-100,300,150, "Perk Screen");
+        this.perkBackButton = new Button(c.width/2-150,c.height/2+300,300,150, "Back");
+        this.menuBackButton = new Button(c.width/2-300,c.height/2+300,600,100, "Back");
     }
 
 
@@ -90,8 +92,7 @@ class SceneManager {
         // play button
         this.playButton.draw(dt,mouseX,mouseY);
 
-        // settings button
-        this.settingsButton.draw(dt,mouseX,mouseY);
+        
 
         
     }
@@ -116,10 +117,36 @@ class SceneManager {
         ctx.fillRect (0,0,c.width, c.height);
         
         //this will draw the credit title screen.
-        ctx.fillStyle= "white";
+        ctx.fillStyle= "Blue";
         ctx.font = "100px Arial";
         ctx.textAlign = "center";
-        ctx.fillText("Game Credits",c.width/2, 200);
+        ctx.fillText("CyberCloud Studios",c.width/2, 200);
+
+        //button section for credits
+        this.creditBackButton.draw (dt,mouseX, mouseY);
+
+        //This will be the actual credits
+       
+        ctx.fillStyle= "white";
+        ctx.font = "30px Arial";
+        ctx.textAlign = "center";
+
+        ctx.fillText("Ice, Lava and Air Background",c.width/2, 275);
+
+        ctx.font = "15px Arial";
+        ctx.fillText("Glacial Mountains: Parallax Background by Vicente Nitti (www.vnitti.itch.io)",c.width/2, 340);
+        ctx.fillText("Licensed under Creative Commons: By Attribution 4.0 License",c.width/2, 380);
+        ctx.fillText("http://creativecommons.org/licenses/by/4.0/",c.width/2, 420);
+        ctx.fillText("Parts of this work was remixed.",c.width/2, 460);
+
+        ctx.font = "30px Arial";
+        ctx.fillText("Earth Background",c.width/2, 595);
+
+        ctx.font = "15px Arial";
+        ctx.fillText("Grassy Mountains: Parallax Background by Vicente Nitti (www.vnitti.itch.io)",c.width/2, 660);
+        ctx.fillText("Licensed under Creative Commons: By Attribution 4.0 License",c.width/2, 700);
+        ctx.fillText("http://creativecommons.org/licenses/by/4.0/",c.width/2, 740);
+        ctx.fillText("Parts of this work was remixed.",c.width/2, 780);
     }
     
     drawMenu() {
@@ -133,11 +160,17 @@ class SceneManager {
         ctx.fillText("Menu",c.width/2, 200);
 
         if (this.matchmaking) {
-            ctx.fillStyle = "white";
-            ctx.fillText("Matchmaking...", c.width/2, c.height/2);
+            ctx.font = "50px Arial";
+            ctx.fillStyle = "Red";
+            ctx.fillText("Matchmaking...", c.width/2, c.height/2-200);
         } else {
             this.matchmakeButton.draw(dt, mouseX, mouseY);
         }
+
+        this.perkScreenButton.draw(dt,mouseX,mouseY);
+        this.settingsButton.draw(dt,mouseX,mouseY);
+        this.menuBackButton.draw(dt,mouseX,mouseY);
+    
     }
 
     drawPerkScreen() {
@@ -149,6 +182,9 @@ class SceneManager {
         ctx.font = "100px Arial";
         ctx.textAlign = "center";
         ctx.fillText("Perk Screen",c.width/2, 200);
+
+        this.perkBackButton.draw(dt,mouseX,mouseY);
+
     }
 
     pickCharacter() {
@@ -181,7 +217,7 @@ class SceneManager {
             break;
         }
 
-        //which player am i 
+        //which player am I ? 
         ctx.fillStyle = "white";
         ctx.textAlign = "center";
         ctx.font = "50px Arial";
@@ -218,26 +254,36 @@ class SceneManager {
             case 1: //title screen
                 if (this.playButton.mouseOver(mouseX,mouseY)) {
                     this.scene = 4; 
-                } else if (this.settingsButton.mouseOver(mouseX,mouseY)) {
-                    this.scene = 2; 
                 }
                 break;
             case 2: //settings screen
                 if(this.settingBackButton.mouseOver(mouseX,mouseY)) {
-                    this.scene = 1;
+                    this.scene = 4;
                 } else if (this.settingCreditButton.mouseOver(mouseX,mouseY)){          
                     this.scene = 3;
                 }
                 break;
             case 3: //credits screen
-                
+                if(this.creditBackButton.mouseOver(mouseX,mouseY)) {
+                    this.scene = 2;
+                }
                 break;
             case 4: //menu screen
                 if (this.matchmakeButton.mouseOver(mouseX, mouseY)) {
                     matchmake();
+                } else if (this.perkScreenButton.mouseOver(mouseX,mouseY)){          
+                    this.scene = 5;
+                } else if (this.settingsButton.mouseOver(mouseX,mouseY)) {
+                    this.scene = 2; 
+                } else if (this.menuBackButton.mouseOver(mouseX,mouseY)) {
+                    this.scene = 1; 
                 }
+                   
                 break;
-            case 5:
+            case 5: //perk screen
+                if(this.perkBackButton.mouseOver(mouseX,mouseY)) {
+                    this.scene = 4;
+                }
 
                 break;
             case 6: //character select
