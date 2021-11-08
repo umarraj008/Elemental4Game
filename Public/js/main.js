@@ -6,6 +6,16 @@ var dt = 0, lastTime = 0
 var mouseX, mouseY;
 var sceneManager = new SceneManager(0);
 
+airBackground = new Image();
+earthBackground = new Image();
+fireBackground = new Image();
+waterBackground = new Image();
+
+airBackground.src = "resources/images/AirMapFull.png";
+earthBackground.src = "resources/images/EarthMapFull.png";
+fireBackground.src = "resources/images/FireMapFull.png";
+waterBackground.src = "resources/images/WaterMapFull.png";
+
 function setup() {
     // c.width = 1920;
     // c.height = 1080;

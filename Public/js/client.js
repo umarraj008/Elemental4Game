@@ -9,6 +9,7 @@ var game = {
     winner: null,
     over: false,
     whichPlayerAmI: null,
+    map: 0,
 }
 
 socket.on("connect", function() {
@@ -56,12 +57,17 @@ socket.on("game-cancelled", function() {
         turn: false,
         winner: null,
         over: false,
+        map: 0,
     }
     sceneManager.matchmaking = false;
 });
 
 socket.on("your-player", function(which) {
     game.whichPlayerAmI = which;
+});
+
+socket.on("game-map", function(map) {
+    game.map = map;
 });
 
 function matchmake() {

@@ -161,6 +161,22 @@ class SceneManager {
         ctx.fillStyle = "black";
         ctx.fillRect(0,0,c.width,c.height);
 
+        //maps
+        switch(game.map) {
+            case 1: 
+            ctx.drawImage(airBackground,0,0,c.width,c.height);
+            break;
+            case 2: 
+            ctx.drawImage(earthBackground,0,0,c.width,c.height);
+            break;
+            case 3: 
+            ctx.drawImage(fireBackground,0,0,c.width,c.height);
+            break;
+            case 4:
+            ctx.drawImage(waterBackground,0,0,c.width,c.height); 
+            break;
+        }
+
         //which player am i 
         ctx.fillStyle = "white";
         ctx.textAlign = "center";

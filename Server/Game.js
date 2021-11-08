@@ -7,7 +7,8 @@ module.exports = class Game {
         this.player2Socket = p2;
         this.winner = null;
         this.gameId = null;
-        
+        this.map = 0;
+
         this.player1 = new Player(this.player1Socket, "Player 1");
         this.player2 = new Player(this.player2Socket, "Player 2");
 
@@ -16,6 +17,8 @@ module.exports = class Game {
 
     startGame() {
         //tell players to pick characters
+        this.map = Math.floor(Math.random() * 4)
+        this.sendMessageToBothPlayers("game-map", this.map);
         this.sendMessageToBothPlayers("pick-character", this.id);
         this.player1.sendMessage("your-player", 1);
         this.player2.sendMessage("your-player", 2);
