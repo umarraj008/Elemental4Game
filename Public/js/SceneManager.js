@@ -6,8 +6,8 @@ class SceneManager {
 
         this.playButton = new Button(c.width/2-150,c.height/2-75,300,150, "Play");
         this.settingsButton = new Button(c.width/2-150,c.height/2+100,300,150, "Settings");
-        this.matchmakeButton = new Button(c.width/2-150,c.height/2+300,300,150, "Matchmake");
-
+        
+        c
         this.actionButtons = {
             wait: new Button(20,600,200,100,"Wait +2p + 10hp"),
             heal: new Button(200+80,600,200,100,"Heal -6p + 30hp"),
@@ -23,7 +23,12 @@ class SceneManager {
             earth: new Button(600+20,c.height/2-300,300,600,"Earth"),
             air: new Button(900+20,c.height/2-300,300,600,"Air"),
         };
+
+        this.settingBackButton = new Button(c.width/2-150,c.height/2+300,300,150, "Back");
+        this.settingCreditButton = new Button(c.width/2-150,c.height/2+100,300,150, "Credits");
+        this.creditBackButton = new Button(c.width/2-150,c.height/2+300,300,150, "Back");
     }
+
 
     run(dt) {
         //switch scenes
@@ -79,7 +84,7 @@ class SceneManager {
         //draw title text
         ctx.fillStyle = "white";
         ctx.textAlign = "center";
-        ctx.font = "100px Arial white";
+        ctx.font = "100px Arial";
         ctx.fillText("Elemental 4", c.width/2, c.height/2-200);
         
         // play button
@@ -88,12 +93,6 @@ class SceneManager {
         // settings button
         this.settingsButton.draw(dt,mouseX,mouseY);
 
-        //placeholder
-        ctx.font = "50px Arial";
-        ctx.fillStyle = "blue";
-        ctx.fillText("Play", c.width/2, c.height/2);
-        ctx.fillStyle = 'blue';
-        ctx.fillText("Settings", c.width/2, c.height/2+200);
         
     }
     drawSettings() {
@@ -105,8 +104,13 @@ class SceneManager {
         ctx.font = "100px Arial";
         ctx.textAlign = "center";
         ctx.fillText("Settings",c.width/2, 200);
+
+        //button section for settings
+        this.settingBackButton.draw (dt,mouseX, mouseY);
+        this.settingCreditButton.draw(dt,mouseX, mouseY);
     }
 
+    
     drawCredits(){
         ctx.fillStyle = "black";
         ctx.fillRect (0,0,c.width, c.height);
@@ -219,7 +223,11 @@ class SceneManager {
                 }
                 break;
             case 2: //settings screen
-                
+                if(this.settingBackButton.mouseOver(mouseX,mouseY)) {
+                    this.scene = 1;
+                } else if (this.settingCreditButton.mouseOver(mouseX,mouseY)){          
+                    this.scene = 3;
+                }
                 break;
             case 3: //credits screen
                 
