@@ -10,6 +10,7 @@ var game = {
     over: false,
     whichPlayerAmI: null,
     map: 0,
+    player2: {health:100,points:5},
 }
 
 socket.on("connect", function() {
@@ -58,6 +59,7 @@ socket.on("game-cancelled", function() {
         winner: null,
         over: false,
         map: 0,
+        player2: {health:100,points:5},
     }
     sceneManager.matchmaking = false;
 });
@@ -68,6 +70,11 @@ socket.on("your-player", function(which) {
 
 socket.on("game-map", function(map) {
     game.map = map;
+});
+
+socket.on("other-player", function(player) {
+    game.player2.health = player.health;
+    game.player2.points = player.points;
 });
 
 function matchmake() {

@@ -78,6 +78,12 @@ module.exports = class Game {
         this.player1.gameUpdate();
         this.player2.gameUpdate();
 
+        let d1 = {health:this.player2.health, points:this.player2.points};
+        let d2 = {health:this.player1.health, points:this.player1.points};
+
+        this.player1.sendMessage('other-player', d1);
+        this.player2.sendMessage('other-player', d2);
+
         //check for game over
         if (this.player1.health <= 0) {
             this.winner = this.player2.name;

@@ -3,10 +3,12 @@ class SceneManager {
         this.scene = start;
         this.splash = new Splash();
         this.matchmaking = false;
-
+        this.fullScreen = false;
+        
         this.playButton = new Button(c.width/2-150,c.height/2-75,300,150, "Play");
         this.settingsButton = new Button(c.width/2+300,c.height/2-100,300,150, "Settings");
         this.matchmakeButton =  new Button(c.width/2-600,c.height/2-100,300,150, "Matchmake");
+        this.settingsFullScreenButton = new Button(c.width/2-600,c.height/2-100,300,150, "Fullscreen");
         this.actionButtons = {
             wait: new Button(20,600,200,100,"Wait +2p + 10hp"),
             heal: new Button(200+80,600,200,100,"Heal -6p + 30hp"),
@@ -109,6 +111,7 @@ class SceneManager {
         //button section for settings
         this.settingBackButton.draw (dt,mouseX, mouseY);
         this.settingCreditButton.draw(dt,mouseX, mouseY);
+        this.settingsFullScreenButton.draw(dt,mouseX, mouseY);
     }
 
     
@@ -240,6 +243,11 @@ class SceneManager {
         ctx.fillText("health: " + game.health, 50, 200);
         ctx.fillText("points: " + game.points, 50, 250);
 
+        ctx.textAlign = "right";
+        ctx.fillText("health: " + game.player2.health, c.width-50, 200);
+        ctx.fillText("points: " + game.player2.points, c.width-50, 250);
+
+
         if (game.over) {
             ctx.fillStyle = "red";
             ctx.textAlign = "center";
@@ -261,6 +269,16 @@ class SceneManager {
                     this.scene = 4;
                 } else if (this.settingCreditButton.mouseOver(mouseX,mouseY)){          
                     this.scene = 3;
+                } else if(this.settingsFullScreenButton.mouseOver(mouseX,mouseY)) { 
+                    if (this.fullScreen) {
+                        document.exitFullscreen();
+                        this.fullScreen = false;
+                        this.settingsFullScreenButton.setText('FullScreen');
+                    }  else {
+                        c.requestFullscreen();
+                        this.fullScreen = true;
+                        this.settingsFullScreenButton.setText('Exit FullScreen');
+                    }
                 }
                 break;
             case 3: //credits screen
