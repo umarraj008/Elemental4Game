@@ -1,6 +1,5 @@
 
-# Elemental 4 Game
-## By Cybercloud Studios
+# Elemental 4 Game By Cybercloud Studios
 
 This is an online action-fantasy turn based game! 
 
