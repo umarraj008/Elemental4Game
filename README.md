@@ -1,5 +1,6 @@
 
 # Elemental 4 Game
+## By Cybercloud Studios
 
 This is an online action-fantasy turn based game! 
 
@@ -44,6 +45,17 @@ Starting the server
   cd [folder location]
   node Server/main.js
 ```
+## Credits
+Ice, Lava and Air Background
+Glacial Mountains: Parallax Background by Vicente Nitti (www.vnitti.itch.io)
+Licensed under Creative Commons: By Attribution 4.0 License
+http://creativecommons.org/licenses/by/4.0/
+Parts of this work was remixed.
+
+Earth Background
+Grassy Mountains: Parallax Background by Vicente Nitti (www.vnitti.itch.io)
+Licensed under Creative Commons: By Attribution 4.0 License
+http://creativecommons.org/licenses/by/4.0/
+Parts of this work was remixed.
 
 ![Logo](https://github.com/umarraj008/Elemental4Game/blob/main/Public/resources/images/Elemental4Logo.png?raw=true)
-
