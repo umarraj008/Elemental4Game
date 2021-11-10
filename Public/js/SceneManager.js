@@ -8,29 +8,30 @@ class SceneManager {
         this.playButton = new Button(c.width/2-150,c.height/2-75,300,150, "Play");
         this.settingsButton = new Button(c.width/2+300,c.height/2-100,300,150, "Settings");
         this.matchmakeButton =  new Button(c.width/2-600,c.height/2-100,300,150, "Matchmake");
-        this.settingsFullScreenButton = new Button(c.width/2-600,c.height/2-100,300,150, "Fullscreen");
+        this.settingsFullScreenButton = new Button(c.width/2-150,c.height/2-200,300,150, "Fullscreen");
         this.actionButtons = {
-            wait: new Button(20,600,200,100,"Wait +2p + 10hp"),
-            heal: new Button(200+80,600,200,100,"Heal -6p + 30hp"),
-            attack1: new Button(400+100,600,200,100,"Attack 1 -3p +10dam"),
-            attack2: new Button(600+120,600,200,100,"Attack 2 -4p +20dam"),
-            attack3: new Button(800+140,600,200,100,"Attack 3 -5p +30dam"),
-            ultimate: new Button(1000+160,600,200,100,"Ultimate -15p +70dam"),
+            wait: new Button(20,c.height-20-220,296,220,""),
+            heal: new Button(336,c.height-20-220,296,220,""),
+            attack1: new Button(652,c.height-20-220,296,220,""),
+            attack2: new Button(968,c.height-20-220,296,220,""),
+            attack3: new Button(1284,c.height-20-220,296,220,""),
+            ultimate: new Button(1600,c.height-20-220,296,220,""),
         };
 
         this.characterSelect = {
-            fire: new Button(20,c.height/2-300,300,600,"Fire"),
-            water: new Button(300+20,c.height/2-300,300,600,"Water"),
-            earth: new Button(600+20,c.height/2-300,300,600,"Earth"),
-            air: new Button(900+20,c.height/2-300,300,600,"Air"),
+            fire: new Button(0,c.height/2-300,480,600,"Fire"),
+            water: new Button(480,c.height/2-300,480,600,"Water"),
+            earth: new Button(480+480,c.height/2-300,480,600,"Earth"),
+            air: new Button(480+480+480,c.height/2-300,480,600,"Air"),
         };
 
-        this.settingBackButton = new Button(c.width/2-150,c.height/2+300,300,150, "Back");
-        this.settingCreditButton = new Button(c.width/2-150,c.height/2+100,300,150, "Credits");
+        this.settingBackButton = new Button(c.width/2-300,c.height/2+300,600,100, "Back");
+        this.settingCreditButton = new Button(c.width/2-150,c.height/2,300,150, "Credits");
         this.creditBackButton = new Button(c.width/2-150,c.height/2+300,300,150, "Back");
         this.perkScreenButton = new Button(c.width/2-150,c.height/2-100,300,150, "Perk Screen");
         this.perkBackButton = new Button(c.width/2-150,c.height/2+300,300,150, "Back");
         this.menuBackButton = new Button(c.width/2-300,c.height/2+300,600,100, "Back");
+        this.resultsBackButton = new Button(c.width/2-300,c.height/2+300,600,100, "Back");
     }
 
 
@@ -56,13 +57,13 @@ class SceneManager {
                 this.drawPerkScreen();
                 break;
             case 6: //pick character screen
-                this.pickCharacter();
+                this.drawPickCharacter();
                 break;
             case 7: //game screen
                 this.drawGame();
                 break;
             case 8: //results screen
-                // this.drawGameResults();
+                 this.drawGameResults();
                 break;
         }
 
@@ -93,10 +94,7 @@ class SceneManager {
         
         // play button
         this.playButton.draw(dt,mouseX,mouseY);
-
-        
-
-        
+     
     }
     drawSettings() {
         ctx.fillStyle = "black";
@@ -190,9 +188,16 @@ class SceneManager {
 
     }
 
-    pickCharacter() {
-        ctx.fillStyle ="black";
-        ctx.fillRect(0,0,c.width,c.height);
+    drawPickCharacter() {
+        ctx.fillStyle = "black";
+        ctx.fillRect (0,0,c.width, c.height);
+
+        ctx.fillStyle= "white";
+        ctx.font = "80px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("Pick your character",c.width/2, 150);
+
+        
         this.characterSelect.fire.draw(dt, mouseX, mouseY);
         this.characterSelect.water.draw(dt, mouseX, mouseY);
         this.characterSelect.earth.draw(dt, mouseX, mouseY);
@@ -235,6 +240,34 @@ class SceneManager {
             this.actionButtons.attack2.draw(dt, mouseX, mouseY);
             this.actionButtons.attack3.draw(dt, mouseX, mouseY);
             this.actionButtons.ultimate.draw(dt, mouseX, mouseY);
+
+            ctx.fillStyle = "black";
+            ctx.textAlign = "center";
+            ctx.font = "30px Arial";
+             ctx.fillText("Wait", 20+148, 900);
+             ctx.fillText("Heal",336+148, 900);
+             ctx.fillText("Attack 1",652+148, 900);
+             ctx.fillText("Attack 2",968+148, 900);
+             ctx.fillText("Attack 3",1284+148, 900);
+             ctx.fillText("Ultimate",1600+148, 900);
+             
+             
+             ctx.font = "20px Arial";
+             ctx.fillText("Price: 0", 20+148, 950);
+             ctx.fillText("Price: 6",336+148, 950);
+             ctx.fillText("Price: 3",652+148, 950);
+             ctx.fillText("Price: 4",968+148, 950);
+             ctx.fillText("Price: 5",1284+148, 950);
+             ctx.fillText("Price: 15",1600+148, 950);
+
+             ctx.fillText("10 Health, 2 points", 20+148, 1000);
+             ctx.fillText("30 Health",336+148, 1000);
+             ctx.fillText("10 Damage",652+148, 1000);
+             ctx.fillText("20 Damage",968+148, 1000);
+             ctx.fillText("30 Damage",1284+148, 1000);
+             ctx.fillText("70 Damage",1600+148, 1000);
+            
+
         }
 
         ctx.fillStyle = "white";
@@ -242,10 +275,25 @@ class SceneManager {
         ctx.font = "40px Arial";
         ctx.fillText("health: " + game.health, 50, 200);
         ctx.fillText("points: " + game.points, 50, 250);
+        
 
         ctx.textAlign = "right";
         ctx.fillText("health: " + game.player2.health, c.width-50, 200);
         ctx.fillText("points: " + game.player2.points, c.width-50, 250);
+       
+        
+        ctx.fillStyle = "red";
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 5;
+        ctx.textAlign = "left";
+        ctx.font = "60px Arial";
+        ctx.strokeText("You", 50, 100);
+        ctx.fillText("You", 50, 100);
+
+        ctx.textAlign = "right";
+        
+        ctx.strokeText("Opponent",c.width -50, 100);
+        ctx.fillText("Opponent",c.width -50, 100);
 
 
         if (game.over) {
@@ -256,7 +304,22 @@ class SceneManager {
             ctx.fillText(game.winner + " Wins!", c.width/2,c.height/2+100);
         }
     }
+    drawGameResults() {
+        //background
+        ctx.fillStyle = "black";
+        ctx.fillRect(0,0,c.width,c.height);
 
+         //this will draw the Game results screen text
+         ctx.fillStyle= "white";
+         ctx.font = "100px Arial";
+         ctx.textAlign = "center";
+         ctx.fillText("Game Results",c.width/2, 200);
+ 
+         this.resultsBackButton.draw(dt,mouseX,mouseY);
+    }
+
+
+    
     mouseClick() {
         switch(this.scene) {
             case 1: //title screen
@@ -307,14 +370,17 @@ class SceneManager {
             case 6: //character select
                 if (this.characterSelect.fire.mouseOver(mouseX,mouseY)) {
                     selectPlayer(0);
+                    this.scene = 7;
                 } else if (this.characterSelect.water.mouseOver(mouseX,mouseY)) {
                     selectPlayer(1);
+                    this.scene = 7;
                 } else if (this.characterSelect.earth.mouseOver(mouseX,mouseY)) {
                     selectPlayer(2);
+                    this.scene = 7;
                 } else if (this.characterSelect.air.mouseOver(mouseX,mouseY)) {
                     selectPlayer(3);
+                    this.scene = 7;
                 } 
-                this.scene = 7;
                 break;
 
             case 7: //game
@@ -333,6 +399,12 @@ class SceneManager {
                         action(5);
                     }
                 } 
+                break;
+
+            case 8://game results
+                if (this.resultsBackButton.mouseOver(mouseX,mouseY)) {
+                    this.scene = 4;
+                }
                 break;
         }
     }
