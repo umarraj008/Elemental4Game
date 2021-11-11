@@ -13,6 +13,7 @@ var game = {
     player2: {health:100,points:5},
     characterType: null,
     player2characterType: null,
+    win: null,
 }
 
 socket.on("connect", function() {
@@ -43,11 +44,15 @@ socket.on("game-update", function(data) {
     game.points = data.points;
     game.health = data.health;
     game.turn = data.turn;
+
+    if (data.turn && sceneManager.bot) sceneManager.botSelected = false;
 });
 
-socket.on("game-winner", function(data) {
-    game.over = true;
-    game.winner = data.winner;
+socket.on("game-over", function(data) {
+    // game.over = true;
+    // game.winner = data.winner;
+
+    // window.setTimeout(function() {this.scene = 8;}, 3000);
 });
 
 socket.on("game-cancelled", function() {
@@ -81,8 +86,26 @@ socket.on("other-player", function(player) {
     game.player2.points = player.points;
 });
 
-socket.on("player2-characterType", function(characterType){
-    this.player2characterType = characterType;
+socket.on("other-player-character", function(type){
+    game.player2characterType = type;
+});
+
+socket.on("you-win", function(data) {
+    game.over = true;
+    game.turn = false;
+    //game.winner = data.winner;
+    game.win = true;
+
+    setTimeout(function(){sceneManager.scene = 8; },3000);
+});
+
+socket.on("you-lose", function() {
+    game.over = true;
+    game.turn = false;
+    //game.winner = data.winner;
+    game.win = false;
+
+    setTimeout(function(){sceneManager.scene = 8; },3000);
 });
 
 function matchmake() {
@@ -97,4 +120,21 @@ function selectPlayer(which) {
 
 function action(which) {
     socket.emit("player-action", {id: gameID, action: which});
+}
+
+function resetGame() {
+    gameID = "";
+    game = {
+        points: 0,
+        health: 0,
+        turn: false,
+        winner: null,
+        over: false,
+        map: 0,
+        player2: {health:100,points:5},
+        characterType: null,
+        player2characterType: null,
+        win: null,
+    }
+    sceneManager.matchmaking = false;
 }

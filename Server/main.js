@@ -64,12 +64,20 @@ io.sockets.on("connection", function(socket) {
     });
 
     socket.on("disconnect", function() {
-        //if player was in a game then end match
         let player = findPlayer(socket.id);
+        //if player is in matchmaking queue
+        for (i = 0; i < matchmakingQueue.length; i++) {
+            if (matchmakingQueue[i].socket.id == socket.id) {
+                matchmakingQueue.splice(i, 1);
+                break;
+            }
+        }
+
+        //if player was in a game then end match
         if (games[player.gameID] != null || games[player.gameID] != undefined) {
             games[player.gameID].matchCancelled(socket.id);
             delete games[player.gameID];
-            console.log("match cancelled");
+            //console.log("match cancelled");
         }
         players.delete(socket.id);
     });
