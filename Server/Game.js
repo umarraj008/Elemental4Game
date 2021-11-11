@@ -17,7 +17,7 @@ module.exports = class Game {
 
     startGame() {
         //tell players to pick characters
-        this.map = Math.floor(Math.random() * 4)
+        this.map = Math.floor(Math.random() * 4) + 1;
         this.sendMessageToBothPlayers("game-map", this.map);
         this.sendMessageToBothPlayers("pick-character", this.id);
         this.player1.sendMessage("your-player", 1);
@@ -87,9 +87,13 @@ module.exports = class Game {
         //check for game over
         if (this.player1.health <= 0) {
             this.winner = this.player2.name;
+            this.player1.sendMessage("you-lose");
+            this.player2.sendMessage("you-win");
             this.sendResults();
         } else if (this.player2.health <= 0) {
             this.winner = this.player1.name;
+            this.player1.sendMessage("you-win");
+            this.player2.sendMessage("you-lose");
             this.sendResults();
         }
 
@@ -112,7 +116,7 @@ module.exports = class Game {
                     this.player2.takeDamage(this.player1.attacks[action].damage);
                 }
             } else {
-                console.log("costs too much");
+                //console.log("costs too much");
                 return;
             }
         } else if (this.player2.getTurn()) {
@@ -129,7 +133,7 @@ module.exports = class Game {
                     this.player1.takeDamage(this.player2.attacks[action].damage);
                 }
             } else {
-                console.log("costs too much");
+                //console.log("costs too much");
                 return;
             }
         }
@@ -142,7 +146,7 @@ module.exports = class Game {
         //xp calc
         //skill calc
         //upload reslults to database
-        this.sendMessageToBothPlayers("game-winner", {winner: this.winner});
+        //this.sendMessageToBothPlayers("game-over", {winner: this.winner});
     }
 
     sendMessageToBothPlayers(message, data) {
@@ -162,8 +166,8 @@ module.exports = class Game {
         this.ready++;
         
         if (this.ready == 2) {
-            this.player1.sendMessage("player2-characterType", which);
-            this.player2.sendMessage("player2-characterType", which);
+            this.player1.sendMessage("other-player-character", this.player2.playerType);
+            this.player2.sendMessage("other-player-character", this.player1.playerType);
             this.pickRandomPlayer();      
         }
     }

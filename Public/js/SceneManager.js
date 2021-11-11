@@ -4,13 +4,31 @@ class SceneManager {
         this.splash = new Splash();
         this.matchmaking = false;
         this.fullScreen = false;
-        this.wizards = new Image();
-        this.wizards.src = "resources/images/wizards.png";
+        this.bot = false;
+        this.botHasMatchMaked = false;
+        this.botSelected = true;
         
+        //title screen buttons
         this.playButton = new Button(c.width/2-150,c.height/2-75,300,150, "Play");
-        this.settingsButton = new Button(c.width/2+300,c.height/2-100,300,150, "Settings");
+        
+        //main menu buttons
         this.matchmakeButton =  new Button(c.width/2-600,c.height/2-100,300,150, "Matchmake");
+        this.perkScreenButton = new Button(c.width/2-150,c.height/2-100,300,150, "Perk Screen");
+        this.settingsButton = new Button(c.width/2+300,c.height/2-100,300,150, "Settings");
+        this.menuBackButton = new Button(c.width/2-300,c.height/2+300,600,100, "Back");
+        
+        //settings buttons
         this.settingsFullScreenButton = new Button(c.width/2-150,c.height/2-200,300,150, "Fullscreen");
+        this.settingCreditButton = new Button(c.width/2-150,c.height/2,300,150, "Credits");
+        this.settingBackButton = new Button(c.width/2-300,c.height/2+300,600,100, "Back");
+        
+        //perk screen buttons
+        this.perkBackButton = new Button(c.width/2-150,c.height/2+300,300,150, "Back");
+        
+        //credits page buttons
+        this.creditBackButton = new Button(c.width/2-150,c.height/2+300,300,150, "Back");
+        
+        //game buttons
         this.actionButtons = {
             wait: new Button(20,c.height-20-220,296,220,""),
             heal: new Button(336,c.height-20-220,296,220,""),
@@ -19,20 +37,16 @@ class SceneManager {
             attack3: new Button(1284,c.height-20-220,296,220,""),
             ultimate: new Button(1600,c.height-20-220,296,220,""),
         };
-
+        
+        //character select buttons
         this.characterSelect = {
             fire: new Button(0,c.height/2-300,480,600,"Fire"),
             water: new Button(480,c.height/2-300,480,600,"Water"),
             earth: new Button(480+480,c.height/2-300,480,600,"Earth"),
             air: new Button(480+480+480,c.height/2-300,480,600,"Air"),
         };
-
-        this.settingBackButton = new Button(c.width/2-300,c.height/2+300,600,100, "Back");
-        this.settingCreditButton = new Button(c.width/2-150,c.height/2,300,150, "Credits");
-        this.creditBackButton = new Button(c.width/2-150,c.height/2+300,300,150, "Back");
-        this.perkScreenButton = new Button(c.width/2-150,c.height/2-100,300,150, "Perk Screen");
-        this.perkBackButton = new Button(c.width/2-150,c.height/2+300,300,150, "Back");
-        this.menuBackButton = new Button(c.width/2-300,c.height/2+300,600,100, "Back");
+        
+        //game results page buttons
         this.resultsBackButton = new Button(c.width/2-300,c.height/2+300,600,100, "Back");
     }
 
@@ -72,14 +86,59 @@ class SceneManager {
         //tell user if they are connected to server
         if (socket.connected) {
             ctx.fillStyle = "lime";
-            ctx.textAlign = "left";
-            ctx.font = "30px Arial";
-            ctx.fillText("Connected to Server", 50, c.height-100);
+            ctx.textAlign = "center";
+            ctx.font = "20px Arial";
+            ctx.fillText("Connected to Server", c.width/2, 30);
         } else {
             ctx.fillStyle = "red";
-            ctx.textAlign = "left";
-            ctx.font = "30px Arial";
-            ctx.fillText("Not Connected to Server", 50, c.height-100);
+            ctx.textAlign = "center";
+            ctx.font = "20px Arial";
+            ctx.fillText("Not Connected to Server", c.width/2, 30);
+            this.scene = 1;
+        }
+
+        if (this.bot) {
+            switch(this.scene) {
+                case 1:
+                    this.scene = 4;
+                break;
+                case 4:
+                    if (!this.botHasMatchMaked) {
+                        this.botHasMatchMaked = true;
+                        matchmake();
+                    }
+                break;
+                case 6:
+                    selectPlayer(Math.floor(Math.random()*4)+1);
+                    this.scene = 7;
+                break;
+                case 7:
+                    let actions = [0,3,4,5,6,15];
+                    let a = 5;
+
+                    if (game.turn && !this.botSelected) {
+                        if (game.points >= 15) {
+                            console.log("selected action(5)"); action(5);
+                        } else if (game.points >= 6) {
+                            console.log("selected action(1)"); action(1);
+                        } else if (game.points >= 5) {
+                            console.log("selected action(4)"); action(4);
+                        } else if (game.points >= 4) {
+                            console.log("selected action(3)"); action(3);
+                        } else if (game.points >= 3) {
+                            console.log("selected action(2)"); action(2);
+                        } else if (game.points >= 0) {
+                            console.log("selected action(0)"); action(0);
+                        }
+                        this.botSelected = true;
+                    }
+                break;
+                case 8:
+                    resetGame();
+                    this.botHasMatchMaked = false;
+                    this.scene = 4;
+                break;
+            }
         }
     }
 
@@ -236,36 +295,41 @@ class SceneManager {
             break;
         }
 
-        //draw characters
+        //draw platforms
+        ctx.drawImage(platform, 80,c.height/2+120, 394, 157);
+        
+        //draw character - left
         switch(game.characterType) {
             case 0: 
-            ctx.drawImage(this.wizards,0,0,60,90,150,c.height/2-250,333,500);
+            ctx.drawImage(wizards,0,0,60,90,150,c.height/2-250,266,400);
             break;
             case 1: 
-            ctx.drawImage(this.wizards,60,0,60,90,150,c.height/2-250,333,500);
+            ctx.drawImage(wizards,60,0,60,90,150,c.height/2-250,266,400);
             break;
             case 2: 
-            ctx.drawImage(this.wizards,120,0,60,90,150,c.height/2-250,333,500);
+            ctx.drawImage(wizards,120,0,60,90,150,c.height/2-250,266,400);
             break;
             case 3:
-            ctx.drawImage(this.wizards,180,0,60,90,150,c.height/2-250,333,500);
-            break;
+                ctx.drawImage(wizards,180,0,60,90,150,c.height/2-250,266,400);
+                break;
         }
 
+        //draw character right
         ctx.save();
         ctx.scale(-1,1);
+        ctx.drawImage(platform, -1840,c.height/2+120, 394, 157);
         switch(game.player2characterType) {
             case 0: 
-            ctx.drawImage(this.wizards,0,0,60,90,-1437,c.height/2-250,-333,500);
+            ctx.drawImage(wizards,0,0,60,90,-1504,c.height/2-250,-266,400);
             break;
             case 1: 
-            ctx.drawImage(this.wizards,60,0,60,90,-1437,c.height/2-250,-333,500);
+            ctx.drawImage(wizards,60,0,60,90,-1504,c.height/2-250,-266,400);
             break;
             case 2: 
-            ctx.drawImage(this.wizards,120,0,60,90,-1437,c.height/2-250,-333,500);
+            ctx.drawImage(wizards,120,0,60,90,-1504,c.height/2-250,-266,400);
             break;
             case 3:
-            ctx.drawImage(this.wizards,180,0,60,90,-1437,c.height/2-250,-333,500);
+            ctx.drawImage(wizards,180,0,60,90,-1504,c.height/2-250,-266,400);
             break;
         }
         ctx.restore();
@@ -274,9 +338,11 @@ class SceneManager {
         ctx.fillStyle = "white";
         ctx.textAlign = "center";
         ctx.font = "50px Arial";
+        ctx.strokeText("Player " + game.whichPlayerAmI, c.width/2, 100);
         ctx.fillText("Player " + game.whichPlayerAmI, c.width/2, 100);
 
         if (game.turn) {
+            ctx.strokeText("Your Turn!", c.width/2, 200);
             ctx.fillText("Your Turn!", c.width/2, 200);
 
             this.actionButtons.wait.draw(dt, mouseX, mouseY);
@@ -342,11 +408,17 @@ class SceneManager {
 
 
         if (game.over) {
-            ctx.fillStyle = "red";
             ctx.textAlign = "center";
             ctx.font = "100px Arial";
-            ctx.fillText("Game Over!", c.width/2,c.height/2);
-            ctx.fillText(game.winner + " Wins!", c.width/2,c.height/2+100);
+            if (game.win) {
+                ctx.fillStyle = "lime";
+                ctx.strokeText("You Win!", c.width/2,c.height/2);
+                ctx.fillText("You Win!", c.width/2,c.height/2);
+            } else {
+                ctx.fillStyle = "red";
+                ctx.strokeText("You Lose!", c.width/2,c.height/2);
+                ctx.fillText("You Lose!", c.width/2,c.height/2);
+            }
         }
     }
     drawGameResults() {
@@ -354,13 +426,24 @@ class SceneManager {
         ctx.fillStyle = "black";
         ctx.fillRect(0,0,c.width,c.height);
 
-         //this will draw the Game results screen text
-         ctx.fillStyle= "white";
-         ctx.font = "100px Arial";
-         ctx.textAlign = "center";
-         ctx.fillText("Game Results",c.width/2, 200);
+        //this will draw the Game results screen text
+        ctx.fillStyle= "white";
+        ctx.font = "100px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("Game Results",c.width/2, 200);
  
-         this.resultsBackButton.draw(dt,mouseX,mouseY);
+        ctx.textAlign = "center";
+        ctx.font = "100px Arial";
+        if (game.win) {
+            ctx.fillStyle = "lime";
+            ctx.fillText("You Win!", c.width/2,c.height/2);
+        } else {
+            ctx.fillStyle = "red";
+            ctx.fillText("You Lose!", c.width/2,c.height/2);
+        }
+
+
+        this.resultsBackButton.draw(dt,mouseX,mouseY);
     }
 
 
@@ -449,6 +532,7 @@ class SceneManager {
             case 8://game results
                 if (this.resultsBackButton.mouseOver(mouseX,mouseY)) {
                     this.scene = 4;
+                    resetGame();
                 }
                 break;
         }

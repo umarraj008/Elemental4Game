@@ -31,8 +31,10 @@ class Button {
 
     mouseOver(mx,my) {
         if (mx >= this.x && mx <= this.x + this.width && my >= this.y && my <= this.y + this.height) {
+            c.style.cursor = "pointer";
             return true;
         } else {
+            c.style.cursor = "default";
             return false;
         }
     }

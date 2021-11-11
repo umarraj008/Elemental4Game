@@ -10,11 +10,15 @@ airBackground = new Image();
 earthBackground = new Image();
 fireBackground = new Image();
 waterBackground = new Image();
+wizards = new Image();
+platform = new Image();
 
 airBackground.src = "resources/images/AirMapFull.png";
 earthBackground.src = "resources/images/EarthMapFull.png";
 fireBackground.src = "resources/images/FireMapFull.png";
 waterBackground.src = "resources/images/WaterMapFull.png";
+wizards.src = "resources/images/wizards.png";
+platform.src = "resources/images/platform1.png";
 
 function setup() {
     // c.width = 1920;
