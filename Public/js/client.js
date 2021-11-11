@@ -11,6 +11,8 @@ var game = {
     whichPlayerAmI: null,
     map: 0,
     player2: {health:100,points:5},
+    characterType: null,
+    player2characterType: null,
 }
 
 socket.on("connect", function() {
@@ -60,6 +62,8 @@ socket.on("game-cancelled", function() {
         over: false,
         map: 0,
         player2: {health:100,points:5},
+        characterType: null,
+        player2characterType: null,
     }
     sceneManager.matchmaking = false;
 });
@@ -77,6 +81,10 @@ socket.on("other-player", function(player) {
     game.player2.points = player.points;
 });
 
+socket.on("player2-characterType", function(characterType){
+    this.player2characterType = characterType;
+});
+
 function matchmake() {
     socket.emit("matchmake");
     sceneManager.matchmaking = true;
@@ -84,6 +92,7 @@ function matchmake() {
 
 function selectPlayer(which) {
     socket.emit("player-selected", {id: gameID, type: which});
+    game.characterType = which;
 }
 
 function action(which) {
