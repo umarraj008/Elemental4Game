@@ -162,6 +162,8 @@ module.exports = class Game {
         this.ready++;
         
         if (this.ready == 2) {
+            this.player1.sendMessage("player2-characterType", which);
+            this.player2.sendMessage("player2-characterType", which);
             this.pickRandomPlayer();      
         }
     }

@@ -19,7 +19,7 @@ waterBackground.src = "resources/images/WaterMapFull.png";
 function setup() {
     // c.width = 1920;
     // c.height = 1080;
-
+    ctx.imageSmoothingEnabled = false;
     resizeWindow();
 }
 

@@ -4,6 +4,8 @@ class SceneManager {
         this.splash = new Splash();
         this.matchmaking = false;
         this.fullScreen = false;
+        this.wizards = new Image();
+        this.wizards.src = "resources/images/wizards.png";
         
         this.playButton = new Button(c.width/2-150,c.height/2-75,300,150, "Play");
         this.settingsButton = new Button(c.width/2+300,c.height/2-100,300,150, "Settings");
@@ -148,6 +150,15 @@ class SceneManager {
         ctx.fillText("Licensed under Creative Commons: By Attribution 4.0 License",c.width/2, 700);
         ctx.fillText("http://creativecommons.org/licenses/by/4.0/",c.width/2, 740);
         ctx.fillText("Parts of this work was remixed.",c.width/2, 780);
+
+        ctx.font = "30px Arial";
+        ctx.fillText("Wizard Character",c.width/2-700, 275);
+
+        ctx.font = "15px Arial";
+        ctx.fillText("Wizard Pack by LuizMelo (www.luizmelo.itch.io)",c.width/2-700, 340);
+        ctx.fillText("Licensed under Creative Commons Zero v1.0 Universal",c.width/2-700, 380);
+        ctx.fillText("https://creativecommons.org/publicdomain/zero/1.0/",c.width/2-700, 420);
+        ctx.fillText("Parts of this work was remixed.",c.width/2-700, 460);
     }
     
     drawMenu() {
@@ -225,6 +236,40 @@ class SceneManager {
             break;
         }
 
+        //draw characters
+        switch(game.characterType) {
+            case 0: 
+            ctx.drawImage(this.wizards,0,0,60,90,150,c.height/2-250,333,500);
+            break;
+            case 1: 
+            ctx.drawImage(this.wizards,60,0,60,90,150,c.height/2-250,333,500);
+            break;
+            case 2: 
+            ctx.drawImage(this.wizards,120,0,60,90,150,c.height/2-250,333,500);
+            break;
+            case 3:
+            ctx.drawImage(this.wizards,180,0,60,90,150,c.height/2-250,333,500);
+            break;
+        }
+
+        ctx.save();
+        ctx.scale(-1,1);
+        switch(game.player2characterType) {
+            case 0: 
+            ctx.drawImage(this.wizards,0,0,60,90,-1437,c.height/2-250,-333,500);
+            break;
+            case 1: 
+            ctx.drawImage(this.wizards,60,0,60,90,-1437,c.height/2-250,-333,500);
+            break;
+            case 2: 
+            ctx.drawImage(this.wizards,120,0,60,90,-1437,c.height/2-250,-333,500);
+            break;
+            case 3:
+            ctx.drawImage(this.wizards,180,0,60,90,-1437,c.height/2-250,-333,500);
+            break;
+        }
+        ctx.restore();
+        
         //which player am I ? 
         ctx.fillStyle = "white";
         ctx.textAlign = "center";
