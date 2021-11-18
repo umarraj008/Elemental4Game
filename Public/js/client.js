@@ -130,20 +130,7 @@ socket.on("game-over", function(data) {
 
 socket.on("game-cancelled", function() {
     sceneManager.scene = 4;
-    console.log("Game was cancelled");
-    gameID = "";
-    game = {
-        points: 0,
-        health: 0,
-        turn: false,
-        winner: null,
-        over: false,
-        map: 0,
-        player2: {health:100,points:5},
-        characterType: null,
-        player2characterType: null,
-    }
-    sceneManager.matchmaking = false;
+    resetGame();
 });
 
 socket.on("your-player", function(which) {
@@ -217,11 +204,16 @@ function resetGame() {
         turn: false,
         winner: null,
         over: false,
+        whichPlayerAmI: null,
         map: 0,
-        player2: {health:100,points:5},
+        player2: {health:100,points:5, turn: false, action: null},
         characterType: null,
         player2characterType: null,
         win: null,
+        id: null,
+        hitDelay: 700,
     }
+    player1Animator = undefined;
+    player2Animator = undefined;
     sceneManager.matchmaking = false;
 }
