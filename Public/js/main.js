@@ -6,12 +6,16 @@ var dt = 0, lastTime = 0
 var mouseX, mouseY;
 var sceneManager = new SceneManager(0);
 
-airBackground = new Image();
-earthBackground = new Image();
-fireBackground = new Image();
-waterBackground = new Image();
-wizards = new Image();
-platform = new Image();
+const airBackground = new Image();
+const earthBackground = new Image();
+const fireBackground = new Image();
+const waterBackground = new Image();
+const wizards = new Image();
+const platform = new Image();
+const fireSpriteSheet = new Image();
+const waterSpriteSheet = new Image();
+const earthSpriteSheet = new Image();
+const airSpriteSheet = new Image();
 
 airBackground.src = "resources/images/AirMapFull.png";
 earthBackground.src = "resources/images/EarthMapFull.png";
@@ -19,6 +23,11 @@ fireBackground.src = "resources/images/FireMapFull.png";
 waterBackground.src = "resources/images/WaterMapFull.png";
 wizards.src = "resources/images/wizards.png";
 platform.src = "resources/images/platform1.png";
+fireSpriteSheet.src = "resources/images/fireSpriteSheet.png";
+waterSpriteSheet.src = "resources/images/waterSpriteSheet.png";
+earthSpriteSheet.src = "resources/images/earthSpriteSheet.png";
+airSpriteSheet.src = "resources/images/airSpriteSheet.png";
+
 
 function setup() {
     // c.width = 1920;
