@@ -18,8 +18,8 @@ module.exports = class Game {
     startGame() {
         //tell players to pick characters
         this.map = Math.floor(Math.random() * 4) + 1;
-        this.sendMessageToBothPlayers("game-map", this.map);
-        this.sendMessageToBothPlayers("pick-character", this.id);
+        //this.sendMessageToBothPlayers("game-map", this.map);
+        this.sendMessageToBothPlayers("pick-character", {gameID: this.id, map: this.map});
         this.player1.sendMessage("your-player", 1);
         this.player2.sendMessage("your-player", 2);
     }
@@ -42,8 +42,7 @@ module.exports = class Game {
         } else {
             this.sendMessageToBothPlayers("player2-turn");
         }
-        this.player1.gameUpdate();
-        this.player2.gameUpdate();
+        this.gameUpdate();
     }
 
     nextTurn() {
@@ -74,15 +73,22 @@ module.exports = class Game {
             this.player2.points++;
         }
     
+        if (this.player1.health <= 0) {this.player1.action = "dead";}
+        if (this.player2.health <= 0) {this.player2.action = "dead";}
+        
         //update player data
-        this.player1.gameUpdate();
-        this.player2.gameUpdate();
+        //this.player1.gameUpdate();
+        //this.player2.gameUpdate();
+        this.gameUpdate();
 
-        let d1 = {health:this.player2.health, points:this.player2.points};
-        let d2 = {health:this.player1.health, points:this.player1.points};
+        this.player1.action = null;
+        this.player2.action = null;
 
-        this.player1.sendMessage('other-player', d1);
-        this.player2.sendMessage('other-player', d2);
+        // let d1 = {health:this.player2.health, points:this.player2.points};
+        // let d2 = {health:this.player1.health, points:this.player1.points};
+
+        // this.player1.sendMessage('other-player', d1);
+        // this.player2.sendMessage('other-player', d2);
 
         //check for game over
         if (this.player1.health <= 0) {
@@ -107,13 +113,17 @@ module.exports = class Game {
                 if (action == 0) { //wait
                     this.player1.health += this.player1.attacks[0].heal;
                     this.player1.points -= this.player1.attacks[0].cost;
+                    this.player1.action = "wait";
                 } else if (action == 1) { //heal
                     this.player1.health += this.player1.attacks[1].heal;
                     this.player1.points -= this.player1.attacks[1].cost;
+                    this.player1.action = "heal";
                 } else if (action == 2 || action == 3 || action == 4 || action == 5) {
                     //attacks
                     this.player1.points -= this.player1.attacks[action].cost;
                     this.player2.takeDamage(this.player1.attacks[action].damage);
+                    this.player1.action = "attack" + (action-1);
+                    this.player2.action = "damage";
                 }
             } else {
                 //console.log("costs too much");
@@ -124,13 +134,17 @@ module.exports = class Game {
                 if (action == 0) { //wait
                     this.player2.health += this.player2.attacks[0].heal;
                     this.player2.points -= this.player2.attacks[0].cost;
+                    this.player2.action = "wait";
                 } else if (action == 1) { //heal
                     this.player2.health += this.player2.attacks[1].heal;
                     this.player2.points -= this.player2.attacks[1].cost;
+                    this.player2.action = "heal";
                 } else if (action == 2 || action == 3 || action == 4 || action == 5) {
                     //attacks
                     this.player2.points -= this.player2.attacks[action].cost;
                     this.player1.takeDamage(this.player2.attacks[action].damage);
+                    this.player2.action = "attack" + (action-1);
+                    this.player1.action = "damage";
                 }
             } else {
                 //console.log("costs too much");
@@ -157,10 +171,10 @@ module.exports = class Game {
     playerSelected(id, which) {
         if (id == this.player1Socket.id) {
             this.player1.setPlayer(which);
-            this.player1.gameUpdate();
+            //this.player1.gameUpdate();
         } else if (id == this.player2Socket.id) {
             this.player2.setPlayer(which);
-            this.player2.gameUpdate();
+            //this.player2.gameUpdate();
         }
 
         this.ready++;
@@ -168,6 +182,7 @@ module.exports = class Game {
         if (this.ready == 2) {
             this.player1.sendMessage("other-player-character", this.player2.playerType);
             this.player2.sendMessage("other-player-character", this.player1.playerType);
+            this.gameUpdate();
             this.pickRandomPlayer();      
         }
     }
@@ -178,5 +193,35 @@ module.exports = class Game {
         } else if (whoLeft == this.player2Socket.id) {
             this.player1.sendMessage("game-cancelled");
         }
+    }
+
+    gameUpdate() {
+        let gameData1 = {
+            points: this.player1.points,
+            health: this.player1.health,
+            turn: this.player1.turn,
+            action: this.player1.action,
+            
+            p2Points: this.player2.points,
+            p2Health: this.player2.health,
+            p2Turn: this.player2.turn,
+            p2Action: this.player2.action,
+        };
+
+        this.player1.sendMessage("game-update", gameData1);
+
+        let gameData2 = {
+            points: this.player2.points,
+            health: this.player2.health,
+            turn: this.player2.turn,
+            action: this.player2.action,
+            
+            p2Points: this.player1.points,
+            p2Health: this.player1.health,
+            p2Turn: this.player1.turn,
+            p2Action: this.player1.action,
+        };
+        
+        this.player2.sendMessage("game-update", gameData2);
     }
 }

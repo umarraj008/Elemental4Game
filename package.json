@@ -2,9 +2,9 @@
   "name": "elemental4game",
   "version": "1.0.0",
   "description": "Web Game",
-  "main": "Server/Main.js",
+  "main": "Server/main.js",
   "scripts": {
-    "start": "node Server/Main.js"
+    "start": "node Server/main.js"
   },
   "repository": {
     "type": "git",

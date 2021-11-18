@@ -7,6 +7,7 @@ module.exports = class Player {
         this.playerType = null;
         this.turn = false;
         this.name = name;
+        this.action = null;
 
         this.attacks = [
             {name: "Wait", cost: -2, heal: 10},
@@ -28,9 +29,9 @@ module.exports = class Player {
         this.socket.emit(message, data)
     }
 
-    gameUpdate() {
-        this.socket.emit("game-update", {points: this.points, health: this.health, turn: this.turn});
-    }
+    // gameUpdate() {
+    //     this.socket.emit("game-update", {points: this.points, health: this.health, turn: this.turn});
+    // }
 
     setPlayer(which) {
         this.playerType = which;

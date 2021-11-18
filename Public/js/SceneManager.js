@@ -7,6 +7,10 @@ class SceneManager {
         this.bot = false;
         this.botHasMatchMaked = false;
         this.botSelected = true;
+        this.player1Animator;
+        this.player2Animator;
+        this.characterWidth = 1000;
+        this.characterHeight = 1000;
         
         //title screen buttons
         this.playButton = new Button(c.width/2-150,c.height/2-75,300,150, "Play");
@@ -298,41 +302,53 @@ class SceneManager {
         //draw platforms
         ctx.drawImage(platform, 80,c.height/2+120, 394, 157);
         
-        //draw character - left
-        switch(game.characterType) {
-            case 0: 
-            ctx.drawImage(wizards,0,0,60,90,150,c.height/2-250,266,400);
-            break;
-            case 1: 
-            ctx.drawImage(wizards,60,0,60,90,150,c.height/2-250,266,400);
-            break;
-            case 2: 
-            ctx.drawImage(wizards,120,0,60,90,150,c.height/2-250,266,400);
-            break;
-            case 3:
-                ctx.drawImage(wizards,180,0,60,90,150,c.height/2-250,266,400);
-                break;
+        //draw player 1
+        this.player1Animator.draw();
+
+        //draw player 2
+        if (this.player2Animator != undefined) {
+            ctx.save();
+            ctx.scale(-1,1);
+            ctx.drawImage(platform, -1840,c.height/2+120, 394, 157);
+            this.player2Animator.draw();
+            ctx.restore();
         }
 
-        //draw character right
-        ctx.save();
-        ctx.scale(-1,1);
-        ctx.drawImage(platform, -1840,c.height/2+120, 394, 157);
-        switch(game.player2characterType) {
-            case 0: 
-            ctx.drawImage(wizards,0,0,60,90,-1504,c.height/2-250,-266,400);
-            break;
-            case 1: 
-            ctx.drawImage(wizards,60,0,60,90,-1504,c.height/2-250,-266,400);
-            break;
-            case 2: 
-            ctx.drawImage(wizards,120,0,60,90,-1504,c.height/2-250,-266,400);
-            break;
-            case 3:
-            ctx.drawImage(wizards,180,0,60,90,-1504,c.height/2-250,-266,400);
-            break;
-        }
-        ctx.restore();
+        //draw character - left
+        // switch(game.characterType) {
+        //     case 0: 
+        //     ctx.drawImage(wizards,0,0,60,90,150,c.height/2-250,266,400);
+        //     break;
+        //     case 1: 
+        //     ctx.drawImage(wizards,60,0,60,90,150,c.height/2-250,266,400);
+        //     break;
+        //     case 2: 
+        //     ctx.drawImage(wizards,120,0,60,90,150,c.height/2-250,266,400);
+        //     break;
+        //     case 3:
+        //         ctx.drawImage(wizards,180,0,60,90,150,c.height/2-250,266,400);
+        //         break;
+        // }
+
+        // //draw character right
+        // ctx.save();
+        // ctx.scale(-1,1);
+        // ctx.drawImage(platform, -1840,c.height/2+120, 394, 157);
+        // switch(game.player2characterType) {
+        //     case 0: 
+        //     ctx.drawImage(wizards,0,0,60,90,-1504,c.height/2-250,-266,400);
+        //     break;
+        //     case 1: 
+        //     ctx.drawImage(wizards,60,0,60,90,-1504,c.height/2-250,-266,400);
+        //     break;
+        //     case 2: 
+        //     ctx.drawImage(wizards,120,0,60,90,-1504,c.height/2-250,-266,400);
+        //     break;
+        //     case 3:
+        //     ctx.drawImage(wizards,180,0,60,90,-1504,c.height/2-250,-266,400);
+        //     break;
+        // }
+        // ctx.restore();
         
         //which player am I ? 
         ctx.fillStyle = "white";
@@ -498,15 +514,19 @@ class SceneManager {
             case 6: //character select
                 if (this.characterSelect.fire.mouseOver(mouseX,mouseY)) {
                     selectPlayer(0);
+                    this.player1Animator = new Animator("fire", -170,-60,this.characterWidth,this.characterHeight);
                     this.scene = 7;
                 } else if (this.characterSelect.water.mouseOver(mouseX,mouseY)) {
                     selectPlayer(1);
+                    this.player1Animator = new Animator("water",-170,-60,this.characterWidth,this.characterHeight);
                     this.scene = 7;
                 } else if (this.characterSelect.earth.mouseOver(mouseX,mouseY)) {
                     selectPlayer(2);
+                    this.player1Animator = new Animator("earth",-170,-60,this.characterWidth,this.characterHeight);
                     this.scene = 7;
                 } else if (this.characterSelect.air.mouseOver(mouseX,mouseY)) {
                     selectPlayer(3);
+                    this.player1Animator = new Animator("air",-170,-60,this.characterWidth,this.characterHeight);
                     this.scene = 7;
                 } 
                 break;
