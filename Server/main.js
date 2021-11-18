@@ -1,6 +1,7 @@
 //Constant variables for server
 const User = require("./User");
 const Game = require("./Game");
+const mysql = require("mysql");
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 3000;
@@ -28,9 +29,22 @@ var matchmakingQueue = [];
 var games = {};
 //var rooms = io.sockets.adapter.rooms;
 
+//database setup
+const db = mysql.createConnection({
+    host: "localhost",
+    database: "elemental4db",
+    user: "root",
+    password: "",
+});
+
+//check database connection
+db.connect((e => {
+    if (e) { console.log("Error connecting to database"); } else { console.log("Connected to database"); }
+}));
+
 io.sockets.on("connection", function(socket) {
     console.log("Player has connected to the server");
-
+    
     socket.on("join-server", function() {
         let player = new User(socket);
         players.set(socket.id, player);
