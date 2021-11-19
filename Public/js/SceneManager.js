@@ -9,8 +9,12 @@ class SceneManager {
         this.botSelected = true;
         this.player1Animator;
         this.player2Animator;
-        this.characterWidth = 1000;
-        this.characterHeight = 1000;
+        this.characterWidth = 1280;
+        this.characterHeight = 800;
+        this.character1X = -400;
+        this.character1Y = -100;
+        this.character2X = -1000;
+        this.character2Y = -100;
         
         //title screen buttons
         this.playButton = new Button(c.width/2-150,c.height/2-75,300,150, "Play");
@@ -214,14 +218,53 @@ class SceneManager {
         ctx.fillText("http://creativecommons.org/licenses/by/4.0/",c.width/2, 740);
         ctx.fillText("Parts of this work was remixed.",c.width/2, 780);
 
-        ctx.font = "30px Arial";
-        ctx.fillText("Wizard Character",c.width/2-700, 275);
+        // ctx.font = "30px Arial";
+        // ctx.fillText("Wizard Character",c.width/2-700, 275);
 
-        ctx.font = "15px Arial";
-        ctx.fillText("Wizard Pack by LuizMelo (www.luizmelo.itch.io)",c.width/2-700, 340);
-        ctx.fillText("Licensed under Creative Commons Zero v1.0 Universal",c.width/2-700, 380);
-        ctx.fillText("https://creativecommons.org/publicdomain/zero/1.0/",c.width/2-700, 420);
-        ctx.fillText("Parts of this work was remixed.",c.width/2-700, 460);
+        // ctx.font = "15px Arial";
+        // ctx.fillText("Wizard Pack by LuizMelo (www.luizmelo.itch.io)",c.width/2-700, 340);
+        // ctx.fillText("Licensed under Creative Commons Zero v1.0 Universal",c.width/2-700, 380);
+        // ctx.fillText("https://creativecommons.org/publicdomain/zero/1.0/",c.width/2-700, 420);
+        // ctx.fillText("Parts of this work was remixed.",c.width/2-700, 460);
+
+
+        //////////////////////
+        //   Game Credits   // 
+        //////////////////////
+
+//      Cybercloud Studios
+     
+//      Ice, Lava and Air Background
+//      Glacial Mountains: Parallax Background by Vicente Nitti (www.vnitti.itch.io)
+//      Licensed under Creative Commons: By Attribution 4.0 License
+//      http://creativecommons.org/licenses/by/4.0/
+//      Parts of this work was remixed.
+     
+//      Earth Background
+//      Grassy Mountains: Parallax Background by Vicente Nitti (www.vnitti.itch.io)
+//      Licensed under Creative Commons: By Attribution 4.0 License
+//      http://creativecommons.org/licenses/by/4.0/
+//      Parts of this work was remixed.
+     
+//      Fire Character
+//      Grassy Mountains: Parallax Background by Chierit (www.chierit.itch.io)
+//      Licensed under Creative Commons: By Attribution 4.0 License
+//      http://creativecommons.org/licenses/by/4.0/
+     
+//      Water Character
+//      Grassy Mountains: Parallax Background by Chierit (www.chierit.itch.io)
+//      Licensed under Creative Commons: By Attribution 4.0 License
+//      http://creativecommons.org/licenses/by/4.0/
+     
+//      Earth Character
+//      Grassy Mountains: Parallax Background by Chierit (www.chierit.itch.io)
+//      Licensed under Creative Commons: By Attribution 4.0 License
+//      http://creativecommons.org/licenses/by/4.0/
+     
+//      Air Character
+//      Grassy Mountains: Parallax Background by Chierit (www.chierit.itch.io)
+//      Licensed under Creative Commons: By Attribution 4.0 License
+//      http://creativecommons.org/licenses/by/4.0/
     }
     
     drawMenu() {
@@ -276,6 +319,19 @@ class SceneManager {
         this.characterSelect.water.draw(dt, mouseX, mouseY);
         this.characterSelect.earth.draw(dt, mouseX, mouseY);
         this.characterSelect.air.draw(dt, mouseX, mouseY);
+
+        ctx.drawImage(fireCharacter,  c.width/2-150-720, 300, 300, 300);
+        ctx.drawImage(waterCharacter, c.width/2-150-240, 300, 300, 300);
+        ctx.drawImage(earthCharacter, c.width/2-150+240, 300, 300, 300);
+        ctx.drawImage(airCharacter,   c.width/2-150+720, 300, 300, 300);
+
+        ctx.fillStyle = "black";
+        ctx.font = "40px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("Fire",  c.width/2-720, 700);
+        ctx.fillText("Water", c.width/2-240, 700);
+        ctx.fillText("Earth", c.width/2+240, 700);
+        ctx.fillText("Air",   c.width/2+720, 700);
     }
 
     drawGame() {
@@ -448,15 +504,15 @@ class SceneManager {
         ctx.textAlign = "center";
         ctx.fillText("Game Results",c.width/2, 200);
  
-        ctx.textAlign = "center";
-        ctx.font = "100px Arial";
-        if (game.win) {
-            ctx.fillStyle = "lime";
-            ctx.fillText("You Win!", c.width/2,c.height/2);
-        } else {
-            ctx.fillStyle = "red";
-            ctx.fillText("You Lose!", c.width/2,c.height/2);
-        }
+        // ctx.textAlign = "center";
+        // ctx.font = "100px Arial";
+        // if (game.win) {
+        //     ctx.fillStyle = "lime";
+        //     ctx.fillText("You Win!", c.width/2,c.height/2);
+        // } else {
+        //     ctx.fillStyle = "red";
+        //     ctx.fillText("You Lose!", c.width/2,c.height/2);
+        // }
 
 
         this.resultsBackButton.draw(dt,mouseX,mouseY);
@@ -514,19 +570,19 @@ class SceneManager {
             case 6: //character select
                 if (this.characterSelect.fire.mouseOver(mouseX,mouseY)) {
                     selectPlayer(0);
-                    this.player1Animator = new Animator("fire", -170,-60,this.characterWidth,this.characterHeight);
+                    this.player1Animator = new Animator("fire", this.character1X,this.character1Y,this.characterWidth,this.characterHeight);
                     this.scene = 7;
                 } else if (this.characterSelect.water.mouseOver(mouseX,mouseY)) {
                     selectPlayer(1);
-                    this.player1Animator = new Animator("water",-170,-60,this.characterWidth,this.characterHeight);
+                    this.player1Animator = new Animator("water",this.character1X,this.character1Y,this.characterWidth,this.characterHeight);
                     this.scene = 7;
                 } else if (this.characterSelect.earth.mouseOver(mouseX,mouseY)) {
                     selectPlayer(2);
-                    this.player1Animator = new Animator("earth",-170,-60,this.characterWidth,this.characterHeight);
+                    this.player1Animator = new Animator("earth",this.character1X-220,this.character1Y-270,this.characterWidth*1.4,this.characterHeight*1.4);
                     this.scene = 7;
                 } else if (this.characterSelect.air.mouseOver(mouseX,mouseY)) {
                     selectPlayer(3);
-                    this.player1Animator = new Animator("air",-170,-60,this.characterWidth,this.characterHeight);
+                    this.player1Animator = new Animator("air",this.character1X,this.character1Y,this.characterWidth,this.characterHeight);
                     this.scene = 7;
                 } 
                 break;
