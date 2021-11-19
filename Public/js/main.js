@@ -16,17 +16,25 @@ const fireSpriteSheet = new Image();
 const waterSpriteSheet = new Image();
 const earthSpriteSheet = new Image();
 const airSpriteSheet = new Image();
+const fireCharacter = new Image();
+const waterCharacter = new Image();
+const earthCharacter = new Image();
+const airCharacter = new Image();
 
-airBackground.src = "resources/images/AirMapFull.png";
-earthBackground.src = "resources/images/EarthMapFull.png";
-fireBackground.src = "resources/images/FireMapFull.png";
-waterBackground.src = "resources/images/WaterMapFull.png";
-wizards.src = "resources/images/wizards.png";
-platform.src = "resources/images/platform1.png";
-fireSpriteSheet.src = "resources/images/fireSpriteSheet.png";
-waterSpriteSheet.src = "resources/images/waterSpriteSheet.png";
-earthSpriteSheet.src = "resources/images/earthSpriteSheet.png";
-airSpriteSheet.src = "resources/images/airSpriteSheet.png";
+airBackground.src =     "resources/images/AirMapFull.png";
+earthBackground.src =   "resources/images/EarthMapFull.png";
+fireBackground.src =    "resources/images/FireMapFull.png";
+waterBackground.src =   "resources/images/WaterMapFull.png";
+wizards.src =           "resources/images/wizards.png";
+platform.src =          "resources/images/platform1.png";
+fireSpriteSheet.src =   "resources/images/fireSpriteSheet.png";
+waterSpriteSheet.src =  "resources/images/waterSpriteSheet.png";
+earthSpriteSheet.src =  "resources/images/earthSpriteSheet.png";
+airSpriteSheet.src =    "resources/images/airSpriteSheet.png";
+fireCharacter.src =     "resources/images/fireCharacter.png";
+waterCharacter.src =    "resources/images/waterCharacter.png";
+earthCharacter.src =    "resources/images/earthCharacter.png";
+airCharacter.src =      "resources/images/airCharacter.png";
 
 
 function setup() {

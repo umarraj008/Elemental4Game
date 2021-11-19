@@ -63,16 +63,16 @@ socket.on("game-update", function(data) {
             sceneManager.player1Animator.switchAnimation("idle");
             break;
         case "attack1":
-            sceneManager.player1Animator.switchAnimation("attack");
+            sceneManager.player1Animator.switchAnimation("attack1", sceneManager.player2Animator);
             break;
         case "attack2":
-            sceneManager.player1Animator.switchAnimation("attack");
+            sceneManager.player1Animator.switchAnimation("attack2", sceneManager.player2Animator);
             break;
         case "attack3":
-            sceneManager.player1Animator.switchAnimation("attack");
+            sceneManager.player1Animator.switchAnimation("attack3", sceneManager.player2Animator);
             break;
         case "attack4":
-            sceneManager.player1Animator.switchAnimation("ultimate");
+            sceneManager.player1Animator.switchAnimation("ultimate", sceneManager.player2Animator);
             break;
         case "wait":
             sceneManager.player1Animator.switchAnimation("wait");
@@ -81,10 +81,10 @@ socket.on("game-update", function(data) {
             sceneManager.player1Animator.switchAnimation("heal");
             break;
         case "damage":
-            window.setTimeout(function(){sceneManager.player1Animator.switchAnimation("damage")}, game.hitDelay);
+            //window.setTimeout(function(){sceneManager.player1Animator.switchAnimation("damage")}, game.hitDelay);
             break;
         case "dead":
-            window.setTimeout(function(){sceneManager.player1Animator.switchAnimation("dead")}, game.hitDelay);
+            window.setTimeout(function(){sceneManager.player1Animator.switchAnimation("dead")}, 2000);
             break;  
     }
 
@@ -93,16 +93,16 @@ socket.on("game-update", function(data) {
             sceneManager.player2Animator.switchAnimation("idle");
             break;
         case "attack1":
-            sceneManager.player2Animator.switchAnimation("attack");
+            sceneManager.player2Animator.switchAnimation("attack1", sceneManager.player1Animator);
             break;
         case "attack2":
-            sceneManager.player2Animator.switchAnimation("attack");
+            sceneManager.player2Animator.switchAnimation("attack2", sceneManager.player1Animator);
             break;
         case "attack3":
-            sceneManager.player2Animator.switchAnimation("attack");
+            sceneManager.player2Animator.switchAnimation("attack3", sceneManager.player1Animator);
             break;
         case "attack4":
-            sceneManager.player2Animator.switchAnimation("ultimate");
+            sceneManager.player2Animator.switchAnimation("ultimate", sceneManager.player1Animator);
             break;
         case "wait":
             sceneManager.player2Animator.switchAnimation("wait");
@@ -111,10 +111,10 @@ socket.on("game-update", function(data) {
             sceneManager.player2Animator.switchAnimation("heal");
             break;
         case "damage":
-            window.setTimeout(function(){sceneManager.player2Animator.switchAnimation("damage")}, game.hitDelay);
+            //window.setTimeout(function(){sceneManager.player2Animator.switchAnimation("damage")}, game.hitDelay);
             break;
         case "dead":
-            window.setTimeout(function(){sceneManager.player2Animator.switchAnimation("dead")}, game.hitDelay);
+            window.setTimeout(function(){sceneManager.player2Animator.switchAnimation("dead")}, 2000);
             break;   
     }
 
@@ -157,25 +157,34 @@ socket.on("other-player-character", function(type){
     } else if (type == 3) {
         type = "air";
     }  
-    sceneManager.player2Animator = new Animator(type, -1100, -60,-sceneManager.characterWidth,sceneManager.characterHeight);
+
+    if (type == "earth") {
+        sceneManager.player2Animator = new Animator(type, sceneManager.character2X+250, sceneManager.character2Y-270, -(sceneManager.characterWidth*1.4),(sceneManager.characterHeight*1.4));
+    } else {
+        sceneManager.player2Animator = new Animator(type, sceneManager.character2X, sceneManager.character2Y, -sceneManager.characterWidth,sceneManager.characterHeight);
+    }
 });
 
 socket.on("you-win", function(data) {
-    game.over = true;
-    game.turn = false;
-    //game.winner = data.winner;
-    game.win = true;
-
-    setTimeout(function(){sceneManager.scene = 8; },3000);
+    setTimeout(function(){
+        game.over = true;
+        game.turn = false;
+        //game.winner = data.winner;
+        game.win = true;
+    },3000);
+    setTimeout(function(){sceneManager.scene = 8;},7000); 
 });
 
 socket.on("you-lose", function() {
-    game.over = true;
-    game.turn = false;
-    //game.winner = data.winner;
-    game.win = false;
+    
+    setTimeout(function(){
+        game.over = true;
+        game.turn = false;
+        //game.winner = data.winner;
+        game.win = false;
+    },3000);
 
-    setTimeout(function(){sceneManager.scene = 8; },3000);
+    setTimeout(function(){sceneManager.scene = 8;},7000); 
 });
 
 function matchmake() {
