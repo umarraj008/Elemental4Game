@@ -15,7 +15,16 @@ class SceneManager {
         this.character1Y = -100;
         this.character2X = -1000;
         this.character2Y = -100;
-        
+        this.cloud1pos = {x:0};
+        this.cloud2pos = {x:0};
+        this.cloud3pos = {x:0};
+        this.cloud4pos = {x:0};
+        this.cloud5pos = {x:0};
+        this.cloudMoveSpeed = 1;
+        this.titleCurrentMap = Math.floor(Math.random()*3)+1;
+        this.titleMapTimer = 0;
+        this.titleMapDuration = 5000;
+
         //title screen buttons
         this.playButton = new Button(c.width/2-150,c.height/2-75,300,150, "Play");
         
@@ -102,7 +111,7 @@ class SceneManager {
             ctx.textAlign = "center";
             ctx.font = "20px Arial";
             ctx.fillText("Not Connected to Server", c.width/2, 30);
-            this.scene = 1;
+            // this.scene = 1;
         }
 
         if (this.bot) {
@@ -152,9 +161,100 @@ class SceneManager {
 
     drawTitleScreen(dt) {
         //background
-        ctx.fillStyle = "black";
-        ctx.fillRect(0,0,c.width,c.height);
-    
+        // ctx.fillStyle = "black";
+        // ctx.fillRect(0,0,c.width,c.height);
+        
+        switch(this.titleCurrentMap) {
+            case 1: 
+            ctx.fillStyle="#08a9fc";
+            ctx.fillRect(0,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud4,this.cloud4pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud4,c.width+this.cloud4pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapMountains,0,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud3,this.cloud3pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud3,c.width+this.cloud3pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud2,this.cloud2pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud2,c.width+this.cloud2pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud1,this.cloud1pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud1,c.width+this.cloud1pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloudSingle,this.cloud5pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloudSingle,c.width+this.cloud5pos.x,0,c.width,c.height);
+            break;
+            case 2: 
+            ctx.fillStyle="#ff4c3c";
+            ctx.fillRect(0,0,c.width,c.height);
+            ctx.drawImage(fireMapCloud4,this.cloud4pos.x,0,c.width,c.height);
+            ctx.drawImage(fireMapCloud4,c.width+this.cloud4pos.x,0,c.width,c.height);
+            ctx.drawImage(fireMapVolcano,0,0,c.width,c.height);
+            ctx.drawImage(fireMapCloud3,this.cloud3pos.x,0,c.width,c.height);
+            ctx.drawImage(fireMapCloud3,c.width+this.cloud3pos.x,0,c.width,c.height);
+            ctx.drawImage(fireMapCloud2,this.cloud2pos.x,0,c.width,c.height);
+            ctx.drawImage(fireMapCloud2,c.width+this.cloud2pos.x,0,c.width,c.height);
+            ctx.drawImage(fireMapCloud1,this.cloud1pos.x,0,c.width,c.height);
+            ctx.drawImage(fireMapCloud1,c.width+this.cloud1pos.x,0,c.width,c.height);
+            ctx.drawImage(fireMapCloudSingle,this.cloud5pos.x,0,c.width,c.height);
+            ctx.drawImage(fireMapCloudSingle,c.width+this.cloud5pos.x,0,c.width,c.height);
+            break;
+            case 3: 
+            ctx.fillStyle="#74e3f5";
+            ctx.fillRect(0,0,c.width,c.height);
+            ctx.drawImage(earthMapHill3,0,0,c.width,c.height);
+            ctx.drawImage(earthMapHill2,0,0,c.width,c.height);
+            ctx.drawImage(earthMapCloud2,this.cloud4pos.x,0,c.width,c.height);
+            ctx.drawImage(earthMapCloud2,c.width+this.cloud4pos.x,0,c.width,c.height);
+            ctx.drawImage(earthMapHill1,0,0,c.width,c.height);
+            ctx.drawImage(earthMapCloud1,this.cloud1pos.x,0,c.width,c.height);
+            ctx.drawImage(earthMapCloud1,c.width+this.cloud1pos.x,0,c.width,c.height);
+            break;
+            case 4:
+            ctx.fillStyle="#08a9fc";
+            ctx.fillRect(0,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud4,this.cloud4pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud4,c.width+this.cloud4pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud3,this.cloud3pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud3,c.width+this.cloud3pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud2,this.cloud2pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud2,c.width+this.cloud2pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud1,this.cloud1pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud1,c.width+this.cloud1pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloudSingle,this.cloud5pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloudSingle,c.width+this.cloud5pos.x,0,c.width,c.height);
+            break;
+        }
+
+        if (this.titleMapTimer >= this.titleMapDuration) {
+            this.titleCurrentMap++;
+            if (this.titleCurrentMap >= 5) {
+                this.titleCurrentMap = 1;
+            }
+            this.titleMapTimer = 0;
+        } else {
+            this.titleMapTimer+=dt;
+        }
+
+
+        this.cloud1pos.x-=this.cloudMoveSpeed;
+        this.cloud2pos.x-=this.cloudMoveSpeed*0.9;
+        this.cloud3pos.x-=this.cloudMoveSpeed*0.5;
+        this.cloud4pos.x-=this.cloudMoveSpeed*0.2;
+        this.cloud5pos.x-=this.cloudMoveSpeed;
+
+        if (this.cloud1pos.x <= -c.width) {
+            this.cloud1pos.x = 0;
+        }
+        if (this.cloud2pos.x <= -c.width) {
+            this.cloud2pos.x = 0;
+        }
+        if (this.cloud3pos.x <= -c.width) {
+            this.cloud3pos.x = 0;
+        }
+        if (this.cloud4pos.x <= -c.width) {
+            this.cloud4pos.x = 0;
+        }
+        if (this.cloud5pos.x <= -c.width) {
+            this.cloud5pos.x = 0;
+        }
+
         //draw title text
         ctx.fillStyle = "white";
         ctx.textAlign = "center";
@@ -342,18 +442,84 @@ class SceneManager {
         //maps
         switch(game.map) {
             case 1: 
-            ctx.drawImage(airBackground,0,0,c.width,c.height);
+            ctx.fillStyle="#08a9fc";
+            ctx.fillRect(0,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud4,this.cloud4pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud4,c.width+this.cloud4pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapMountains,0,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud3,this.cloud3pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud3,c.width+this.cloud3pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud2,this.cloud2pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud2,c.width+this.cloud2pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud1,this.cloud1pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud1,c.width+this.cloud1pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloudSingle,this.cloud5pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloudSingle,c.width+this.cloud5pos.x,0,c.width,c.height);
             break;
             case 2: 
-            ctx.drawImage(earthBackground,0,0,c.width,c.height);
+            ctx.fillStyle="#ff4c3c";
+            ctx.fillRect(0,0,c.width,c.height);
+            ctx.drawImage(fireMapCloud4,this.cloud4pos.x,0,c.width,c.height);
+            ctx.drawImage(fireMapCloud4,c.width+this.cloud4pos.x,0,c.width,c.height);
+            ctx.drawImage(fireMapVolcano,0,0,c.width,c.height);
+            ctx.drawImage(fireMapCloud3,this.cloud3pos.x,0,c.width,c.height);
+            ctx.drawImage(fireMapCloud3,c.width+this.cloud3pos.x,0,c.width,c.height);
+            ctx.drawImage(fireMapCloud2,this.cloud2pos.x,0,c.width,c.height);
+            ctx.drawImage(fireMapCloud2,c.width+this.cloud2pos.x,0,c.width,c.height);
+            ctx.drawImage(fireMapCloud1,this.cloud1pos.x,0,c.width,c.height);
+            ctx.drawImage(fireMapCloud1,c.width+this.cloud1pos.x,0,c.width,c.height);
+            ctx.drawImage(fireMapCloudSingle,this.cloud5pos.x,0,c.width,c.height);
+            ctx.drawImage(fireMapCloudSingle,c.width+this.cloud5pos.x,0,c.width,c.height);
             break;
             case 3: 
-            ctx.drawImage(fireBackground,0,0,c.width,c.height);
+            ctx.fillStyle="#74e3f5";
+            ctx.fillRect(0,0,c.width,c.height);
+            ctx.drawImage(earthMapHill3,0,0,c.width,c.height);
+            ctx.drawImage(earthMapHill2,0,0,c.width,c.height);
+            ctx.drawImage(earthMapCloud2,this.cloud4pos.x,0,c.width,c.height);
+            ctx.drawImage(earthMapCloud2,c.width+this.cloud4pos.x,0,c.width,c.height);
+            ctx.drawImage(earthMapHill1,0,0,c.width,c.height);
+            ctx.drawImage(earthMapCloud1,this.cloud1pos.x,0,c.width,c.height);
+            ctx.drawImage(earthMapCloud1,c.width+this.cloud1pos.x,0,c.width,c.height);
             break;
             case 4:
-            ctx.drawImage(waterBackground,0,0,c.width,c.height); 
+            ctx.fillStyle="#08a9fc";
+            ctx.fillRect(0,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud4,this.cloud4pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud4,c.width+this.cloud4pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud3,this.cloud3pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud3,c.width+this.cloud3pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud2,this.cloud2pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud2,c.width+this.cloud2pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud1,this.cloud1pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloud1,c.width+this.cloud1pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloudSingle,this.cloud5pos.x,0,c.width,c.height);
+            ctx.drawImage(waterMapCloudSingle,c.width+this.cloud5pos.x,0,c.width,c.height);
             break;
         }
+
+        this.cloud1pos.x-=this.cloudMoveSpeed;
+        this.cloud2pos.x-=this.cloudMoveSpeed*0.9;
+        this.cloud3pos.x-=this.cloudMoveSpeed*0.5;
+        this.cloud4pos.x-=this.cloudMoveSpeed*0.2;
+        this.cloud5pos.x-=this.cloudMoveSpeed;
+
+        if (this.cloud1pos.x <= -c.width) {
+            this.cloud1pos.x = 0;
+        }
+        if (this.cloud2pos.x <= -c.width) {
+            this.cloud2pos.x = 0;
+        }
+        if (this.cloud3pos.x <= -c.width) {
+            this.cloud3pos.x = 0;
+        }
+        if (this.cloud4pos.x <= -c.width) {
+            this.cloud4pos.x = 0;
+        }
+        if (this.cloud5pos.x <= -c.width) {
+            this.cloud5pos.x = 0;
+        }
+
 
         //draw platforms
         ctx.drawImage(platform, 80,c.height/2+120, 394, 157);
