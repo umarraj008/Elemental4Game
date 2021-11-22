@@ -24,6 +24,8 @@ class SceneManager {
         this.titleCurrentMap = Math.floor(Math.random()*3)+1;
         this.titleMapTimer = 0;
         this.titleMapDuration = 5000;
+        this.windParticleSystem = new WindParticleSystem();
+
 
         //title screen buttons
         this.playButton = new Button(c.width/2-150,c.height/2-75,300,150, "Play");
@@ -33,6 +35,7 @@ class SceneManager {
         this.perkScreenButton = new Button(c.width/2-150,c.height/2-100,300,150, "Perk Screen");
         this.settingsButton = new Button(c.width/2+300,c.height/2-100,300,150, "Settings");
         this.menuBackButton = new Button(c.width/2-300,c.height/2+300,600,100, "Back");
+        this.projectWebsiteButton = new Button(50,c.height-200,300,150, "Project Website");
         
         //settings buttons
         this.settingsFullScreenButton = new Button(c.width/2-150,c.height/2-200,300,150, "Fullscreen");
@@ -254,7 +257,8 @@ class SceneManager {
         if (this.cloud5pos.x <= -c.width) {
             this.cloud5pos.x = 0;
         }
-
+        this.windParticleSystem.draw();
+        
         //draw title text
         ctx.fillStyle = "white";
         ctx.textAlign = "center";
@@ -388,7 +392,8 @@ class SceneManager {
         this.perkScreenButton.draw(dt,mouseX,mouseY);
         this.settingsButton.draw(dt,mouseX,mouseY);
         this.menuBackButton.draw(dt,mouseX,mouseY);
-    
+        this.projectWebsiteButton.draw(dt,mouseX,mouseY);
+        
     }
 
     drawPerkScreen() {
@@ -520,6 +525,7 @@ class SceneManager {
             this.cloud5pos.x = 0;
         }
 
+        this.windParticleSystem.draw();
 
         //draw platforms
         ctx.drawImage(platform, 80,c.height/2+120, 394, 157);
@@ -724,8 +730,9 @@ class SceneManager {
                     this.scene = 2; 
                 } else if (this.menuBackButton.mouseOver(mouseX,mouseY)) {
                     this.scene = 1; 
-                }
-                   
+                } else if (this.projectWebsiteButton.mouseOver(mouseX,mouseY)) {
+                    location.href = "https://msadhak01.wixsite.com/elemental4"; 
+                }   
                 break;
             case 5: //perk screen
                 if(this.perkBackButton.mouseOver(mouseX,mouseY)) {
