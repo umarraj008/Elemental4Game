@@ -74,6 +74,15 @@ class SceneManager {
     run(dt) {
         //switch scenes
         switch(this.scene) {
+            case -1: //login screen
+                ctx.fillStyle = "black";
+                ctx.fillRect(0,0,c.width,c.height);
+
+                ctx.fillStyle = "white";
+                ctx.textAlign = "center";
+                ctx.font = "100px Arial";
+                ctx.fillText("Elemental 4", c.width/2, c.height/2-200);
+                break;
             case 0: //splash screen
                 if (this.splash.draw(dt)) this.scene = 1;
                 break;

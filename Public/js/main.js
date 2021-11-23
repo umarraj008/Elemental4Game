@@ -4,7 +4,7 @@ const ctx = c.getContext("2d");
 var scene = 0;
 var dt = 0, lastTime = 0
 var mouseX, mouseY;
-var sceneManager = new SceneManager(0);
+var sceneManager = new SceneManager(-1);
 
 const airBackground = new Image();
 const earthBackground = new Image();
@@ -77,6 +77,7 @@ function setup() {
     // c.height = 1080;
     ctx.imageSmoothingEnabled = false;
     resizeWindow();
+    main();
 }
 
 function main(time = 0) {
@@ -115,5 +116,10 @@ window.onclick = function(e) {
     //console.log("test2");
 }
 
+function loginButtonPressed() {
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("password").value;
+    login(email, password);
+}
+
 setup();
-main();
