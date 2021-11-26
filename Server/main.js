@@ -43,11 +43,74 @@ db.connect((e => {
 }));
 
 io.sockets.on("connection", function(socket) {
-    console.log("Player has connected to the server");
+    //console.log("Player has connected to the server");
     
-    socket.on("join-server", function() {
-        let player = new User(socket);
-        players.set(socket.id, player);
+    socket.on("join-server", function(data) {
+        if (data.sessionLoggedIn) {
+            db.query("SELECT * FROM users WHERE email='"+data.email+"' AND firstName='"+data.firstName+"' AND lastName='"+data.lastName+"' AND dob='"+data.DOB+"' AND gamertag='"+data.gamerTag+"'", function(error, result) {
+                if (!error) {
+                    if (result.length == 1) {
+                        //make player
+                        let userData = {
+                            firstName: result[0].firstName,
+                            lastName: result[0].lastName,
+                            DOB: result[0].dob,
+                            email: result[0].email,
+                            gamerTag: result[0].gamertag,
+                            gamesWon: result[0].gamesWon,
+                            gamesLost: result[0].gamesLost,
+                            xpLevel: result[0].xpLevel,
+                            perksUnlocked: result[0].perksUnlocked,
+                        }
+
+                        let player = new User(socket, userData);
+                        players.set(socket.id, player);
+                        socket.emit("logged-in", userData);
+                    } else {
+                        //2 users found with same email?
+                        socket.emit("login-failed", "Login Failed");
+                    }
+                } else {
+                    //database error
+                    socket.emit("login-failed", "Email or Password is Incorrect");
+                }
+            });
+        } else {
+            db.query("SELECT * FROM users WHERE email='"+data.email+"'", function(error, result) {
+                if (!error) {
+                    if (result.length == 1) {
+                        if (result[0].password == data.password) {
+
+                            //make player
+                            let userData = {
+                                firstName: result[0].firstName,
+                                lastName: result[0].lastName,
+                                DOB: result[0].dob,
+                                email: result[0].email,
+                                gamerTag: result[0].gamertag,
+                                gamesWon: result[0].gamesWon,
+                                gamesLost: result[0].gamesLost,
+                                xpLevel: result[0].xpLevel,
+                                perksUnlocked: result[0].perksUnlocked,
+                            }
+                            
+                            let player = new User(socket, userData);
+                            players.set(socket.id, player);
+                            socket.emit("logged-in", userData);
+                        } else {
+                            //wrong password
+                            socket.emit("login-failed", "Email or Password is Incorrect");
+                        }
+                    } else {
+                        //2 users found with same email?
+                        socket.emit("login-failed", "Login Failed");
+                    }
+                } else {
+                    //database error
+                    socket.emit("login-failed", "Email or Password is Incorrect");
+                }
+            });
+        }
     });
 
     socket.on("matchmake", function() {
@@ -79,6 +142,11 @@ io.sockets.on("connection", function(socket) {
 
     socket.on("disconnect", function() {
         let player = findPlayer(socket.id);
+
+        if (player == null || player == undefined) {
+            return;
+        }
+
         //if player is in matchmaking queue
         for (i = 0; i < matchmakingQueue.length; i++) {
             if (matchmakingQueue[i].socket.id == socket.id) {
@@ -103,6 +171,58 @@ io.sockets.on("connection", function(socket) {
     socket.on("player-action", function(data) {
         games[data.id].playerAction(data.action);
     });
+
+    socket.on("register", function(data) {
+        db.query("SELECT * FROM users WHERE email='"+data.email+"'",function(error, result) {
+            if (!error) {
+                if(result.length >= 1) {
+                    socket.emit("register-failed", "Account with the same email already exists");
+                } else {
+
+                }
+            } else {
+                socket.emit("register-failed", "Register failed");
+            }
+        });
+        db.query("SELECT * FROM users WHERE gamertag='"+data.gamerTag+"'",function(error, result) {
+            if (!error) {
+                if(result.length >= 1) {
+                    socket.emit("register-failed", "Account with the same gamertag already exists");
+                } else {
+
+                }
+            } else {
+                socket.emit("register-failed", "Register failed");
+            }
+        });
+        db.query("INSERT INTO users(firstName, lastName, dob, email, password, gamertag, gamesWon, gamesLost, xpLevel, perksUnlocked) VALUES('"+data.firstName+"','"+data.lastName+"','"+data.DOB+"', '"+data.email+"', '"+data.password+"', '"+data.gamerTag+"', '0','0','0','0')",function(error, result) {
+            if (!error) {
+                
+            } else {
+                socket.emit("register-failed", "Register failed");
+            }
+        });
+        db.query("SELECT * FROM users WHERE email='"+data.email+"'",function(error, result) {
+            if (!error) {
+                if(result.length == 1) {
+                    let data = {
+                        firstName: result[0].firstName,
+                        lastName: result[0].lastName,
+                        DOB: result[0].dob,
+                        email: result[0].email,
+                        gamerTag: result[0].gamertag,
+                        gamesWon: result[0].gamesWon,
+                        gamesLost: result[0].gamesLost,
+                        xpLevel: result[0].xpLevel,
+                        perksUnlocked: result[0].perksUnlocked,
+                    }
+                    socket.emit("register-success", data);
+                } 
+            } else {
+                socket.emit("register-failed", "Register failed");
+            }
+        });
+    });
 });
 
 function findGame(id) {
@@ -122,3 +242,4 @@ function makeGameID() {
    }
    return id;
 }
+

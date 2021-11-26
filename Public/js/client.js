@@ -17,11 +17,44 @@ var game = {
     win: null,
     id: null,
     hitDelay: 700,
+
+    myData: {
+        firstName: null,
+        lastName: null,
+        DOB: null,
+        email: null,
+        gamerTag: null,
+        gamesWon: null,
+        gamesLost: null,
+        xpLevel: null,
+        perksUnlocked: null,
+    },
+
+    loggedIn: false,
 }
 
 socket.on("connect", function() {
     console.log("connected to server");
-    socket.emit("join-server");
+    //socket.emit("join-server");
+
+    let sessionEmail = window.sessionStorage.getItem("email");
+    let sessionFirstName = window.sessionStorage.getItem("firstName");
+    let sessionLastName = window.sessionStorage.getItem("lastName");
+    let sessionGamerTag = window.sessionStorage.getItem("gamerTag");
+    let sessionDOB = window.sessionStorage.getItem("DOB");
+
+    if (sessionEmail != null && sessionEmail != undefined && 
+        sessionFirstName != null && sessionFirstName != undefined && 
+        sessionLastName != null && sessionLastName != undefined && 
+        sessionGamerTag != null && sessionGamerTag != undefined && 
+        sessionDOB != null && sessionDOB != undefined) {
+
+            let data = {email: sessionEmail, firstName: sessionFirstName, lastName: sessionLastName, gamerTag: sessionGamerTag, DOB: sessionDOB, sessionLoggedIn: true};
+            loggedIn(data);
+            console.log("Requesting to log back into same account as stored in session storage");
+        } else {
+            document.getElementById("loginContainer").style.display = "flex";
+        }
 });
 
 socket.on("disconnect", function() {
@@ -187,6 +220,51 @@ socket.on("you-lose", function() {
     setTimeout(function(){sceneManager.scene = 8;},7000); 
 });
 
+socket.on("logged-in", function(userData) {
+    game.myData.firstName = userData.firstName;
+    game.myData.lastName = userData.lastName;
+    game.myData.DOB = userData.DOB;
+    game.myData.email = userData.email;
+    game.myData.gamerTag = userData.gamerTag;
+    game.myData.gamesWon = userData.gamesWon;
+    game.myData.gamesLost = userData.gamesLost;
+    game.myData.xpLevel = userData.xpLevel;
+    game.myData.perksUnlocked = userData.perksUnlocked;
+    game.loggedIn = true;
+
+    sessionStorage.setItem("firstName", userData.firstName);
+    sessionStorage.setItem("lastName", userData.lastName);
+    sessionStorage.setItem("DOB", userData.DOB);
+    sessionStorage.setItem("email", userData.email);
+    sessionStorage.setItem("gamerTag", userData.gamerTag);
+    sessionStorage.setItem("gamesWon", userData.gamesWon);
+    sessionStorage.setItem("gamesLost", userData.gamesLost);
+    sessionStorage.setItem("xpLevel", userData.xpLevel);
+    sessionStorage.setItem("perksUnlocked", userData.perksUnlocked);
+
+    document.getElementById("loginContainer").parentNode.removeChild(document.getElementById("loginContainer"));
+    sceneManager.scene = 0;
+    console.log("Logged in as " + game.myData.gamerTag);
+});
+
+socket.on("login-failed", function(message) {
+    console.log(message);
+});
+
+socket.on("register-success", function(data) {
+    sessionStorage.setItem("firstName", data.firstName);
+    sessionStorage.setItem("lastName", data.lastName);
+    sessionStorage.setItem("DOB", data.DOB);
+    sessionStorage.setItem("email", data.email);
+    sessionStorage.setItem("gamerTag", data.gamerTag);
+    sessionStorage.setItem("gamesWon", data.gamesWon);
+    sessionStorage.setItem("gamesLost", data.gamesLost);
+    sessionStorage.setItem("xpLevel", data.xpLevel);
+    sessionStorage.setItem("perksUnlocked", data.perksUnlocked);
+    
+    location.href = index.html;
+});
+
 function matchmake() {
     socket.emit("matchmake");
     sceneManager.matchmaking = true;
@@ -225,4 +303,18 @@ function resetGame() {
     player1Animator = undefined;
     player2Animator = undefined;
     sceneManager.matchmaking = false;
+}
+
+function login(e, p) {
+    socket.emit("join-server", {email: e, password: p});
+}
+
+function loggedIn(data) {
+    socket.emit("join-server", data);
+}
+
+function logout() {
+    sessionStorage.clear();
+    game.loggedIn = false;
+    location.reload();
 }

@@ -1,12 +1,11 @@
 module.exports = class Player {
-    constructor(s, name) {
+    constructor(s) {
         this.health = 100;
         this.points = 5;
         this.totalDamage = 0;
         this.totalPoints = 0;
         this.playerType = null;
         this.turn = false;
-        this.name = name;
         this.action = null;
 
         this.attacks = [
