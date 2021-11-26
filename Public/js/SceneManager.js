@@ -25,6 +25,7 @@ class SceneManager {
         this.titleMapTimer = 0;
         this.titleMapDuration = 5000;
         this.windParticleSystem = new WindParticleSystem();
+    
 
 
         //title screen buttons
@@ -70,10 +71,10 @@ class SceneManager {
         this.resultsBackButton = new Button(c.width/2-300,c.height/2+300,600,100, "Back");
     }
 
-
     run(dt) {
         //switch scenes
         switch(this.scene) {
+            
             case -1: //login screen
                 ctx.fillStyle = "black";
                 ctx.fillRect(0,0,c.width,c.height);
