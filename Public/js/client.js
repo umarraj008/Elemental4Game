@@ -318,8 +318,3 @@ function logout() {
     game.loggedIn = false;
     location.reload();
 }
-
-function register(firstName,lastName,email,DOB,gamerTag,password) {
-    let data = {firstName:firstName, lastName:lastName, email:email, DOB:DOB, gamerTag:gamerTag, password:password};
-    socket.emit("register", data);
-}

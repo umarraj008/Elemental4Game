@@ -122,20 +122,4 @@ function loginButtonPressed() {
     login(email, password);
 }
 
-function registerButtonPressed() {
-    let firstName = document.getElementById("firstName").value;
-    let lastName = document.getElementById("lastName").value;
-    let email = document.getElementById("email").value;
-    let DOB = document.getElementById("DOB").value;
-    let gamerTag = document.getElementById("gamerTag").value;
-    let password = document.getElementById("password").value;
-    let confirmPassword = document.getElementById("confirmPassword").value;
-    // register();
-    if(password == confirmPassword) {
-        register(firstName,lastName,email,DOB,gamerTag,password);
-    } else {
-        console.log("passwords dont match");
-    }
-}
-
 setup();

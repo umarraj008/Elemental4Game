@@ -195,7 +195,7 @@ io.sockets.on("connection", function(socket) {
                 socket.emit("register-failed", "Register failed");
             }
         });
-        db.query("INSERT INTO users(firstName, lastName, dob, email, password, gamertag, gamesWon, gamesLost, xpLevel, perksUnlocked) VALUES('"+data.firstName+"','"+data.lastName+"','"+data.dob+"', '"+data.email+"', '"+data.password+"', '"+data.gamerTag+"', '0','0','0','0')",function(error, result) {
+        db.query("INSERT INTO users(firstName, lastName, dob, email, password, gamertag, gamesWon, gamesLost, xpLevel, perksUnlocked) VALUES('"+data.firstName+"','"+data.lastName+"','"+data.DOB+"', '"+data.email+"', '"+data.password+"', '"+data.gamerTag+"', '0','0','0','0')",function(error, result) {
             if (!error) {
                 
             } else {
