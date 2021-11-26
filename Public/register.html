@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Elemental 4</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"
+        integrity="sha512-zN6KYOtONNTOGXz0RkWX2EpavN9VdIs+2w+To+fhciFv83YA9maUpi2lzZWrOfKXdFIZZomWufBznkyHi3a8oQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="shortcut icon" type="image/x-con" href="resources/images/Elemental4Logo.ico">
+</head>
+
+<body>
+    <script src="js/client.js"></script>
+
+    <div id="registerContainer">
+        <div id="innerRegisterContainer">
+            <h1>Register</h1>
+            <input type="text" placeholder="firstName" id="firstName">
+            <input type="text" placeholder="lastName" id="lastName">
+            <input type="email" placeholder="Email" id="email">
+            <input type="date" placeholder="dateOfBirth" id="DOB">
+            <input type="text" placeholder="gamerTag" id="gamerTag">
+            <input type="password" placeholder="password" id="password">
+            <input type="password" placeholder="confirmPassword" id="confirmPassword">
+            <input type="submit" value="Register" id="register" onclick="registerButtonPressed()">
+        </div>
+    </div>
+</body>
+
+</html>

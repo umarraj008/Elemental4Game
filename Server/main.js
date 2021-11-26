@@ -171,6 +171,58 @@ io.sockets.on("connection", function(socket) {
     socket.on("player-action", function(data) {
         games[data.id].playerAction(data.action);
     });
+
+    socket.on("register", function(data) {
+        db.query("SELECT * FROM users WHERE email='"+data.email+"'",function(error, result) {
+            if (!error) {
+                if(result.length >= 1) {
+                    socket.emit("register-failed", "Account with the same email already exists");
+                } else {
+
+                }
+            } else {
+                socket.emit("register-failed", "Register failed");
+            }
+        });
+        db.query("SELECT * FROM users WHERE gamertag='"+data.gamerTag+"'",function(error, result) {
+            if (!error) {
+                if(result.length >= 1) {
+                    socket.emit("register-failed", "Account with the same gamertag already exists");
+                } else {
+
+                }
+            } else {
+                socket.emit("register-failed", "Register failed");
+            }
+        });
+        db.query("INSERT INTO users(firstName, lastName, dob, email, password, gamertag, gamesWon, gamesLost, xpLevel, perksUnlocked) VALUES('"+data.firstName+"','"+data.lastName+"','"+data.dob+"', '"+data.email+"', '"+data.password+"', '"+data.gamerTag+"', '0','0','0','0')",function(error, result) {
+            if (!error) {
+                
+            } else {
+                socket.emit("register-failed", "Register failed");
+            }
+        });
+        db.query("SELECT * FROM users WHERE email='"+data.email+"'",function(error, result) {
+            if (!error) {
+                if(result.length == 1) {
+                    let data = {
+                        firstName: result[0].firstName,
+                        lastName: result[0].lastName,
+                        DOB: result[0].dob,
+                        email: result[0].email,
+                        gamerTag: result[0].gamertag,
+                        gamesWon: result[0].gamesWon,
+                        gamesLost: result[0].gamesLost,
+                        xpLevel: result[0].xpLevel,
+                        perksUnlocked: result[0].perksUnlocked,
+                    }
+                    socket.emit("register-success", data);
+                } 
+            } else {
+                socket.emit("register-failed", "Register failed");
+            }
+        });
+    });
 });
 
 function findGame(id) {
@@ -190,3 +242,4 @@ function makeGameID() {
    }
    return id;
 }
+

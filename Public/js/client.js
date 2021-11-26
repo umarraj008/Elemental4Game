@@ -251,6 +251,20 @@ socket.on("login-failed", function(message) {
     console.log(message);
 });
 
+socket.on("register-success", function(data) {
+    sessionStorage.setItem("firstName", data.firstName);
+    sessionStorage.setItem("lastName", data.lastName);
+    sessionStorage.setItem("DOB", data.DOB);
+    sessionStorage.setItem("email", data.email);
+    sessionStorage.setItem("gamerTag", data.gamerTag);
+    sessionStorage.setItem("gamesWon", data.gamesWon);
+    sessionStorage.setItem("gamesLost", data.gamesLost);
+    sessionStorage.setItem("xpLevel", data.xpLevel);
+    sessionStorage.setItem("perksUnlocked", data.perksUnlocked);
+    
+    location.href = index.html;
+});
+
 function matchmake() {
     socket.emit("matchmake");
     sceneManager.matchmaking = true;
@@ -303,4 +317,9 @@ function logout() {
     sessionStorage.clear();
     game.loggedIn = false;
     location.reload();
+}
+
+function register(firstName,lastName,email,DOB,gamerTag,password) {
+    let data = {firstName:firstName, lastName:lastName, email:email, DOB:DOB, gamerTag:gamerTag, password:password};
+    socket.emit("register", data);
 }
