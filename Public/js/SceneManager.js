@@ -70,6 +70,8 @@ class SceneManager {
         
         //game results page buttons
         this.resultsBackButton = new Button(c.width/2-300,c.height/2+300,600,100, "Back");
+
+        this.logoutButton = new Button(50, c.height-200,300,150, "Logout");
     }
 
     run(dt) {
@@ -284,6 +286,9 @@ class SceneManager {
         ctx.textAlign = "left";
         ctx.font = "30px Arial";
         ctx.fillText("Logged in as " + game.myData.gamerTag, 50, 50);
+
+        //logout
+        this.logoutButton.draw(dt, mouseX, mouseY);
      
     }
     drawSettings() {
@@ -722,6 +727,8 @@ class SceneManager {
             case 1: //title screen
                 if (this.playButton.mouseOver(mouseX,mouseY)) {
                     this.scene = 4; 
+                } else if (this.logoutButton.mouseOver(mouseX, mouseY)) {
+                    logout();
                 }
                 break;
             case 2: //settings screen
