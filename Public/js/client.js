@@ -37,7 +37,7 @@ socket.on("connect", function() {
     console.log("connected to server");
     //socket.emit("join-server");
 
-    if (game.id != null && game.map != 0) {
+    if (game.id != null && game.map != 0 && sceneManager.scene != 0) {
         location.reload();
         return;
     }

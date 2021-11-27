@@ -30,7 +30,7 @@ var games = {};
 //var rooms = io.sockets.adapter.rooms;
 
 //database setup
-const db = mysql.createConnection({
+var db = mysql.createPool({
     host: "eu-cdbr-west-01.cleardb.com",
     database: "heroku_d85e5cf42d32717",
     user: "b0e016254a55c2",
@@ -38,9 +38,29 @@ const db = mysql.createConnection({
 });
 
 //check database connection
-db.connect((e => {
-    if (e) { console.log("Error connecting to database"); } else { console.log("Connected to database"); }
-}));
+// db.connect(e => {
+//     if (e) { console.log("Error connecting to database"); setTimeout(function() {handleDisconnect()}, 2000);} else { console.log("Connected to database"); }
+// });
+
+db.query("SELECT 1", (error, results, fields) => {
+    if (error) throw error
+    console.log("Connected to Server"); 
+});
+
+//db error
+db.on("error", error => {
+    console.log("Disconnected From Database");
+    if (error.code == "PROTOCOL_CONNECTION_LOST") {
+        db = mysql.createConnection({
+            host: "eu-cdbr-west-01.cleardb.com",
+            database: "heroku_d85e5cf42d32717",
+            user: "b0e016254a55c2",
+            password: "5ccaf3af",
+        });
+    } else {
+        throw error;
+    }
+});
 
 io.sockets.on("connection", function(socket) {
     //console.log("Player has connected to the server");
@@ -139,6 +159,14 @@ io.sockets.on("connection", function(socket) {
             //matchmakingQueue[0].socket.join(gameID);
             //matchmakingQueue[1].socket.join(gameID);
             
+            if (matchmakingQueue[1].socket == undefined) {
+                matchmakingQueue.splice(1,1);
+            }
+
+            if (matchmakingQueue[0].socket == undefined) {
+                matchmakingQueue.splice(0,1);
+            }
+
             //make new game
             var game = new Game(gameID, matchmakingQueue[0].socket, matchmakingQueue[0].gamerTag, matchmakingQueue[1].socket, matchmakingQueue[1].gamerTag);
             findPlayer(matchmakingQueue[0].socket.id).gameID = gameID;
@@ -174,6 +202,8 @@ io.sockets.on("connection", function(socket) {
             delete games[player.gameID];
             //console.log("match cancelled");
         }
+
+        //delete player from list
         players.delete(socket.id);
     });
 
