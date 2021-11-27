@@ -31,10 +31,10 @@ var games = {};
 
 //database setup
 const db = mysql.createConnection({
-    host: "localhost",
-    database: "elemental4db",
-    user: "root",
-    password: "",
+    host: "eu-cdbr-west-01.cleardb.com",
+    database: "heroku_d85e5cf42d32717",
+    user: "b0e016254a55c2",
+    password: "5ccaf3af",
 });
 
 //check database connection
