@@ -1,12 +1,12 @@
 class HealthBar{
-    constructor(x,y,w,h){
+    constructor(x,y,w,h,s,m){
         this.x = x;
         this.y = y;
         this.w = w;
         this.h = h;
-        this.value = 1;
+        this.value = s/100;
         this.border = 2;
-        this.maxValue = 1
+        this.maxValue = m/100
         this.change = false;
         this.changeTo;
         this.range1 = 70/100;
@@ -51,5 +51,7 @@ class HealthBar{
     changeValue(value){
         this.change = true;
         this.changeTo = value/100;
+
+        if (this.changeTo <= 0) this.changeTo = 0;
     }
 }

@@ -25,7 +25,8 @@ class SceneManager {
         this.titleMapTimer = 0;
         this.titleMapDuration = 5000;
         this.windParticleSystem = new WindParticleSystem();
-    
+        this.player1HealthBar = new HealthBar(50,120,700,30,0,200);
+        this.player2HealthBar = new HealthBar(-(c.width-50), 120, 700, 30,0,200);
 
 
         //title screen buttons
@@ -277,6 +278,12 @@ class SceneManager {
         
         // play button
         this.playButton.draw(dt,mouseX,mouseY);
+
+        //logged in as text
+        ctx.fillStyle = "white";
+        ctx.textAlign = "left";
+        ctx.font = "30px Arial";
+        ctx.fillText("Logged in as " + game.myData.gamerTag, 50, 50);
      
     }
     drawSettings() {
@@ -592,8 +599,8 @@ class SceneManager {
         ctx.fillStyle = "white";
         ctx.textAlign = "center";
         ctx.font = "50px Arial";
-        ctx.strokeText("Player " + game.whichPlayerAmI, c.width/2, 100);
-        ctx.fillText("Player " + game.whichPlayerAmI, c.width/2, 100);
+        // ctx.strokeText("Player " + game.whichPlayerAmI, c.width/2, 100);
+        // ctx.fillText("Player " + game.whichPlayerAmI, c.width/2, 100);
 
         if (game.turn) {
             ctx.strokeText("Your Turn!", c.width/2, 200);
@@ -652,13 +659,13 @@ class SceneManager {
         ctx.lineWidth = 5;
         ctx.textAlign = "left";
         ctx.font = "60px Arial";
-        ctx.strokeText("You", 50, 100);
-        ctx.fillText("You", 50, 100);
+        ctx.strokeText(game.myData.gamerTag, 50, 100);
+        ctx.fillText(game.myData.gamerTag, 50, 100);
 
         ctx.textAlign = "right";
         
-        ctx.strokeText("Opponent",c.width -50, 100);
-        ctx.fillText("Opponent",c.width -50, 100);
+        ctx.strokeText(game.player2.gamerTag ,c.width -50, 100);
+        ctx.fillText(game.player2.gamerTag ,c.width -50, 100);
 
 
         if (game.over) {
@@ -674,6 +681,14 @@ class SceneManager {
                 ctx.fillText("You Lose!", c.width/2,c.height/2);
             }
         }
+
+        //healthbar
+        this.player1HealthBar.draw();
+
+        ctx.save();
+        ctx.scale(-1,1);
+        this.player2HealthBar.draw();
+        ctx.restore();
     }
     drawGameResults() {
         //background

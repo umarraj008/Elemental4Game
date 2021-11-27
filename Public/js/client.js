@@ -11,7 +11,7 @@ var game = {
     over: false,
     whichPlayerAmI: null,
     map: 0,
-    player2: {health:100,points:5, turn: false, action: null},
+    player2: {health:100,points:5, turn: false, action: null, gamerTag: null},
     characterType: null,
     player2characterType: null,
     win: null,
@@ -36,6 +36,11 @@ var game = {
 socket.on("connect", function() {
     console.log("connected to server");
     //socket.emit("join-server");
+
+    if (game.id != null && game.map != 0) {
+        location.reload();
+        return;
+    }
 
     let sessionEmail = window.sessionStorage.getItem("email");
     let sessionFirstName = window.sessionStorage.getItem("firstName");
@@ -66,7 +71,9 @@ socket.on("pick-character", function(data) {
     sceneManager.scene = 6;
     game.id = data.gameID;
     game.map = data.map;
-
+    game.player2.gamerTag = data.p2GT;
+    sceneManager.player1HealthBar.changeValue(100);
+    sceneManager.player2HealthBar.changeValue(100);
 });
 
 socket.on("player2-turn", function() {
@@ -84,10 +91,10 @@ socket.on("game-update", function(data) {
 
     window.setTimeout(function() {
         game.points = data.points;
-        game.health = data.health;
+        game.health = (data.health <= 0) ? 0 : data.health;
         game.turn = data.turn;
         game.player2.points = data.p2Points;
-        game.player2.health = data.p2Health;
+        game.player2.health = (data.p2Health <= 0) ? 0 : data.p2Health;
         game.player2.turn = data.p2Turn
     }, game.hitDelay);
 
@@ -96,28 +103,30 @@ socket.on("game-update", function(data) {
             sceneManager.player1Animator.switchAnimation("idle");
             break;
         case "attack1":
-            sceneManager.player1Animator.switchAnimation("attack1", sceneManager.player2Animator);
+            sceneManager.player1Animator.switchAnimation("attack1", sceneManager.player2Animator, sceneManager.player2HealthBar, data.p2Health);
             break;
         case "attack2":
-            sceneManager.player1Animator.switchAnimation("attack2", sceneManager.player2Animator);
+            sceneManager.player1Animator.switchAnimation("attack2", sceneManager.player2Animator, sceneManager.player2HealthBar, data.p2Health);
             break;
         case "attack3":
-            sceneManager.player1Animator.switchAnimation("attack3", sceneManager.player2Animator);
+            sceneManager.player1Animator.switchAnimation("attack3", sceneManager.player2Animator, sceneManager.player2HealthBar, data.p2Health);
             break;
         case "attack4":
-            sceneManager.player1Animator.switchAnimation("ultimate", sceneManager.player2Animator);
+            sceneManager.player1Animator.switchAnimation("ultimate", sceneManager.player2Animator, sceneManager.player2HealthBar, data.p2Health);
             break;
         case "wait":
             sceneManager.player1Animator.switchAnimation("wait");
+            sceneManager.player1HealthBar.changeValue(data.health);
             break;
-        case "heal":
+            case "heal":
+            sceneManager.player1HealthBar.changeValue(data.health);
             sceneManager.player1Animator.switchAnimation("heal");
             break;
         case "damage":
             //window.setTimeout(function(){sceneManager.player1Animator.switchAnimation("damage")}, game.hitDelay);
             break;
         case "dead":
-            window.setTimeout(function(){sceneManager.player1Animator.switchAnimation("dead")}, 2000);
+            window.setTimeout(function(){sceneManager.player1Animator.switchAnimation("dead"); sceneManager.player2HealthBar.changeValue(data.p2Health);}, 2000);
             break;  
     }
 
@@ -126,28 +135,30 @@ socket.on("game-update", function(data) {
             sceneManager.player2Animator.switchAnimation("idle");
             break;
         case "attack1":
-            sceneManager.player2Animator.switchAnimation("attack1", sceneManager.player1Animator);
+            sceneManager.player2Animator.switchAnimation("attack1", sceneManager.player1Animator, sceneManager.player1HealthBar, data.health);
             break;
         case "attack2":
-            sceneManager.player2Animator.switchAnimation("attack2", sceneManager.player1Animator);
+            sceneManager.player2Animator.switchAnimation("attack2", sceneManager.player1Animator, sceneManager.player1HealthBar, data.health);
             break;
         case "attack3":
-            sceneManager.player2Animator.switchAnimation("attack3", sceneManager.player1Animator);
+            sceneManager.player2Animator.switchAnimation("attack3", sceneManager.player1Animator, sceneManager.player1HealthBar, data.health);
             break;
         case "attack4":
-            sceneManager.player2Animator.switchAnimation("ultimate", sceneManager.player1Animator);
+            sceneManager.player2Animator.switchAnimation("ultimate", sceneManager.player1Animator, sceneManager.player1HealthBar, data.health);
             break;
         case "wait":
             sceneManager.player2Animator.switchAnimation("wait");
+            sceneManager.player2HealthBar.changeValue(data.health);
             break;
         case "heal":
             sceneManager.player2Animator.switchAnimation("heal");
+            sceneManager.player2HealthBar.changeValue(data.health);
             break;
         case "damage":
             //window.setTimeout(function(){sceneManager.player2Animator.switchAnimation("damage")}, game.hitDelay);
             break;
         case "dead":
-            window.setTimeout(function(){sceneManager.player2Animator.switchAnimation("dead")}, 2000);
+            window.setTimeout(function(){sceneManager.player2Animator.switchAnimation("dead");sceneManager.player1HealthBar.changeValue(data.health);}, 2000);
             break;   
     }
 
@@ -166,8 +177,9 @@ socket.on("game-cancelled", function() {
     resetGame();
 });
 
-socket.on("your-player", function(which) {
-    game.whichPlayerAmI = which;
+socket.on("your-player", function(data) {
+    game.whichPlayerAmI = data.which;
+    game.player2.gamerTag = data.p2GT;
 });
 
 // socket.on("game-map", function(map) {
@@ -293,15 +305,19 @@ function resetGame() {
         over: false,
         whichPlayerAmI: null,
         map: 0,
-        player2: {health:100,points:5, turn: false, action: null},
+        player2: {health:100,points:5, turn: false, action: null, gamerTag: null},
         characterType: null,
         player2characterType: null,
         win: null,
         id: null,
         hitDelay: 700,
+        myData: game.myData,
+        loggedIn: false,
     }
-    player1Animator = undefined;
-    player2Animator = undefined;
+    sceneManager.player1Animator = undefined;
+    sceneManager.player2Animator = undefined;
+    sceneManager.player1HealthBar.value = 0;
+    sceneManager.player2HealthBar.value = 0;
     sceneManager.matchmaking = false;
 }
 
