@@ -8,9 +8,10 @@ module.exports = class Game {
         this.winner = null;
         this.gameId = null;
         this.map = 0;
+        this.over = false;
 
-        this.player1 = new Player(this.player1Socket, "Player 1");
-        this.player2 = new Player(this.player2Socket, "Player 2");
+        this.player1 = new Player(this.player1Socket, p1Name);
+        this.player2 = new Player(this.player2Socket, p2Name);
 
         this.ready = 0;
     }
@@ -20,8 +21,8 @@ module.exports = class Game {
         this.map = Math.floor(Math.random() * 4) + 1;
         //this.sendMessageToBothPlayers("game-map", this.map);
         this.sendMessageToBothPlayers("pick-character", {gameID: this.id, map: this.map});
-        this.player1.sendMessage("your-player", 1);
-        this.player2.sendMessage("your-player", 2);
+        this.player1.sendMessage("your-player", {which: 1, p2GT: this.player2.gamerTag});
+        this.player2.sendMessage("your-player", {which: 2, p2GT: this.player1.gamerTag});
     }
 
     pickRandomPlayer() {
@@ -161,6 +162,7 @@ module.exports = class Game {
         //skill calc
         //upload reslults to database
         //this.sendMessageToBothPlayers("game-over", {winner: this.winner});
+        this.over = true;
     }
 
     sendMessageToBothPlayers(message, data) {

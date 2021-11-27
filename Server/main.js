@@ -31,10 +31,10 @@ var games = {};
 
 //database setup
 const db = mysql.createConnection({
-    host: "localhost",
-    database: "elemental4db",
-    user: "root",
-    password: "",
+    host: "eu-cdbr-west-01.cleardb.com",
+    database: "heroku_d85e5cf42d32717",
+    user: "b0e016254a55c2",
+    password: "5ccaf3af",
 });
 
 //check database connection
@@ -46,41 +46,20 @@ io.sockets.on("connection", function(socket) {
     //console.log("Player has connected to the server");
     
     socket.on("join-server", function(data) {
-        if (data.sessionLoggedIn) {
-            db.query("SELECT * FROM users WHERE email='"+data.email+"' AND firstName='"+data.firstName+"' AND lastName='"+data.lastName+"' AND dob='"+data.DOB+"' AND gamertag='"+data.gamerTag+"'", function(error, result) {
-                if (!error) {
-                    if (result.length == 1) {
-                        //make player
-                        let userData = {
-                            firstName: result[0].firstName,
-                            lastName: result[0].lastName,
-                            DOB: result[0].dob,
-                            email: result[0].email,
-                            gamerTag: result[0].gamertag,
-                            gamesWon: result[0].gamesWon,
-                            gamesLost: result[0].gamesLost,
-                            xpLevel: result[0].xpLevel,
-                            perksUnlocked: result[0].perksUnlocked,
-                        }
+        //check if account is already active on server
+        let check = true;
+        for (let [k, v] of players.entries()) {
+            if (v.email == data.email) {
+                check = false;
+                break;
+            }
+        }
 
-                        let player = new User(socket, userData);
-                        players.set(socket.id, player);
-                        socket.emit("logged-in", userData);
-                    } else {
-                        //2 users found with same email?
-                        socket.emit("login-failed", "Login Failed");
-                    }
-                } else {
-                    //database error
-                    socket.emit("login-failed", "Email or Password is Incorrect");
-                }
-            });
-        } else {
-            db.query("SELECT * FROM users WHERE email='"+data.email+"'", function(error, result) {
-                if (!error) {
-                    if (result.length == 1) {
-                        if (result[0].password == data.password) {
-
+        if (check) {
+            if (data.sessionLoggedIn) {
+                db.query("SELECT * FROM users WHERE email='"+data.email+"' AND firstName='"+data.firstName+"' AND lastName='"+data.lastName+"' AND dob='"+data.DOB+"' AND gamertag='"+data.gamerTag+"'", function(error, result) {
+                    if (!error) {
+                        if (result.length == 1) {
                             //make player
                             let userData = {
                                 firstName: result[0].firstName,
@@ -93,23 +72,57 @@ io.sockets.on("connection", function(socket) {
                                 xpLevel: result[0].xpLevel,
                                 perksUnlocked: result[0].perksUnlocked,
                             }
-                            
+
                             let player = new User(socket, userData);
                             players.set(socket.id, player);
                             socket.emit("logged-in", userData);
                         } else {
-                            //wrong password
-                            socket.emit("login-failed", "Email or Password is Incorrect");
+                            //2 users found with same email?
+                            socket.emit("login-failed", "Login Failed");
                         }
                     } else {
-                        //2 users found with same email?
-                        socket.emit("login-failed", "Login Failed");
+                        //database error
+                        socket.emit("login-failed", "Email or Password is Incorrect");
                     }
-                } else {
-                    //database error
-                    socket.emit("login-failed", "Email or Password is Incorrect");
-                }
-            });
+                });
+            } else {
+                db.query("SELECT * FROM users WHERE email='"+data.email+"'", function(error, result) {
+                    if (!error) {
+                        if (result.length == 1) {
+                            if (result[0].password == data.password) {
+
+                                //make player
+                                let userData = {
+                                    firstName: result[0].firstName,
+                                    lastName: result[0].lastName,
+                                    DOB: result[0].dob,
+                                    email: result[0].email,
+                                    gamerTag: result[0].gamertag,
+                                    gamesWon: result[0].gamesWon,
+                                    gamesLost: result[0].gamesLost,
+                                    xpLevel: result[0].xpLevel,
+                                    perksUnlocked: result[0].perksUnlocked,
+                                }
+                                
+                                let player = new User(socket, userData);
+                                players.set(socket.id, player);
+                                socket.emit("logged-in", userData);
+                            } else {
+                                //wrong password
+                                socket.emit("login-failed", "Email or Password is Incorrect");
+                            }
+                        } else {
+                            //2 users found with same email?
+                            socket.emit("login-failed", "Login Failed");
+                        }
+                    } else {
+                        //database error
+                        socket.emit("login-failed", "Email or Password is Incorrect");
+                    }
+                });
+            }
+        } else {
+            socket.emit("login-failed", "User has already logged in somewhere else");
         }
     });
 
@@ -127,7 +140,7 @@ io.sockets.on("connection", function(socket) {
             //matchmakingQueue[1].socket.join(gameID);
             
             //make new game
-            var game = new Game(gameID, matchmakingQueue[0].socket, matchmakingQueue[0].name, matchmakingQueue[1].socket, matchmakingQueue[1].name);
+            var game = new Game(gameID, matchmakingQueue[0].socket, matchmakingQueue[0].gamerTag, matchmakingQueue[1].socket, matchmakingQueue[1].gamerTag);
             findPlayer(matchmakingQueue[0].socket.id).gameID = gameID;
             findPlayer(matchmakingQueue[1].socket.id).gameID = gameID;
             
@@ -243,3 +256,11 @@ function makeGameID() {
    return id;
 }
 
+setInterval(() => {
+    for (id in games) {
+        if (games[id].over) {
+            console.log("deleted game " + id);
+            delete games[id];
+        }
+    }
+}, 600000);

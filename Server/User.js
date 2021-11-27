@@ -1,8 +1,8 @@
 module.exports = class User {
     constructor(s, userData) {
         this.socket = s;
-        this.name;
-        this.xp;
+        // this.name;
+        // this.xp;
         this.gameID = null;
 
         this.firstName = userData.firstName;

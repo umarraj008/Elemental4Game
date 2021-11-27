@@ -1,5 +1,5 @@
 module.exports = class Player {
-    constructor(s) {
+    constructor(s, gamerTag) {
         this.health = 100;
         this.points = 5;
         this.totalDamage = 0;
@@ -7,6 +7,7 @@ module.exports = class Player {
         this.playerType = null;
         this.turn = false;
         this.action = null;
+        this.gamerTag = gamerTag;
 
         this.attacks = [
             {name: "Wait", cost: -2, heal: 10},
