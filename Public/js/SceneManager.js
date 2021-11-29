@@ -20,7 +20,7 @@ class SceneManager {
         this.cloud3pos = {x:0};
         this.cloud4pos = {x:0};
         this.cloud5pos = {x:0};
-        this.cloudMoveSpeed = 1;
+        this.cloudMoveSpeed = 0.1;
         this.titleCurrentMap = Math.floor(Math.random()*3)+1;
         this.titleMapTimer = 0;
         this.titleMapDuration = 5000;
@@ -74,7 +74,7 @@ class SceneManager {
         this.logoutButton = new Button(50, c.height-200,300,150, "Logout");
     }
 
-    run(dt) {
+    run() {
         //switch scenes
         switch(this.scene) {
             
@@ -88,10 +88,10 @@ class SceneManager {
                 ctx.fillText("Elemental 4", c.width/2, c.height/2-200);
                 break;
             case 0: //splash screen
-                if (this.splash.draw(dt)) this.scene = 1;
+                if (this.splash.draw()) this.scene = 1;
                 break;
             case 1: //title screen
-                this.drawTitleScreen(dt);
+                this.drawTitleScreen();
                 break;
             case 2: //settings screen
                 this.drawSettings();
@@ -175,7 +175,7 @@ class SceneManager {
         }
     }
 
-    drawTitleScreen(dt) {
+    drawTitleScreen() {
         //background
         // ctx.fillStyle = "black";
         // ctx.fillRect(0,0,c.width,c.height);
@@ -249,11 +249,11 @@ class SceneManager {
         }
 
 
-        this.cloud1pos.x-=this.cloudMoveSpeed;
-        this.cloud2pos.x-=this.cloudMoveSpeed*0.9;
-        this.cloud3pos.x-=this.cloudMoveSpeed*0.5;
-        this.cloud4pos.x-=this.cloudMoveSpeed*0.2;
-        this.cloud5pos.x-=this.cloudMoveSpeed;
+        this.cloud1pos.x-=this.cloudMoveSpeed*dt;
+        this.cloud2pos.x-=this.cloudMoveSpeed*0.9*dt;
+        this.cloud3pos.x-=this.cloudMoveSpeed*0.5*dt;
+        this.cloud4pos.x-=this.cloudMoveSpeed*0.2*dt;
+        this.cloud5pos.x-=this.cloudMoveSpeed*dt;
 
         if (this.cloud1pos.x <= -c.width) {
             this.cloud1pos.x = 0;
@@ -525,11 +525,11 @@ class SceneManager {
             break;
         }
 
-        this.cloud1pos.x-=this.cloudMoveSpeed;
-        this.cloud2pos.x-=this.cloudMoveSpeed*0.9;
-        this.cloud3pos.x-=this.cloudMoveSpeed*0.5;
-        this.cloud4pos.x-=this.cloudMoveSpeed*0.2;
-        this.cloud5pos.x-=this.cloudMoveSpeed;
+        this.cloud1pos.x-=this.cloudMoveSpeed*dt;
+        this.cloud2pos.x-=this.cloudMoveSpeed*0.9*dt;
+        this.cloud3pos.x-=this.cloudMoveSpeed*0.5*dt;
+        this.cloud4pos.x-=this.cloudMoveSpeed*0.2*dt;
+        this.cloud5pos.x-=this.cloudMoveSpeed*dt;
 
         if (this.cloud1pos.x <= -c.width) {
             this.cloud1pos.x = 0;

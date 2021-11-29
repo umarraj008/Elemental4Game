@@ -4,7 +4,7 @@ class WindParticle{
         this.y =(Math.random() * c.height-500);
         this.minSpeed = 1;
         this.maxSpeed = 5;
-        this.speed = ((Math.random() * this.maxSpeed)+this.minSpeed);
+        this.speed = ((Math.random() * this.maxSpeed)+this.minSpeed)/10;
         this.points = [];
         this.counter = 0;
         this.amplitude = 2;
@@ -26,7 +26,7 @@ class WindParticle{
 
         this.points.forEach(p=>{
             ctx.lineTo(p.x,p.y + p.yo);
-            p.x -= this.speed;
+            p.x -= this.speed*dt;
             this.counter++;
             p.yo= (Math.sin(p.x/this.frequency)*this.amplitude); 
         });

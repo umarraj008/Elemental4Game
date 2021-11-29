@@ -20,13 +20,13 @@ class HealthBar{
     draw(){
         if (this.change) {
             if (this.changeTo > this.value){
-                this.value += 0.007; 
+                this.value += (dt/10)*0.01; 
                 if(this.value >= this.changeTo){
                     this.change = false;
                     this.value = this.changeTo;
                 }
             } else if(this.changeTo < this.value){
-                this.value -= 0.007;
+                this.value -= (dt/10)*0.01; 
                 if (this.value <= this.changeTo){
                     this.change = false;
                     this.value = this.changeTo;
