@@ -17,8 +17,8 @@ class Indicator{
         ctx.font = this.font;
         
         ctx.fillText(this.text,this.x,this.y);
-        this.y -= this.speed;
-        this.opacity -= this.opacitySpeed;
+        this.y -= this.speed*dt;
+        this.opacity -= this.opacitySpeed*dt;
 
         if (this.opacity < 0 ){
             return true;

@@ -2,9 +2,14 @@ const c = document.getElementById("canvas");
 const ctx = c.getContext("2d");
 
 var scene = 0;
-var dt = 0, lastTime = 0
+var dt = 0;
 var mouseX, mouseY;
 var sceneManager = new SceneManager(-1);
+var frameRate = 60;
+var frameInterval = 1000/frameRate;
+var now;
+var elapsed;
+var then = Date.now();
 
 const airBackground = new Image();
 const earthBackground = new Image();
@@ -80,12 +85,18 @@ function setup() {
     main();
 }
 
-function main(time = 0) {
+function main() {
+    frameInterval = 1000/frameRate;
     requestAnimationFrame(main);
-    dt = time - lastTime;
-    lastTime = time;
     
-    sceneManager.run(dt);
+    now = Date.now();
+    elapsed = now - then;
+    dt = elapsed;
+    
+    if (elapsed > frameInterval) {
+        then = now - (elapsed % frameInterval);
+        sceneManager.run();
+    }
 }
 
 function resizeWindow() {

@@ -44,7 +44,7 @@ var db = mysql.createPool({
 
 db.query("SELECT 1", (error, results, fields) => {
     if (error) throw error
-    console.log("Connected to Server"); 
+    console.log("Connected to Database"); 
 });
 
 //db error
