@@ -4,7 +4,7 @@ module.exports = class User {
         // this.name;
         // this.xp;
         this.gameID = null;
-
+        this.id = userData.id;
         this.firstName = userData.firstName;
         this.lastName = userData.lastName;
         this.DOB = userData.DOB;
@@ -14,6 +14,7 @@ module.exports = class User {
         this.gamesLost = userData.gamesLost;
         this.xpLevel = userData.xpLevel;
         this.perksUnlocked = userData.perksUnlocked;
+        this.nextLevel = userData.nextLevel;
     }
     
 }

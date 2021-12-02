@@ -1,5 +1,5 @@
 class HealthBar{
-    constructor(x,y,w,h,s,m){
+    constructor(x,y,w,h,s,m,c){
         this.x = x;
         this.y = y;
         this.w = w;
@@ -16,31 +16,38 @@ class HealthBar{
         this.color2 = "orange";
         this.color3 = "red";
         this.fillColor = this.color1;
+        this.constant = c;
+        this.speed = 0.01;
     }
     draw(){
         if (this.change) {
             if (this.changeTo > this.value){
-                this.value += (dt/10)*0.01; 
+                this.value += (dt/10)*this.speed; 
                 if(this.value >= this.changeTo){
                     this.change = false;
                     this.value = this.changeTo;
                 }
             } else if(this.changeTo < this.value){
-                this.value -= (dt/10)*0.01; 
+                this.value -= (dt/10)*this.speed; 
                 if (this.value <= this.changeTo){
                     this.change = false;
                     this.value = this.changeTo;
                 }
             }
         }
-        if (this.value <= this.range3 && this.value >=0){
-            this.fillColor = this.color3
-        }
-        if (this.value <= this.range2 && this.value >= this.range3){
-            this.fillColor = this.color2
-        }
-        if (this.value <= this.range1 && this.value >= this.range2){
-            this.fillColor = this.color1
+
+        if (this.constant) {
+            this.fillColor = "lime";
+        } else {
+            if (this.value <= this.range3 && this.value >=0){
+                this.fillColor = this.color3
+            }
+            if (this.value <= this.range2 && this.value >= this.range3){
+                this.fillColor = this.color2
+            }
+            if (this.value <= this.range1 && this.value >= this.range2){
+                this.fillColor = this.color1
+            }
         }
 
         ctx.fillStyle = "black";

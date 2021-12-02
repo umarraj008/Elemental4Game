@@ -1,19 +1,18 @@
 const Player = require("./Player");
 
 module.exports = class Game {
-    constructor(id, p1, p1Name, p2, p2Name) {
+    constructor(id, em, p1, p2) {
         this.id = id;
-        this.player1Socket = p1;
-        this.player2Socket = p2;
-        this.winner = null;
-        this.gameId = null;
+        this.player1Socket = p1.socket;
+        this.player2Socket = p2.socket;
+        this.gameId = id;
         this.map = 0;
-        this.over = false;
 
-        this.player1 = new Player(this.player1Socket, p1Name);
-        this.player2 = new Player(this.player2Socket, p2Name);
+        this.player1 = new Player(p1);
+        this.player2 = new Player(p2);
 
         this.ready = 0;
+        this.em = em;
     }
 
     startGame() {
@@ -80,6 +79,8 @@ module.exports = class Game {
         //update player data
         //this.player1.gameUpdate();
         //this.player2.gameUpdate();
+        this.player1.critical = false;
+        this.player2.critical = false;
         this.gameUpdate();
 
         this.player1.action = null;
@@ -92,16 +93,22 @@ module.exports = class Game {
         // this.player2.sendMessage('other-player', d2);
 
         //check for game over
+        // if (this.player1.health <= 0) {
+        //     this.winner = this.player2.name;
+        //     this.player1.sendMessage("you-lose");
+        //     this.player2.sendMessage("you-win");
+        //     this.sendResults();
+        // } else if (this.player2.health <= 0) {
+        //     this.winner = this.player1.name;
+        //     this.player1.sendMessage("you-win");
+        //     this.player2.sendMessage("you-lose");
+        //     this.sendResults();
+        // }
+
         if (this.player1.health <= 0) {
-            this.winner = this.player2.name;
-            this.player1.sendMessage("you-lose");
-            this.player2.sendMessage("you-win");
-            this.sendResults();
+            this.sendResults(2);
         } else if (this.player2.health <= 0) {
-            this.winner = this.player1.name;
-            this.player1.sendMessage("you-win");
-            this.player2.sendMessage("you-lose");
-            this.sendResults();
+            this.sendResults(1);
         }
 
     }
@@ -118,11 +125,24 @@ module.exports = class Game {
                 } else if (action == 1) { //heal
                     this.player1.health += this.player1.attacks[1].heal;
                     this.player1.points -= this.player1.attacks[1].cost;
+                    this.player1.totalPoints += this.player1.attacks[1].cost;
                     this.player1.action = "heal";
+                    if (this.player1.health >= 200) this.player1.health = 200;
                 } else if (action == 2 || action == 3 || action == 4 || action == 5) {
                     //attacks
                     this.player1.points -= this.player1.attacks[action].cost;
-                    this.player2.takeDamage(this.player1.attacks[action].damage);
+                    this.player1.totalPoints += this.player1.attacks[action].cost;
+
+                    let criticalDamage = 0;
+                    if (Math.random()*100 <= 100*this.player1.criticalDamageChance) {
+                        this.player1.critical = true;
+                        criticalDamage = this.player1.attacks[action].damage * this.player1.criticalDamage;
+                    }
+                    
+                    let damage = this.player1.attacks[action].damage + this.player1.damageBoost + criticalDamage;
+
+                    this.player1.totalDamage += damage;
+                    this.player2.takeDamage(damage);
                     this.player1.action = "attack" + (action-1);
                     this.player2.action = "damage";
                 }
@@ -139,11 +159,24 @@ module.exports = class Game {
                 } else if (action == 1) { //heal
                     this.player2.health += this.player2.attacks[1].heal;
                     this.player2.points -= this.player2.attacks[1].cost;
+                    this.player2.totalPoints += this.player2.attacks[1].cost;
                     this.player2.action = "heal";
+                    if (this.player2.health >= 200) this.player2.health = 200;
                 } else if (action == 2 || action == 3 || action == 4 || action == 5) {
                     //attacks
                     this.player2.points -= this.player2.attacks[action].cost;
-                    this.player1.takeDamage(this.player2.attacks[action].damage);
+                    this.player2.totalPoints += this.player2.attacks[action].cost;
+
+                    let criticalDamage = 0;
+                    if (Math.random()*100 <= 100*this.player2.criticalDamageChance) {
+                        this.player2.critical = true;
+                        criticalDamage = this.player2.attacks[action].damage * this.player2.criticalDamage;
+                    }
+                    
+                    let damage = this.player2.attacks[action].damage + this.player2.damageBoost + criticalDamage;
+
+                    this.player2.totalDamage += damage;
+                    this.player1.takeDamage(damage);
                     this.player2.action = "attack" + (action-1);
                     this.player1.action = "damage";
                 }
@@ -156,13 +189,27 @@ module.exports = class Game {
         this.nextTurn();
     }
 
-    sendResults() {
+    sendResults(winner) {
         //send this.winner
         //xp calc
         //skill calc
         //upload reslults to database
         //this.sendMessageToBothPlayers("game-over", {winner: this.winner});
-        this.over = true;
+        // this.over = true;
+
+        //xp calc
+        //skill calc
+        //send to client
+        //send to database
+        //delete game
+
+        let baseXP = 1000;
+        let p1Data = this.player1.calculateXP(baseXP, (winner == 1) ? true: false);
+        let p2Data = this.player2.calculateXP(baseXP, (winner == 2) ? true: false);
+        
+        this.em.emit("update-account", p1Data);
+        this.em.emit("update-account", p2Data);
+        this.em.emit("delete-game", {id: this.id});
     }
 
     sendMessageToBothPlayers(message, data) {
@@ -203,11 +250,13 @@ module.exports = class Game {
             health: this.player1.health,
             turn: this.player1.turn,
             action: this.player1.action,
+            critical: this.player1.critical,
             
             p2Points: this.player2.points,
             p2Health: this.player2.health,
             p2Turn: this.player2.turn,
             p2Action: this.player2.action,
+            p2Critical: this.player2.critical,
         };
 
         this.player1.sendMessage("game-update", gameData1);
@@ -217,11 +266,13 @@ module.exports = class Game {
             health: this.player2.health,
             turn: this.player2.turn,
             action: this.player2.action,
-            
+            critical: this.player2.critical,
+
             p2Points: this.player1.points,
             p2Health: this.player1.health,
             p2Turn: this.player1.turn,
             p2Action: this.player1.action,
+            p2Critical: this.player1.critical,
         };
         
         this.player2.sendMessage("game-update", gameData2);

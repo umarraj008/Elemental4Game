@@ -25,9 +25,10 @@ class SceneManager {
         this.titleMapTimer = 0;
         this.titleMapDuration = 5000;
         this.windParticleSystem = new WindParticleSystem();
-        this.player1HealthBar = new HealthBar(50,120,700,30,0,200);
-        this.player2HealthBar = new HealthBar(-(c.width-50), 120, 700, 30,0,200);
-
+        this.player1HealthBar = new HealthBar(50,120,700,30,0,200, false);
+        this.player2HealthBar = new HealthBar(-(c.width-50), 120, 700, 30,0,200, false);
+        this.xpHealthBar = new HealthBar(c.width/2-350, c.height/2, 700, 30, 0, 100, true);
+        this.xpHealthBar.speed = 0.07;
 
         //title screen buttons
         this.playButton = new Button(c.width/2-150,c.height/2-75,300,150, "Play");
@@ -697,7 +698,7 @@ class SceneManager {
     }
     drawGameResults() {
         //background
-        ctx.fillStyle = "black";
+        ctx.fillStyle = "rgb(100,100,100)";
         ctx.fillRect(0,0,c.width,c.height);
 
         //this will draw the Game results screen text
@@ -716,6 +717,23 @@ class SceneManager {
         //     ctx.fillText("You Lose!", c.width/2,c.height/2);
         // }
 
+        ctx.fillStyle = "black";
+        ctx.textAlign = "left";
+        ctx.font = "30px Arial"
+        ctx.fillText("Current XP: " + (Math.floor(this.xpHealthBar.value*100))+"xp", c.width/2-350, c.height/2-100);
+        ctx.fillText("XP Needed for Next Level: "+ (this.xpHealthBar.maxValue*100)+"xp", c.width/2+350, c.height/2-100);
+        
+        ctx.textAlign = "center";
+        ctx.fillText("+"+game.xpGain+"xp", c.width/2, c.height/2-100);
+        ctx.fillText("Level " + ((this.xpHealthBar.maxValue/10)-1) , c.width/2, c.height/2-250);
+        
+        if (game.levelUp) {
+            ctx.textAlign = "center";
+            ctx.fillStyle = "lime";
+            ctx.fillText("Level Up!", c.width/2, c.height/2-200);
+        }
+
+        this.xpHealthBar.draw();
 
         this.resultsBackButton.draw(dt,mouseX,mouseY);
     }
