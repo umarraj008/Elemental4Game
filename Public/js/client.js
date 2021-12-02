@@ -17,6 +17,8 @@ var game = {
     win: null,
     id: null,
     hitDelay: 700,
+    levelUp: false,
+    xpGain: 0,
 
     myData: {
         firstName: null,
@@ -28,6 +30,7 @@ var game = {
         gamesLost: null,
         xpLevel: null,
         perksUnlocked: null,
+        nextLevel: null,
     },
 
     loggedIn: false,
@@ -96,6 +99,8 @@ socket.on("game-update", function(data) {
         game.player2.points = data.p2Points;
         game.player2.health = (data.p2Health <= 0) ? 0 : data.p2Health;
         game.player2.turn = data.p2Turn
+
+        if (game.health <= 0 || game.player2.health <= 0) game.turn = false;
     }, game.hitDelay);
 
     switch (game.action) {
@@ -166,10 +171,35 @@ socket.on("game-update", function(data) {
 });
 
 socket.on("game-over", function(data) {
-    // game.over = true;
-    // game.winner = data.winner;
+    setTimeout(function(){
+        game.over = true;
+        game.turn = false;
+        game.win = data.winner;
+    },3000);
 
-    // window.setTimeout(function() {this.scene = 8;}, 3000);
+    setTimeout(function(){
+        sceneManager.scene = 8;
+        game.xpGain = data.xpGain,
+        sceneManager.xpHealthBar.maxValue = data.oldNextLevel/100;
+        sceneManager.xpHealthBar.value = data.oldXpLevel/100;
+        sceneManager.xpHealthBar.changeValue(data.newXpLevel);
+        
+        if (data.levelUp) {
+            setTimeout(function () {
+                game.levelUp = true;
+                sceneManager.xpHealthBar.maxValue = data.newNextLevel/100;
+                sceneManager.xpHealthBar.value = 0;
+            }, 3000);
+        }
+
+    },7000); 
+
+
+    game.myData.gamesWon = data.gamesWon;
+    game.myData.gamesLost = data.gamesLost;
+    game.myData.xpLevel = data.levelUpNewXpLevel;
+    game.myData.nextLevel = data.newNextLevel;
+    //console.log(data);
 });
 
 socket.on("game-cancelled", function() {
@@ -311,14 +341,18 @@ function resetGame() {
         win: null,
         id: null,
         hitDelay: 700,
+        levelUp: false,
         myData: game.myData,
         loggedIn: false,
+        xpGain: 0,
     }
     sceneManager.player1Animator = undefined;
     sceneManager.player2Animator = undefined;
     sceneManager.player1HealthBar.value = 0;
     sceneManager.player2HealthBar.value = 0;
     sceneManager.matchmaking = false;
+
+    
 }
 
 function login(e, p) {

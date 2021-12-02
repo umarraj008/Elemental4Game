@@ -1,6 +1,8 @@
 //Constant variables for server
 const User = require("./User");
 const Game = require("./Game");
+const events = require("events");
+const em = new events.EventEmitter();
 const mysql = require("mysql");
 const express = require("express");
 const app = express();
@@ -82,6 +84,7 @@ io.sockets.on("connection", function(socket) {
                         if (result.length == 1) {
                             //make player
                             let userData = {
+                                id: result[0].playerID,
                                 firstName: result[0].firstName,
                                 lastName: result[0].lastName,
                                 DOB: result[0].dob,
@@ -91,6 +94,7 @@ io.sockets.on("connection", function(socket) {
                                 gamesLost: result[0].gamesLost,
                                 xpLevel: result[0].xpLevel,
                                 perksUnlocked: result[0].perksUnlocked,
+                                nextLevel: result[0].nextLevel,
                             }
 
                             let player = new User(socket, userData);
@@ -113,6 +117,7 @@ io.sockets.on("connection", function(socket) {
 
                                 //make player
                                 let userData = {
+                                    id: result[0].playerID,
                                     firstName: result[0].firstName,
                                     lastName: result[0].lastName,
                                     DOB: result[0].dob,
@@ -122,6 +127,7 @@ io.sockets.on("connection", function(socket) {
                                     gamesLost: result[0].gamesLost,
                                     xpLevel: result[0].xpLevel,
                                     perksUnlocked: result[0].perksUnlocked,
+                                    nextLevel: result[0].nextLevel,
                                 }
                                 
                                 let player = new User(socket, userData);
@@ -168,7 +174,29 @@ io.sockets.on("connection", function(socket) {
             }
 
             //make new game
-            var game = new Game(gameID, matchmakingQueue[0].socket, matchmakingQueue[0].gamerTag, matchmakingQueue[1].socket, matchmakingQueue[1].gamerTag);
+            let player1 = {
+                socket: matchmakingQueue[0].socket,
+                id: matchmakingQueue[0].id,
+                gamerTag: matchmakingQueue[0].gamerTag,
+                gamesWon: matchmakingQueue[0].gamesWon,
+                gamesLost: matchmakingQueue[0].gamesLost,
+                xpLevel: matchmakingQueue[0].xpLevel,
+                perksUnlocked: matchmakingQueue[0].perksUnlocked,
+                nextLevel: matchmakingQueue[0].nextLevel,
+            };
+
+            let player2 = {
+                socket: matchmakingQueue[1].socket,
+                id: matchmakingQueue[1].id,
+                gamerTag: matchmakingQueue[1].gamerTag,
+                gamesWon: matchmakingQueue[1].gamesWon,
+                gamesLost: matchmakingQueue[1].gamesLost,
+                xpLevel: matchmakingQueue[1].xpLevel,
+                perksUnlocked: matchmakingQueue[1].perksUnlocked,
+                nextLevel: matchmakingQueue[1].nextLevel,
+            };
+
+            var game = new Game(gameID, em, player1, player2);
             findPlayer(matchmakingQueue[0].socket.id).gameID = gameID;
             findPlayer(matchmakingQueue[1].socket.id).gameID = gameID;
             
@@ -200,7 +228,7 @@ io.sockets.on("connection", function(socket) {
         if (games[player.gameID] != null || games[player.gameID] != undefined) {
             games[player.gameID].matchCancelled(socket.id);
             delete games[player.gameID];
-            //console.log("match cancelled");
+            console.log("match cancelled, game deleted: " + player.gameID);
         }
 
         //delete player from list
@@ -238,7 +266,7 @@ io.sockets.on("connection", function(socket) {
                 socket.emit("register-failed", "Register failed");
             }
         });
-        db.query("INSERT INTO users(firstName, lastName, dob, email, password, gamertag, gamesWon, gamesLost, xpLevel, perksUnlocked) VALUES('"+data.firstName+"','"+data.lastName+"','"+data.DOB+"', '"+data.email+"', '"+data.password+"', '"+data.gamerTag+"', '0','0','0','0')",function(error, result) {
+        db.query("INSERT INTO users(firstName, lastName, dob, email, password, gamertag, gamesWon, gamesLost, xpLevel, perksUnlocked, nextLevel) VALUES('"+data.firstName+"','"+data.lastName+"','"+data.DOB+"', '"+data.email+"', '"+data.password+"', '"+data.gamerTag+"', '0','0','0','0,0,0,0','1000')",function(error, result) {
             if (!error) {
                 
             } else {
@@ -258,6 +286,7 @@ io.sockets.on("connection", function(socket) {
                         gamesLost: result[0].gamesLost,
                         xpLevel: result[0].xpLevel,
                         perksUnlocked: result[0].perksUnlocked,
+                        nextLevel: result[0].nextLevel,
                     }
                     socket.emit("register-success", data);
                 } 
@@ -286,11 +315,37 @@ function makeGameID() {
    return id;
 }
 
-setInterval(() => {
-    for (id in games) {
-        if (games[id].over) {
-            console.log("deleted game " + id);
-            delete games[id];
+// setInterval(() => {
+//     for (id in games) {
+//         if (games[id].over) {
+//             console.log("deleted game " + id);
+//             delete games[id];
+//         }
+//     }
+// }, 600000);
+
+em.on("delete-game", (data) => {
+    console.log("delete this game: " + data.id);
+    delete games[data.id];
+});
+
+em.on("game-over", (data) => {
+    console.log("Games Over, uploading to database...: " + data.id);
+    em.emit("delete-game", {id: data.id});
+});
+
+em.on("update-account", (data) => {
+    db.query("UPDATE users SET gamesWon='"+data.gamesWon+"',gamesLost='"+data.gamesLost+"',xpLevel='"+data.levelUpNewXpLevel+"',nextLevel='"+data.newNextLevel+"' WHERE playerID='"+data.id+"'",function(error, result) {
+        if (error) {
+            console.log(error);
+        } else {
+            let player = findPlayer(data.socketID);
+
+            player.gameID = null;
+            player.gamesWon = data.gamesWon;
+            player.gamesLost = data.gamesLost;
+            player.xpLevel = data.levelUpNewXpLevel;
+            player.nextLevel = data.newNextLevel;
         }
-    }
-}, 600000);
+    });
+});
