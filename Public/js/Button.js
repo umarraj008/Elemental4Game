@@ -10,6 +10,7 @@ class Button {
         this.textColor = "black";
         this.font = "20px Arial";
         this.textAlign = "center";
+        this.selected = false;
     }
 
     draw(dt,mx,my) {
@@ -27,6 +28,10 @@ class Button {
         ctx.textAlign = this.textAlign;
         ctx.fillText(this.text, this.x + this.width/2, this.y + this.height / 2);
 
+        if (this.selected) {
+            ctx.strokeStyle= "lime";
+            ctx.strokeRect(this.x,this.y,this.width,this.height);
+        }
     }
 
     mouseOver(mx,my) {

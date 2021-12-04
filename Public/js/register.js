@@ -9,11 +9,11 @@ socket.on("connect", function() {
     let sessionGamerTag = window.sessionStorage.getItem("gamerTag");
     let sessionDOB = window.sessionStorage.getItem("DOB");
 
-    if (sessionEmail != null && sessionEmail != undefined && 
-        sessionFirstName != null && sessionFirstName != undefined && 
-        sessionLastName != null && sessionLastName != undefined && 
-        sessionGamerTag != null && sessionGamerTag != undefined && 
-        sessionDOB != null && sessionDOB != undefined) {
+    if (sessionEmail != null || sessionEmail != undefined && 
+        sessionFirstName != null || sessionFirstName != undefined && 
+        sessionLastName != null || sessionLastName != undefined && 
+        sessionGamerTag != null || sessionGamerTag != undefined && 
+        sessionDOB != null || sessionDOB != undefined) {
 
         location.href = "index.html";
     } 
@@ -39,6 +39,7 @@ socket.on("register-success", function(data) {
 
 socket.on("register-failed", function(message) {
     console.log(message);
+    logout();
 });
 
 function register(firstName,lastName,email,DOB,gamerTag,password) {
@@ -54,6 +55,7 @@ function registerButtonPressed() {
     let gamerTag = document.getElementById("gamerTag").value;
     let password = document.getElementById("password").value;
     let confirmPassword = document.getElementById("confirmPassword").value;
+
     // register();
     if(password == confirmPassword) {
         register(firstName,lastName,email,DOB,gamerTag,password);

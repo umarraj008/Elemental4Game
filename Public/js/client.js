@@ -51,11 +51,11 @@ socket.on("connect", function() {
     let sessionGamerTag = window.sessionStorage.getItem("gamerTag");
     let sessionDOB = window.sessionStorage.getItem("DOB");
 
-    if (sessionEmail != null && sessionEmail != undefined && 
-        sessionFirstName != null && sessionFirstName != undefined && 
-        sessionLastName != null && sessionLastName != undefined && 
-        sessionGamerTag != null && sessionGamerTag != undefined && 
-        sessionDOB != null && sessionDOB != undefined) {
+    if (sessionEmail != null || sessionEmail != undefined && 
+        sessionFirstName != null || sessionFirstName != undefined && 
+        sessionLastName != null || sessionLastName != undefined && 
+        sessionGamerTag != null || sessionGamerTag != undefined && 
+        sessionDOB != null || sessionDOB != undefined) {
 
             let data = {email: sessionEmail, firstName: sessionFirstName, lastName: sessionLastName, gamerTag: sessionGamerTag, DOB: sessionDOB, sessionLoggedIn: true};
             loggedIn(data);
@@ -291,6 +291,7 @@ socket.on("logged-in", function(userData) {
 
 socket.on("login-failed", function(message) {
     console.log(message);
+    logout();
 });
 
 socket.on("register-success", function(data) {
@@ -304,7 +305,7 @@ socket.on("register-success", function(data) {
     sessionStorage.setItem("xpLevel", data.xpLevel);
     sessionStorage.setItem("perksUnlocked", data.perksUnlocked);
     
-    location.href = index.html;
+    location.href = "index.html";
 });
 
 function matchmake() {
