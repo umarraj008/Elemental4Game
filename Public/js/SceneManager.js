@@ -76,29 +76,51 @@ class SceneManager {
         this.logoutButton = new Button(50, c.height-200,300,150, "Logout");
 
         this.perkButtons = [
-            new Button(50,230,285,155,"+5 Damage"),
-            new Button(50,407,285,155,"+10 Damage"),
-            new Button(50,584,285,155,"+15 Damage"),
-            new Button(50,761,285,155,"+20 Damage"),
+            new Button(50,230,285,155,"+5 Damage", true),
+            new Button(50,407,285,155,"+10 Damage", true),
+            new Button(50,584,285,155,"+15 Damage", true),
+            new Button(50,761,285,155,"+20 Damage", true),
 
-            new Button(365,230,285,155,"+15 Health"),
-            new Button(365,407,285,155,"+30 Health"),
-            new Button(365,584,285,155,"+50 Health"),
-            new Button(365,761,285,155,"+70 Health"),
+            new Button(365,230,285,155,"+15 Health", true),
+            new Button(365,407,285,155,"+30 Health", true),
+            new Button(365,584,285,155,"+50 Health", true),
+            new Button(365,761,285,155,"+70 Health", true),
 
-            new Button(680,230,285,155,"x0.4 Critical Damage"),
-            new Button(680,407,285,155,"x0.6 Critical Damage"),
-            new Button(680,584,285,155,"x0.8 Critical Damage"),
-            new Button(680,761,285,155,"x1.0 Critical Damage"),
+            new Button(680,230,285,155,"x0.4 Critical Damage", true),
+            new Button(680,407,285,155,"x0.6 Critical Damage", true),
+            new Button(680,584,285,155,"x0.8 Critical Damage", true),
+            new Button(680,761,285,155,"x1.0 Critical Damage", true),
 
-            new Button(995,230,285,155,"3% Critical Hit Chance"),
-            new Button(995,407,285,155,"8% Critical Hit Chance"),
-            new Button(995,584,285,155,"15% Critical Hit Chance"),
-            new Button(995,761,285,155,"30% Critical Hit Chance"),
+            new Button(995,230,285,155,"3% Critical Hit Chance", true),
+            new Button(995,407,285,155,"8% Critical Hit Chance", true),
+            new Button(995,584,285,155,"15% Critical Hit Chance", true),
+            new Button(995,761,285,155,"30% Critical Hit Chance", true),
         ]
         
         this.perkBuyButton = new Button(1364,400,470,80, "Buy Perk");
         this.perkButtons[0].selected = true;
+        this.perkDescription = [
+            {string: "This will add extra dammage to your attacks!", price: 1},
+            {string: "This will add extra dammage to your attacks!", price: 2},
+            {string: "This will add extra dammage to your attacks!", price: 3},
+            {string: "This will add extra dammage to your attacks!", price: 4},
+            {string: "You will start with extra health!", price: 1},
+            {string: "You will start with extra health!", price: 2},
+            {string: "You will start with extra health!", price: 3},
+            {string: "You will start with extra health!", price: 4},
+            {string: "Increase the damage the critical hit does!", price: 1},
+            {string: "Increase the damage the critical hit does!", price: 2},
+            {string: "Increase the damage the critical hit does!", price: 3},
+            {string: "Increase the damage the critical hit does!", price: 4},
+            {string: "Increase the chance of getting a critical hit!", price: 1},
+            {string: "Increase the chance of getting a critical hit!", price: 2},
+            {string: "Increase the chance of getting a critical hit!", price: 3},
+            {string: "Increase the chance of getting a critical hit!", price: 4},
+        ];
+
+        this.perkConfirmWindow = false;
+        this.perkConfirmConfirmButton = new Button(c.width/2-310, c.height/2, 300, 100, "Confirm");
+        this.perkConfirmCancelButton = new Button(c.width/2+10, c.height/2, 300, 100, "Cancel");
     } 
 
 
@@ -487,8 +509,34 @@ class SceneManager {
         ctx.font = "180px Arial";
         ctx.fillText("5", 1452,815);
 
+        //perk description
+        ctx.fillStyle = "black";
+        ctx.textAlign = "center";
+        ctx.font = "25px Arial";
+        ctx.fillText(this.perkDescription[this.selectedPerk].string, 1599,240);
+
+        //perk price
+        ctx.font = "30px Arial";
+        ctx.fillText("Price", 1599,300);
+        ctx.font = "100px Arial";
+        ctx.fillText(this.perkDescription[this.selectedPerk].price, 1599,370);
+
         //Buy button
         this.perkBuyButton.draw(dt,mouseX,mouseY);
+
+        //confirm window
+        if (this.perkConfirmWindow) {
+            ctx.fillStyle = "red";
+            ctx.fillRect(c.width/2-600,c.height/2-300, 1800, 600);
+
+            ctx.fillStyle = "black";
+            ctx.textAlign = "center";
+            ctx.font = "30px Arial";
+            ctx.fillText("Are you sure?", c.width/2, c.height/2-200);
+
+            this.perkConfirmConfirmButton.draw(dt, mouseX, mouseY);
+            this.perkConfirmCancelButton.draw(dt, mouseX, mouseY);
+        }
     }
     
 
@@ -846,6 +894,17 @@ class SceneManager {
             case 5: //perk screen
                 if(this.perkBackButton.mouseOver(mouseX,mouseY)) {
                     this.scene = 4;
+                    break;
+                } else if (this.perkBuyButton.mouseOver(mouseX, mouseY)) {
+                    this.perkConfirmWindow = true;
+                    break;
+                } else if (this.perkConfirmCancelButton.mouseOver(mouseX, mouseY)) {
+                    this.perkConfirmWindow = false;
+                    break;
+                } else if (this.perkConfirmConfirmButton.mouseOver(mouseX, mouseY)) {
+                    //buy perk
+                    buyPerk(this.selectedPerk);
+                    break;
                 }
                 for (let i= 0;i<this.perkButtons.length; i++){
                     if (this.perkButtons[i].mouseOver(mouseX,mouseY)){

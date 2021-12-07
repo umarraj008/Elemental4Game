@@ -369,3 +369,7 @@ function logout() {
     game.loggedIn = false;
     location.reload();
 }
+
+function buyPerk(perk) {
+    socket.emit("buy-perk", perk);
+}
