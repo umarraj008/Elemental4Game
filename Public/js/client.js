@@ -35,6 +35,8 @@ var game = {
     },
 
     loggedIn: false,
+    notifValue: 0,
+    chatHidden: true,
 }
 
 socket.on("connect", function() {
@@ -78,6 +80,7 @@ socket.on("pick-character", function(data) {
     game.player2.gamerTag = data.p2GT;
     sceneManager.player1HealthBar.changeValue(100);
     sceneManager.player2HealthBar.changeValue(100);
+    document.getElementById("textChatShow").style.display = "block";
 });
 
 socket.on("player2-turn", function() {
@@ -195,7 +198,7 @@ socket.on("game-over", function(data) {
 
     },7000); 
 
-
+    document.getElementById("textChatShow").style.display = "none";
     game.myData.gamesWon = data.gamesWon;
     game.myData.gamesLost = data.gamesLost;
     game.myData.xpLevel = data.levelUpNewXpLevel;
@@ -332,6 +335,20 @@ socket.on("update-data", function(data) {
     game.myData.nextLevel = data.nextLevel;
 
 });
+
+socket.on("update-chat", function(data){
+    let chat= document.getElementById("textChat");
+    chat.value += data;
+    chat.scrollTop = chat.scrollHeight;
+
+    if(game.chatHidden){
+        let notif=document.getElementById("notif");
+        game.notifValue ++;
+        notif.innerHTML=game.notifValue;
+        notif.style.display = "block"
+    }
+
+})
 
 function matchmake() {
     socket.emit("matchmake");
@@ -476,4 +493,35 @@ function updatePerkButtons() {
             sceneManager.perkButtons[i].canBuy = true;
         }
     }
+}
+
+function showTextChat(){
+    document.getElementById("textChatContainer").style.display = "block";
+    document.getElementById("textChatHide").style.display = "block";
+    document.getElementById("textChatShow").style.display = "none";
+    document.getElementById("notif").style.display = "none";
+
+    game.notifValue = 0;
+    game.chatHidden = false;
+}
+
+function hideTextChat(){
+    document.getElementById("textChatContainer").style.display = "none";
+    document.getElementById("textChatHide").style.display = "none";
+    document.getElementById("textChatShow").style.display = "block";
+
+    game.chatHidden = true;
+}
+
+function sendMessageTextChat(){
+    let textinput = document.getElementById("textChatInput");
+    let message = textinput.value;
+
+    if (message.length < 1){
+        return;
+    }
+
+    let data = {id:game.id, message: game.myData.gamerTag + ": " + message + "\n"}
+    socket.emit("send-text-chat", data);
+    textinput.value = ""; 
 }

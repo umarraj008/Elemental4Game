@@ -71,7 +71,7 @@ h1 {
     margin-bottom: 20px;
 }
 
-input {
+/* //input {
     width: 100%;
     background: none;
     border: 1px solid #fff;
@@ -80,8 +80,8 @@ input {
     box-sizing: border-box;
     margin-bottom: 20px;
     font-size: 16px;
-    color: #fff;
-}
+    color: #fff; */
+/* }
 
 input[type="submit"] {
     background: #bac675;
@@ -92,8 +92,72 @@ input[type="submit"] {
 input[type="submit"]:hover {
     background: #a4b15c;
     transition: .4s;
-}
+} */
 
 ::placeholder {
     color: #fff;
+}
+
+#textChatContainer{
+    width: 30%;
+    display: none;
+    height: 100%;
+    position: absolute;
+    float: left;
+}
+
+#textChat{
+    width: 100%;
+    height: 20%;
+    resize: none;
+    outline: none;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#textChatInputContainer{
+    width: 100%;
+    height: 30px;
+    display: flex;   
+}
+
+#textChatInput{
+    width: 70%;
+    outline: none;
+    transform: translateY(-5px);
+}
+
+#textChatEnter{
+    width: 30%;
+    outline: none;
+    transform: translateY(-5px);
+}
+
+#textChatHide{
+    position: absolute;
+    width: 30px;
+    height: calc(20% + 31px);
+    margin-left: 30%;
+    display: none;
+}
+
+#textChatShow{
+    position: absolute;
+    width: 30px;
+    height: calc(20% + 31px);
+    display: none;
+}
+
+#notif{
+    position: absolute;
+    top: calc(20% + calc(31px-10px));
+    left: calc(30px-10px);
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 8px;
+    padding-right: 8px;
+    border-radius: 50%;
+    background: red;
+    color: white;
+    display: none;
+    font-family: Arial, Helvetica, sans-serif;
 }
