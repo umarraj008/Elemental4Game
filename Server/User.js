@@ -15,6 +15,7 @@ module.exports = class User {
         this.xpLevel = userData.xpLevel;
         this.perksUnlocked = userData.perksUnlocked;
         this.nextLevel = userData.nextLevel;
+        this.perkPoints = userData.perkPoints;
     }
     
 }

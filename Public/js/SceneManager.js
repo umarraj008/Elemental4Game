@@ -30,6 +30,7 @@ class SceneManager {
         this.xpHealthBar = new HealthBar(c.width/2-350, c.height/2, 700, 30, 0, 100, true);
         this.xpHealthBar.speed = 0.07;
         this.credits = new Credits();
+        this.selectedPerk = 0;
 
         //title screen buttons
         this.playButton = new Button(c.width/2-150,c.height/2-75,300,150, "Play");
@@ -47,8 +48,8 @@ class SceneManager {
         this.settingBackButton = new Button(c.width/2-300,c.height/2+300,600,100, "Back");
         
         //perk screen buttons
-        this.perkBackButton = new Button(c.width/2-150,c.height/2+300,300,150, "Back");
-        
+        this.perkBackButton = new Button(c.width/2-300,c.height/2+420,600,80,"Back");
+
         //credits page buttons
         this.creditBackButton = new Button(c.width/2-150,c.height/2+300,300,150, "Back");
         
@@ -74,7 +75,56 @@ class SceneManager {
         this.resultsBackButton = new Button(c.width/2-300,c.height/2+300,600,100, "Back");
 
         this.logoutButton = new Button(50, c.height-200,300,150, "Logout");
-    }
+
+        this.perkButtons = [
+            new Button(50,230,285,155,"+5 Damage", false, true),
+            new Button(50,407,285,155,"+10 Damage", false, true),
+            new Button(50,584,285,155,"+15 Damage", false, true),
+            new Button(50,761,285,155,"+20 Damage", false, true),
+
+            new Button(365,230,285,155,"+15 Health", false, true),
+            new Button(365,407,285,155,"+30 Health", false, true),
+            new Button(365,584,285,155,"+50 Health", false, true),
+            new Button(365,761,285,155,"+70 Health", false, true),
+
+            new Button(680,230,285,155,"x0.4 Critical Damage", false, true),
+            new Button(680,407,285,155,"x0.6 Critical Damage", false, true),
+            new Button(680,584,285,155,"x0.8 Critical Damage", false, true),
+            new Button(680,761,285,155,"x1.0 Critical Damage", false, true),
+
+            new Button(995,230,285,155,"3% Critical Hit Chance", false, true),
+            new Button(995,407,285,155,"8% Critical Hit Chance", false, true),
+            new Button(995,584,285,155,"15% Critical Hit Chance", false, true),
+            new Button(995,761,285,155,"30% Critical Hit Chance", false, true),
+        ]
+        
+        this.perkBuyButton = new Button(1364,400,470,80, "Buy Perk");
+        this.perkButtons[0].selected = true;
+        this.perkDescription = [
+            {string: "This will add extra dammage to your attacks!", price: 1,},
+            {string: "This will add extra dammage to your attacks!", price: 2,},
+            {string: "This will add extra dammage to your attacks!", price: 3,},
+            {string: "This will add extra dammage to your attacks!", price: 4,},
+            {string: "You will start with extra health!", price: 1,},
+            {string: "You will start with extra health!", price: 2,},
+            {string: "You will start with extra health!", price: 3,},
+            {string: "You will start with extra health!", price: 4,},
+            {string: "Increase the damage the critical hit does!", price: 1,},
+            {string: "Increase the damage the critical hit does!", price: 2,},
+            {string: "Increase the damage the critical hit does!", price: 3,},
+            {string: "Increase the damage the critical hit does!", price: 4,},
+            {string: "Increase the chance of getting a critical hit!", price: 1,},
+            {string: "Increase the chance of getting a critical hit!", price: 2,},
+            {string: "Increase the chance of getting a critical hit!", price: 3,},
+            {string: "Increase the chance of getting a critical hit!", price: 4,},
+        ];
+
+        this.perkConfirmWindow = false;
+        this.perkConfirmConfirmButton = new Button(c.width/2-310, c.height/2, 300, 100, "Confirm");
+        this.perkConfirmCancelButton = new Button(c.width/2+10, c.height/2, 300, 100, "Cancel");
+    } 
+
+
 
     run() {
         //switch scenes
@@ -422,22 +472,79 @@ class SceneManager {
     }
 
     drawPerkScreen() {
-        ctx.fillStyle = "black";
+        ctx.fillStyle = "blue";
         ctx.fillRect (0,0,c.width, c.height);
 
         //this will draw the Perk screen text
         ctx.fillStyle= "white";
         ctx.font = "100px Arial";
         ctx.textAlign = "center";
-        ctx.fillText("Perk Screen",c.width/2, 200);
-
+        ctx.fillText("Perk Screen",c.width/2, 110);
+       
+        //Back button
         this.perkBackButton.draw(dt,mouseX,mouseY);
 
+        //Perks buttons
+        this.perkButtons.forEach(b => {
+            b.draw(dt,mouseX,mouseY);
+        });
+        
+        //Perk information title
+        ctx.fillStyle ="white";
+        ctx.textAlign ="center";
+        ctx.font = "30px Arial";
+
+        ctx.fillText("Damage Boost",192,200);
+        ctx.fillText("Starting Health",507,200);
+        ctx.fillText("Critical Damage",822,200);
+        ctx.fillText("Critcal Hit Chance",1137,200);
+
+        ctx.fillStyle = "white";
+        ctx.fillRect(1305,150,589,766);
+
+        ctx.fillStyle = "black";
+        ctx.fillText("Perk Information", 1599,200);
+        ctx.fillText("Skill Points Available", 1452,633);
+        ctx.fillText("Skill Progress", 1746,633);
+        ctx.fillText("5/25", 1746,860);
+
+        ctx.font = "180px Arial";
+        ctx.fillText(game.myData.perkPoints, 1452,815);
+
+        //perk description
+        ctx.fillStyle = "black";
+        ctx.textAlign = "center";
+        ctx.font = "25px Arial";
+        ctx.fillText(this.perkDescription[this.selectedPerk].string, 1599,240);
+
+        //perk price
+        ctx.font = "30px Arial";
+        ctx.fillText("Price", 1599,300);
+        ctx.font = "100px Arial";
+        ctx.fillText(this.perkDescription[this.selectedPerk].price, 1599,370);
+
+        //Buy button
+        this.perkBuyButton.draw(dt,mouseX,mouseY);
+
+        //confirm window
+        if (this.perkConfirmWindow) {
+            ctx.fillStyle = "red";
+            ctx.fillRect(c.width/2-600,c.height/2-300, 1800, 600);
+
+            ctx.fillStyle = "black";
+            ctx.textAlign = "center";
+            ctx.font = "30px Arial";
+            ctx.fillText("Are you sure?", c.width/2, c.height/2-200);
+
+            this.perkConfirmConfirmButton.draw(dt, mouseX, mouseY);
+            this.perkConfirmCancelButton.draw(dt, mouseX, mouseY);
+        }
     }
+    
 
     drawPickCharacter() {
         ctx.fillStyle = "black";
-        ctx.fillRect (0,0,c.width, c.height);
+        ctx.fillRect(0,0,c.width, c.height);
 
         ctx.fillStyle= "white";
         ctx.font = "80px Arial";
@@ -624,28 +731,38 @@ class SceneManager {
             ctx.fillStyle = "black";
             ctx.textAlign = "center";
             ctx.font = "30px Arial";
-             ctx.fillText("Wait", 20+148, 900);
-             ctx.fillText("Heal",336+148, 900);
-             ctx.fillText("Attack 1",652+148, 900);
-             ctx.fillText("Attack 2",968+148, 900);
-             ctx.fillText("Attack 3",1284+148, 900);
-             ctx.fillText("Ultimate",1600+148, 900);
-             
-             
-             ctx.font = "20px Arial";
-             ctx.fillText("Price: 0", 20+148, 950);
-             ctx.fillText("Price: 6",336+148, 950);
-             ctx.fillText("Price: 3",652+148, 950);
-             ctx.fillText("Price: 4",968+148, 950);
-             ctx.fillText("Price: 5",1284+148, 950);
-             ctx.fillText("Price: 15",1600+148, 950);
+            ctx.fillText("Wait", 20+148, 900);
+            ctx.fillText("Heal",336+148, 900);
+            ctx.fillText("Attack 1",652+148, 900);
+            ctx.fillText("Attack 2",968+148, 900);
+            ctx.fillText("Attack 3",1284+148, 900);
+            ctx.fillText("Ultimate",1600+148, 900);
+            
+            
+            ctx.font = "20px Arial";
+            ctx.fillText("Price: 0", 20+148, 950);
+            ctx.fillText("Price: 6",336+148, 950);
+            ctx.fillText("Price: 3",652+148, 950);
+            ctx.fillText("Price: 4",968+148, 950);
+            ctx.fillText("Price: 5",1284+148, 950);
+            ctx.fillText("Price: 15",1600+148, 950);
 
-             ctx.fillText("10 Health, 2 points", 20+148, 1000);
-             ctx.fillText("30 Health",336+148, 1000);
-             ctx.fillText("10 Damage",652+148, 1000);
-             ctx.fillText("20 Damage",968+148, 1000);
-             ctx.fillText("30 Damage",1284+148, 1000);
-             ctx.fillText("70 Damage",1600+148, 1000);
+            let damageBoost = 0, healthBoost = 0;
+            switch(parseInt(game.myData.perksUnlocked.split(",")[0])) {
+                case 0: damageBoost = 0; break;
+                case 1: damageBoost = 5; break;
+                case 2: damageBoost = 10; break;
+                case 3: damageBoost = 15; break;
+                case 4: damageBoost = 20; break;
+            }
+
+            ctx.fillText("10 Health, 2 points", 20+148, 1000);
+            ctx.fillText("30 Health",336+148, 1000);
+            ctx.fillText(10 + damageBoost + " Damage",652+148, 1000);
+            ctx.fillText(20 + damageBoost + " Damage",968+148, 1000);
+            ctx.fillText(30 + damageBoost + " Damage",1284+148, 1000);
+            ctx.fillText(70 + damageBoost + " Damage",1600+148, 1000);
+            
             
 
         }
@@ -778,7 +895,11 @@ class SceneManager {
                 if (this.matchmakeButton.mouseOver(mouseX, mouseY)) {
                     matchmake();
                 } else if (this.perkScreenButton.mouseOver(mouseX,mouseY)){          
+                    updatePerkButtons();
+
                     this.scene = 5;
+                    break;
+
                 } else if (this.settingsButton.mouseOver(mouseX,mouseY)) {
                     this.scene = 2; 
                 } else if (this.menuBackButton.mouseOver(mouseX,mouseY)) {
@@ -790,6 +911,30 @@ class SceneManager {
             case 5: //perk screen
                 if(this.perkBackButton.mouseOver(mouseX,mouseY)) {
                     this.scene = 4;
+                    break;
+                } else if (this.perkBuyButton.mouseOver(mouseX, mouseY)) {
+                    if (game.myData.perkPoints >= this.perkDescription[this.selectedPerk].price) {
+                        this.perkConfirmWindow = true;
+                    }
+                    break;
+                } else if (this.perkConfirmCancelButton.mouseOver(mouseX, mouseY)) {
+                    this.perkConfirmWindow = false;
+                    break;
+                } else if (this.perkConfirmConfirmButton.mouseOver(mouseX, mouseY)) {
+                    //buy perk
+                    buyPerk(this.selectedPerk);
+                    break;
+                }
+                for (let i= 0;i<this.perkButtons.length; i++){
+                    if (this.perkButtons[i].mouseOver(mouseX,mouseY)){
+                        this.perkButtons.forEach(b=>{
+                            b.selected = false;
+                        })
+                        this.perkButtons[i].selected = true;
+                        this.selectedPerk = i;
+
+                        break;
+                    }
                 }
 
                 break;

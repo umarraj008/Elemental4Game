@@ -1,5 +1,5 @@
 class Button {
-    constructor(x1,y1,width1,height1, t) {
+    constructor(x1,y1,width1,height1, t, d, b) {
         this.x = x1;
         this.y = y1;
         this.width = width1;
@@ -10,6 +10,13 @@ class Button {
         this.textColor = "black";
         this.font = "20px Arial";
         this.textAlign = "center";
+        this.selected = false;
+        this.disabled = (d == null || d == undefined) ? false : d;
+        this.disabledColor = "rgb(100,100,100)";
+        this.bought = false;
+        this.boughtColor = "rgb(255,0,0)";
+        this.buyButton = (b == null || b == undefined) ? false : b;
+        this.canBuy = false;
     }
 
     draw(dt,mx,my) {
@@ -20,6 +27,16 @@ class Button {
             ctx.fillStyle = this.backgroundColor;
         }
 
+        if (this.disabled) ctx.fillStyle = this.disabledColor;
+        if (this.buyButton) {
+            if (this.bought) {
+                ctx.fillStyle = this.boughtColor;
+            } else if (this.canBuy) {
+                ctx.fillStyle = this.backgroundColor;
+            } else {
+                ctx.fillStyle = this.disabledColor;
+            }
+        }
         ctx.fillRect(this.x,this.y,this.width,this.height);
 
         ctx.font = this.font;
@@ -27,9 +44,15 @@ class Button {
         ctx.textAlign = this.textAlign;
         ctx.fillText(this.text, this.x + this.width/2, this.y + this.height / 2);
 
+        if (this.selected) {
+            ctx.strokeStyle= "lime";
+            ctx.strokeRect(this.x,this.y,this.width,this.height);
+        }
     }
 
     mouseOver(mx,my) {
+        if (this.disabled) return false;
+
         if (mx >= this.x && mx <= this.x + this.width && my >= this.y && my <= this.y + this.height) {
             c.style.cursor = "pointer";
             return true;
