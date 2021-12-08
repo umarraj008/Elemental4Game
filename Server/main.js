@@ -95,6 +95,7 @@ io.sockets.on("connection", function(socket) {
                                 xpLevel: result[0].xpLevel,
                                 perksUnlocked: result[0].perksUnlocked,
                                 nextLevel: result[0].nextLevel,
+                                perkPoints: result[0].perkPoints,
                             }
 
                             let player = new User(socket, userData);
@@ -128,6 +129,7 @@ io.sockets.on("connection", function(socket) {
                                     xpLevel: result[0].xpLevel,
                                     perksUnlocked: result[0].perksUnlocked,
                                     nextLevel: result[0].nextLevel,
+                                    perkPoints: result[0].perkPoints,
                                 }
                                 
                                 let player = new User(socket, userData);
@@ -183,6 +185,7 @@ io.sockets.on("connection", function(socket) {
                 xpLevel: matchmakingQueue[0].xpLevel,
                 perksUnlocked: matchmakingQueue[0].perksUnlocked,
                 nextLevel: matchmakingQueue[0].nextLevel,
+                perkPoints: matchmakingQueue[0].perkPoints,
             };
 
             let player2 = {
@@ -194,6 +197,7 @@ io.sockets.on("connection", function(socket) {
                 xpLevel: matchmakingQueue[1].xpLevel,
                 perksUnlocked: matchmakingQueue[1].perksUnlocked,
                 nextLevel: matchmakingQueue[1].nextLevel,
+                perkPoints: matchmakingQueue[1].perkPoints,
             };
 
             var game = new Game(gameID, em, player1, player2);
@@ -295,6 +299,52 @@ io.sockets.on("connection", function(socket) {
             }
         });
     });
+
+    socket.on("buy-perk", function (data) {
+       let perkPrices = [
+           1,2,3,4,
+           1,2,3,4,
+           1,2,3,4,
+           1,2,3,4,
+       ]; 
+
+       let player = findPlayer(socket.id);
+       
+        if (player.perkPoints >= perkPrices[data]) {  
+
+            let newPerksUnlocked = player.perksUnlocked.split(",");
+            let perk = data % 4;
+            if (data <= 3) {
+                newPerksUnlocked[0] = perk+1;
+            } else if (data >= 4 && data <= 7) {
+                newPerksUnlocked[1] = perk+1;
+            } else if (data >= 8 && data <= 11) {
+                newPerksUnlocked[2] = perk+1;
+            }else if (data >= 12 && data <= 15) {
+                newPerksUnlocked[3] = perk+1;
+            }
+
+            newPerksUnlocked = newPerksUnlocked[0] + "," + newPerksUnlocked[1] + "," + newPerksUnlocked[2] + "," + newPerksUnlocked[3];
+            player.perkPoints--;
+
+            //update account
+           db.query("UPDATE users SET perksUnlocked='"+newPerksUnlocked+"',perkPoints='"+player.perkPoints+"' WHERE playerID='"+player.id+"'", function(error, result) {
+                if (!error) {
+                    player.perksUnlocked = newPerksUnlocked;
+                    let updateData = {
+                        perkPoints: player.perkPoints,
+                        perksUnlocked: player.perksUnlocked,
+                    }
+                    socket.emit("perk-buy-success", updateData);
+                } else {
+                    socket.emit("perk-buy-failed");
+                }
+            });
+        } else {
+            socket.emit("perk-buy-failed");
+        }
+
+    });
 });
 
 function findGame(id) {
@@ -335,7 +385,7 @@ em.on("game-over", (data) => {
 });
 
 em.on("update-account", (data) => {
-    db.query("UPDATE users SET gamesWon='"+data.gamesWon+"',gamesLost='"+data.gamesLost+"',xpLevel='"+data.levelUpNewXpLevel+"',nextLevel='"+data.newNextLevel+"' WHERE playerID='"+data.id+"'",function(error, result) {
+    db.query("UPDATE users SET gamesWon='"+data.gamesWon+"',gamesLost='"+data.gamesLost+"',xpLevel='"+data.levelUpNewXpLevel+"',nextLevel='"+data.newNextLevel+"',perkPoints='"+data.perkPoints+"' WHERE playerID='"+data.id+"'",function(error, result) {
         if (error) {
             console.log(error);
         } else {
@@ -346,6 +396,8 @@ em.on("update-account", (data) => {
             player.gamesLost = data.gamesLost;
             player.xpLevel = data.levelUpNewXpLevel;
             player.nextLevel = data.newNextLevel;
+            player.perkPoints = data.perkPoints;
+            player.perksUnlocked = data.perksUnlocked;
         }
     });
 });

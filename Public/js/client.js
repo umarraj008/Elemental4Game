@@ -31,6 +31,7 @@ var game = {
         xpLevel: null,
         perksUnlocked: null,
         nextLevel: null,
+        perkPoints: null,
     },
 
     loggedIn: false,
@@ -199,6 +200,7 @@ socket.on("game-over", function(data) {
     game.myData.gamesLost = data.gamesLost;
     game.myData.xpLevel = data.levelUpNewXpLevel;
     game.myData.nextLevel = data.newNextLevel;
+    game.myData.perkPoints = data.perkPoints;
     //console.log(data);
 });
 
@@ -272,6 +274,7 @@ socket.on("logged-in", function(userData) {
     game.myData.gamesLost = userData.gamesLost;
     game.myData.xpLevel = userData.xpLevel;
     game.myData.perksUnlocked = userData.perksUnlocked;
+    game.myData.perkPoints = userData.perkPoints;
     game.loggedIn = true;
 
     sessionStorage.setItem("firstName", userData.firstName);
@@ -283,6 +286,7 @@ socket.on("logged-in", function(userData) {
     sessionStorage.setItem("gamesLost", userData.gamesLost);
     sessionStorage.setItem("xpLevel", userData.xpLevel);
     sessionStorage.setItem("perksUnlocked", userData.perksUnlocked);
+    sessionStorage.setItem("perkPoints", userData.perkPoints);
 
     document.getElementById("loginContainer").parentNode.removeChild(document.getElementById("loginContainer"));
     sceneManager.scene = 0;
@@ -304,8 +308,29 @@ socket.on("register-success", function(data) {
     sessionStorage.setItem("gamesLost", data.gamesLost);
     sessionStorage.setItem("xpLevel", data.xpLevel);
     sessionStorage.setItem("perksUnlocked", data.perksUnlocked);
-    
+    sessionStorage.setItem("perkPoints", data.perkPoints);
+
     location.href = "index.html";
+});
+
+socket.on("perk-buy-success", function(data) {
+    game.myData.perkPoints = data.perkPoints;
+    game.myData.perksUnlocked = data.perksUnlocked;
+    sceneManager.perkConfirmWindow = false;
+    updatePerkButtons();
+});
+
+socket.on("perk-buy-failed", function() {
+    console.log("failed to buy perk");
+});
+
+socket.on("update-data", function(data) {
+    game.myData.gamesWon = data.gamesWon;
+    game.myData.gamesLost = data.gamesLost;
+    game.myData.xpLevel = data.xpLevel;
+    game.myData.perkPoints = data.perkPoints;
+    game.myData.nextLevel = data.nextLevel;
+
 });
 
 function matchmake() {
@@ -371,5 +396,84 @@ function logout() {
 }
 
 function buyPerk(perk) {
-    socket.emit("buy-perk", perk);
+    if (game.myData.perkPoints >= sceneManager.perkDescription[sceneManager.selectedPerk].price && !sceneManager.perkButtons[perk].bought) {
+        socket.emit("buy-perk", perk);
+    }
+}
+
+function updatePerkButtons() {
+    sceneManager.perkButtons.forEach(b => {
+        b.bought = false;
+    });
+
+    let up = game.myData.perksUnlocked.split(",");
+    if (up[0] == 4) {
+        sceneManager.perkButtons[0].bought = true;
+        sceneManager.perkButtons[1].bought = true;
+        sceneManager.perkButtons[2].bought = true;
+        sceneManager.perkButtons[3].bought = true;
+    } else if (up[0] == 3) {
+        sceneManager.perkButtons[0].bought = true;
+        sceneManager.perkButtons[1].bought = true;
+        sceneManager.perkButtons[2].bought = true;
+    } else if (up[0] == 2) {
+        sceneManager.perkButtons[0].bought = true;
+        sceneManager.perkButtons[1].bought = true;
+    } else if (up[0] == 1) {
+        sceneManager.perkButtons[0].bought = true;
+    }
+
+    if (up[1] == 4) {
+        sceneManager.perkButtons[4].bought = true;
+        sceneManager.perkButtons[5].bought = true;
+        sceneManager.perkButtons[6].bought = true;
+        sceneManager.perkButtons[7].bought = true;
+    } else if (up[1] == 3) {
+        sceneManager.perkButtons[4].bought = true;
+        sceneManager.perkButtons[5].bought = true;
+        sceneManager.perkButtons[6].bought = true;
+    } else if (up[1] == 2) {
+        sceneManager.perkButtons[4].bought = true;
+        sceneManager.perkButtons[5].bought = true;
+    } else if (up[1] == 1) {
+        sceneManager.perkButtons[4].bought = true;
+    }
+
+    if (up[2] == 4) {
+        sceneManager.perkButtons[8].bought = true;
+        sceneManager.perkButtons[9].bought = true;
+        sceneManager.perkButtons[10].bought = true;
+        sceneManager.perkButtons[11].bought = true;
+    } else if (up[2] == 3) {
+        sceneManager.perkButtons[8].bought = true;
+        sceneManager.perkButtons[9].bought = true;
+        sceneManager.perkButtons[10].bought = true;
+    } else if (up[2] == 2) {
+        sceneManager.perkButtons[8].bought = true;
+        sceneManager.perkButtons[9].bought = true;
+    } else if (up[2] == 1) {
+        sceneManager.perkButtons[8].bought = true;
+    }
+
+    if (up[3] == 4) {
+        sceneManager.perkButtons[12].bought = true;
+        sceneManager.perkButtons[13].bought = true;
+        sceneManager.perkButtons[14].bought = true;
+        sceneManager.perkButtons[15].bought = true;
+    } else if (up[3] == 3) {
+        sceneManager.perkButtons[12].bought = true;
+        sceneManager.perkButtons[13].bought = true;
+        sceneManager.perkButtons[14].bought = true;
+    } else if (up[3] == 2) {
+        sceneManager.perkButtons[12].bought = true;
+        sceneManager.perkButtons[13].bought = true;
+    } else if (up[3] == 1) {
+        sceneManager.perkButtons[12].bought = true;
+    }
+
+    for (let i = 0; i < sceneManager.perkDescription.length; i++) {
+        if (game.myData.perkPoints >= sceneManager.perkDescription[i].price) {
+            sceneManager.perkButtons[i].canBuy = true;
+        }
+    }
 }
