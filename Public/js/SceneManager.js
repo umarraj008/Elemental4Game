@@ -29,6 +29,7 @@ class SceneManager {
         this.player2HealthBar = new HealthBar(-(c.width-50), 120, 700, 30,0,200, false);
         this.xpHealthBar = new HealthBar(c.width/2-350, c.height/2, 700, 30, 0, 100, true);
         this.xpHealthBar.speed = 0.07;
+        this.credits = new Credits();
         this.selectedPerk = 0;
 
         //title screen buttons
@@ -360,40 +361,41 @@ class SceneManager {
 
     
     drawCredits(){
-        ctx.fillStyle = "black";
-        ctx.fillRect (0,0,c.width, c.height);
+        this.credits.draw();
+        // ctx.fillStyle = "black";
+        // ctx.fillRect (0,0,c.width, c.height);
         
-        //this will draw the credit title screen.
-        ctx.fillStyle= "Blue";
-        ctx.font = "100px Arial";
-        ctx.textAlign = "center";
-        ctx.fillText("CyberCloud Studios",c.width/2, 200);
+        // //this will draw the credit title screen.
+        // ctx.fillStyle= "Blue";
+        // ctx.font = "100px Arial";
+        // ctx.textAlign = "center";
+        // ctx.fillText("CyberCloud Studios",c.width/2, 200);
 
-        //button section for credits
-        this.creditBackButton.draw (dt,mouseX, mouseY);
+        // //button section for credits
+        // this.creditBackButton.draw (dt,mouseX, mouseY);
 
-        //This will be the actual credits
+        // //This will be the actual credits
        
-        ctx.fillStyle= "white";
-        ctx.font = "30px Arial";
-        ctx.textAlign = "center";
+        // ctx.fillStyle= "white";
+        // ctx.font = "30px Arial";
+        // ctx.textAlign = "center";
 
-        ctx.fillText("Ice, Lava and Air Background",c.width/2, 275);
+        // ctx.fillText("Ice, Lava and Air Background",c.width/2, 275);
 
-        ctx.font = "15px Arial";
-        ctx.fillText("Glacial Mountains: Parallax Background by Vicente Nitti (www.vnitti.itch.io)",c.width/2, 340);
-        ctx.fillText("Licensed under Creative Commons: By Attribution 4.0 License",c.width/2, 380);
-        ctx.fillText("http://creativecommons.org/licenses/by/4.0/",c.width/2, 420);
-        ctx.fillText("Parts of this work was remixed.",c.width/2, 460);
+        // ctx.font = "15px Arial";
+        // ctx.fillText("Glacial Mountains: Parallax Background by Vicente Nitti (www.vnitti.itch.io)",c.width/2, 340);
+        // ctx.fillText("Licensed under Creative Commons: By Attribution 4.0 License",c.width/2, 380);
+        // ctx.fillText("http://creativecommons.org/licenses/by/4.0/",c.width/2, 420);
+        // ctx.fillText("Parts of this work was remixed.",c.width/2, 460);
 
-        ctx.font = "30px Arial";
-        ctx.fillText("Earth Background",c.width/2, 595);
+        // ctx.font = "30px Arial";
+        // ctx.fillText("Earth Background",c.width/2, 595);
 
-        ctx.font = "15px Arial";
-        ctx.fillText("Grassy Mountains: Parallax Background by Vicente Nitti (www.vnitti.itch.io)",c.width/2, 660);
-        ctx.fillText("Licensed under Creative Commons: By Attribution 4.0 License",c.width/2, 700);
-        ctx.fillText("http://creativecommons.org/licenses/by/4.0/",c.width/2, 740);
-        ctx.fillText("Parts of this work was remixed.",c.width/2, 780);
+        // ctx.font = "15px Arial";
+        // ctx.fillText("Grassy Mountains: Parallax Background by Vicente Nitti (www.vnitti.itch.io)",c.width/2, 660);
+        // ctx.fillText("Licensed under Creative Commons: By Attribution 4.0 License",c.width/2, 700);
+        // ctx.fillText("http://creativecommons.org/licenses/by/4.0/",c.width/2, 740);
+        // ctx.fillText("Parts of this work was remixed.",c.width/2, 780);
 
         // ctx.font = "30px Arial";
         // ctx.fillText("Wizard Character",c.width/2-700, 275);
@@ -869,7 +871,8 @@ class SceneManager {
             case 2: //settings screen
                 if(this.settingBackButton.mouseOver(mouseX,mouseY)) {
                     this.scene = 4;
-                } else if (this.settingCreditButton.mouseOver(mouseX,mouseY)){          
+                } else if (this.settingCreditButton.mouseOver(mouseX,mouseY)){    
+                    this.credits = new Credits();      
                     this.scene = 3;
                 } else if(this.settingsFullScreenButton.mouseOver(mouseX,mouseY)) { 
                     if (this.fullScreen) {
