@@ -15,7 +15,7 @@ class Splash {
         //text
         ctx.fillStyle = "rgba(255,255,255," + this.opacity + ")";
         ctx.textAlign = "center";
-        ctx.font = "30px Arial";
+        ctx.font = "70px pixel";
         ctx.fillText("Cybercloud Studios", c.width/2, c.height/2);
 
         //transision in

@@ -406,74 +406,133 @@ function updatePerkButtons() {
         b.bought = false;
     });
 
+    for (let i = 0; i < sceneManager.perkDescription.length; i++) {
+        if (game.myData.perkPoints >= sceneManager.perkDescription[i].price) {
+            sceneManager.perkButtons[i].style = "normal";
+        } else {
+            sceneManager.perkButtons[i].style = "disabled";
+        }
+    }
+
     let up = game.myData.perksUnlocked.split(",");
     if (up[0] == 4) {
-        sceneManager.perkButtons[0].bought = true;
-        sceneManager.perkButtons[1].bought = true;
-        sceneManager.perkButtons[2].bought = true;
-        sceneManager.perkButtons[3].bought = true;
+        sceneManager.perkButtons[0].style = "bought";
+        sceneManager.perkButtons[1].style = "bought";
+        sceneManager.perkButtons[2].style = "bought";
+        sceneManager.perkButtons[3].style = "bought";
     } else if (up[0] == 3) {
-        sceneManager.perkButtons[0].bought = true;
-        sceneManager.perkButtons[1].bought = true;
-        sceneManager.perkButtons[2].bought = true;
+        sceneManager.perkButtons[0].style = "bought";
+        sceneManager.perkButtons[1].style = "bought";
+        sceneManager.perkButtons[2].style = "bought";
     } else if (up[0] == 2) {
-        sceneManager.perkButtons[0].bought = true;
-        sceneManager.perkButtons[1].bought = true;
+        sceneManager.perkButtons[0].style = "bought";
+        sceneManager.perkButtons[1].style = "bought";
     } else if (up[0] == 1) {
-        sceneManager.perkButtons[0].bought = true;
+        sceneManager.perkButtons[0].style = "bought";
     }
 
     if (up[1] == 4) {
-        sceneManager.perkButtons[4].bought = true;
-        sceneManager.perkButtons[5].bought = true;
-        sceneManager.perkButtons[6].bought = true;
-        sceneManager.perkButtons[7].bought = true;
+        sceneManager.perkButtons[4].style = "bought";
+        sceneManager.perkButtons[5].style = "bought";
+        sceneManager.perkButtons[6].style = "bought";
+        sceneManager.perkButtons[7].style = "bought";
     } else if (up[1] == 3) {
-        sceneManager.perkButtons[4].bought = true;
-        sceneManager.perkButtons[5].bought = true;
-        sceneManager.perkButtons[6].bought = true;
+        sceneManager.perkButtons[4].style = "bought";
+        sceneManager.perkButtons[5].style = "bought";
+        sceneManager.perkButtons[6].style = "bought";
     } else if (up[1] == 2) {
-        sceneManager.perkButtons[4].bought = true;
-        sceneManager.perkButtons[5].bought = true;
+        sceneManager.perkButtons[4].style = "bought";
+        sceneManager.perkButtons[5].style = "bought";
     } else if (up[1] == 1) {
-        sceneManager.perkButtons[4].bought = true;
+        sceneManager.perkButtons[4].style = "bought";
     }
 
     if (up[2] == 4) {
-        sceneManager.perkButtons[8].bought = true;
-        sceneManager.perkButtons[9].bought = true;
-        sceneManager.perkButtons[10].bought = true;
-        sceneManager.perkButtons[11].bought = true;
+        sceneManager.perkButtons[8].style = "bought";
+        sceneManager.perkButtons[9].style = "bought";
+        sceneManager.perkButtons[10].style = "bought";
+        sceneManager.perkButtons[11].style = "bought";
     } else if (up[2] == 3) {
-        sceneManager.perkButtons[8].bought = true;
-        sceneManager.perkButtons[9].bought = true;
-        sceneManager.perkButtons[10].bought = true;
+        sceneManager.perkButtons[8].style = "bought";
+        sceneManager.perkButtons[9].style = "bought";
+        sceneManager.perkButtons[10].style = "bought";
     } else if (up[2] == 2) {
-        sceneManager.perkButtons[8].bought = true;
-        sceneManager.perkButtons[9].bought = true;
+        sceneManager.perkButtons[8].style = "bought";
+        sceneManager.perkButtons[9].style = "bought";
     } else if (up[2] == 1) {
-        sceneManager.perkButtons[8].bought = true;
+        sceneManager.perkButtons[8].style = "bought";
     }
 
     if (up[3] == 4) {
-        sceneManager.perkButtons[12].bought = true;
-        sceneManager.perkButtons[13].bought = true;
-        sceneManager.perkButtons[14].bought = true;
-        sceneManager.perkButtons[15].bought = true;
+        sceneManager.perkButtons[12].style = "bought";
+        sceneManager.perkButtons[13].style = "bought";
+        sceneManager.perkButtons[14].style = "bought";
+        sceneManager.perkButtons[15].style = "bought";
     } else if (up[3] == 3) {
-        sceneManager.perkButtons[12].bought = true;
-        sceneManager.perkButtons[13].bought = true;
-        sceneManager.perkButtons[14].bought = true;
+        sceneManager.perkButtons[12].style = "bought";
+        sceneManager.perkButtons[13].style = "bought";
+        sceneManager.perkButtons[14].style = "bought";
     } else if (up[3] == 2) {
-        sceneManager.perkButtons[12].bought = true;
-        sceneManager.perkButtons[13].bought = true;
+        sceneManager.perkButtons[12].style = "bought";
+        sceneManager.perkButtons[13].style = "bought";
     } else if (up[3] == 1) {
-        sceneManager.perkButtons[12].bought = true;
+        sceneManager.perkButtons[12].style = "bought";
+    }
+}
+
+function loadSettings() {
+    //frame rate
+    if (SETTINGS.frameRate == 30) {
+        sceneManager.settingsButtons.frameRate30FPS.style = "selected";
+        sceneManager.settingsButtons.frameRate60FPS.style = "disabled";
+    } else if (SETTINGS.frameRate == 60) {
+        sceneManager.settingsButtons.frameRate30FPS.style = "disabled";
+        sceneManager.settingsButtons.frameRate60FPS.style = "selected";
     }
 
-    for (let i = 0; i < sceneManager.perkDescription.length; i++) {
-        if (game.myData.perkPoints >= sceneManager.perkDescription[i].price) {
-            sceneManager.perkButtons[i].canBuy = true;
-        }
+    //wind particles
+    if (SETTINGS.windParticles) {
+        sceneManager.settingsButtons.windParticlesOn.style = "selected";
+        sceneManager.settingsButtons.windParticlesOff.style = "disabled";
+    } else {
+        sceneManager.settingsButtons.windParticlesOn.style = "disabled";
+        sceneManager.settingsButtons.windParticlesOff.style = "selected";
     }
+    
+    //debris
+    if (SETTINGS.debrisParticles) {
+        sceneManager.settingsButtons.debrisParticlesOn.style = "selected";
+        sceneManager.settingsButtons.debrisParticlesOff.style = "disabled";
+    } else {
+        sceneManager.settingsButtons.debrisParticlesOn.style = "disabled";
+        sceneManager.settingsButtons.debrisParticlesOff.style = "selected";
+    }
+    
+    //moving background
+    if (SETTINGS.movingBackground) {
+        sceneManager.settingsButtons.movingBackgroundOn.style = "selected";
+        sceneManager.settingsButtons.movingBackgroundOff.style = "disabled";
+    } else {
+        sceneManager.settingsButtons.movingBackgroundOn.style = "disabled";
+        sceneManager.settingsButtons.movingBackgroundOff.style = "selected";
+    }
+    
+    //text indicators
+    if (SETTINGS.textIndicators) {
+        sceneManager.settingsButtons.textIndicatorsOn.style = "selected";
+        sceneManager.settingsButtons.textIndicatorsOff.style = "disabled";
+    } else {
+        sceneManager.settingsButtons.textIndicatorsOn.style = "disabled";
+        sceneManager.settingsButtons.textIndicatorsOff.style = "selected";
+    }
+    
+    //fullscreen
+    if (SETTINGS.fullscreen) {
+        sceneManager.settingsButtons.fullscreenOn.style = "selected";
+        sceneManager.settingsButtons.fullscreenOff.style = "disabled";
+    } else {
+        sceneManager.settingsButtons.fullscreenOn.style = "disabled";
+        sceneManager.settingsButtons.fullscreenOff.style = "selected";
+    }
+
 }
