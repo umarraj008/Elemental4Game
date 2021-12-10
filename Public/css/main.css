@@ -1,6 +1,12 @@
 * {
     margin: 0;
     padding: 0;
+    font-family: pixel;
+}
+
+@font-face {
+    font-family: pixel;
+    src: url("../resources/fonts/pixel-font-7.ttf");
 }
 
 canvas {
