@@ -127,6 +127,12 @@ window.onclick = function(e) {
     //console.log("test2");
 }
 
+window.onkeydown = function (e) {
+    if (e.keyCode == 13) {
+        sendMessageTextChat();
+    }
+}
+
 function loginButtonPressed() {
     let email = document.getElementById("email").value;
     let password = document.getElementById("password").value;

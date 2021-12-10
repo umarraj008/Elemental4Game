@@ -204,6 +204,11 @@ socket.on("game-over", function(data) {
     game.myData.xpLevel = data.levelUpNewXpLevel;
     game.myData.nextLevel = data.newNextLevel;
     game.myData.perkPoints = data.perkPoints;
+    document.getElementById("textChat").value = "";
+    document.getElementById("textChatInput").value = "";
+    hideTextChat();
+    document.getElementById("textChatShow").style.display = "none";
+    game.id = null;
     //console.log(data);
 });
 
@@ -521,7 +526,9 @@ function sendMessageTextChat(){
         return;
     }
 
-    let data = {id:game.id, message: game.myData.gamerTag + ": " + message + "\n"}
-    socket.emit("send-text-chat", data);
-    textinput.value = ""; 
+    if (game.id != null) {   
+        let data = {id:game.id, message: game.myData.gamerTag + ": " + message + "\n"}
+        socket.emit("send-text-chat", data);
+        textinput.value = ""; 
+    }
 }
