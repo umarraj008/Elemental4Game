@@ -1,16 +1,6 @@
 const c = document.getElementById("canvas");
 const ctx = c.getContext("2d");
 
-var scene = 0;
-var dt = 0;
-var mouseX, mouseY;
-var sceneManager = new SceneManager(-1);
-var frameRate = 60;
-var frameInterval = 1000/frameRate;
-var now;
-var elapsed;
-var then = Date.now();
-
 const airBackground = new Image();
 const earthBackground = new Image();
 const fireBackground = new Image();
@@ -43,6 +33,10 @@ const waterMapCloud2 = new Image();
 const waterMapCloud3 = new Image();
 const waterMapCloud4 = new Image();
 const waterMapMountains = new Image();
+const titleImage = new Image();
+const buttonSpriteSheet = new Image();
+const rocks = new Image();
+const panelSpriteSheet = new Image();
 
 airBackground.src =        "resources/images/AirMapFull.png";
 earthBackground.src =      "resources/images/EarthMapFull.png";
@@ -76,6 +70,30 @@ waterMapCloud2.src =       "resources/images/WaterMap/WaterMap_Cloud2.png";
 waterMapCloud3.src =       "resources/images/WaterMap/WaterMap_Cloud3.png";
 waterMapCloud4.src =       "resources/images/WaterMap/WaterMap_Cloud4.png";
 waterMapMountains.src =    "resources/images/WaterMap/WaterMap_Mountains.png";
+titleImage.src =           "resources/images/elemental4LTitle.png";
+buttonSpriteSheet.src =    "resources/images/buttonSpriteSheet.png";
+rocks.src =                "resources/images/rocks.png";
+panelSpriteSheet.src =     "resources/images/panelSpriteSheet.png";
+
+var scene = 0;
+var dt = 0;
+var mouseX, mouseY;
+var sceneManager = new SceneManager(-1);
+var frameRate = 60;
+var frameInterval = 1000/frameRate;
+var now;
+var elapsed;
+var then = Date.now();
+var FONT = "pixel";
+var pauseDrawing = false;
+var SETTINGS = {
+    frameRate: 60,
+    windParticles: true,
+    debrisParticles: true,
+    movingBackground: true,
+    textIndicators: true,
+    fullscreen: false,
+};
 
 function setup() {
     // c.width = 1920;
@@ -86,14 +104,14 @@ function setup() {
 }
 
 function main() {
-    frameInterval = 1000/frameRate;
+    frameInterval = 1000/SETTINGS.frameRate;
     requestAnimationFrame(main);
     
     now = Date.now();
     elapsed = now - then;
     dt = elapsed;
     
-    if (elapsed > frameInterval) {
+    if (elapsed > frameInterval && !pauseDrawing) {
         then = now - (elapsed % frameInterval);
         sceneManager.run();
     }
@@ -130,6 +148,17 @@ window.onclick = function(e) {
 window.onkeydown = function (e) {
     if (e.keyCode == 13) {
         sendMessageTextChat();
+    }
+}
+
+document.onvisibilitychange  = function () {
+    if (document.visibilityState == "hidden") {
+        pauseDrawing = true;
+        dt = 0;
+        elapsed = 0;
+        console.log("paused");
+    } else {
+        pauseDrawing = false;
     }
 }
 

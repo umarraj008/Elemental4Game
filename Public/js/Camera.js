@@ -64,7 +64,7 @@ class Camera {
             ctx.fillRect(0,0,c.width,c.height);
 
             if (this.transitionUp){
-                this.transitionOpacity += this.transitionSpeed;
+                this.transitionOpacity += this.transitionSpeed*dt;
                 
                 if (this.transitionOpacity >= 1){
                     this.transitionUp = false;
@@ -72,7 +72,7 @@ class Camera {
                     sceneManager.scene = this.scene;
                 }
             }else{
-                this.transitionOpacity -=  this.transitionSpeed;
+                this.transitionOpacity -=  this.transitionSpeed*dt;
 
                 if (this.transitionOpacity <= 0){
                     this.transitionUp = true;
@@ -85,8 +85,8 @@ class Camera {
 
     transitionTo(scene,speed){
         this.scene = scene;
-        this.transitionSpeed = Speed;
-        this.tranasitionEnabled = true;
+        this.transitionSpeed = speed;
+        this.transitionEnabled = true;
         this.transitionUp = true;
 
 
