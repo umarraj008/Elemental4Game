@@ -145,6 +145,12 @@ window.onclick = function(e) {
     //console.log("test2");
 }
 
+window.onkeydown = function (e) {
+    if (e.keyCode == 13) {
+        sendMessageTextChat();
+    }
+}
+
 document.onvisibilitychange  = function () {
     if (document.visibilityState == "hidden") {
         pauseDrawing = true;

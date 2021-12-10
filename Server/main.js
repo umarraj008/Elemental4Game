@@ -345,6 +345,10 @@ io.sockets.on("connection", function(socket) {
         }
 
     });
+
+    socket.on("send-text-chat",function(data){
+        games[data.id].sendTextChatMessage(data.message);
+    });
 });
 
 function findGame(id) {

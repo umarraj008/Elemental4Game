@@ -13,6 +13,7 @@ module.exports = class Game {
 
         this.ready = 0;
         this.em = em;
+        this.chat= [];
     }
 
     startGame() {
@@ -276,5 +277,10 @@ module.exports = class Game {
         };
         
         this.player2.sendMessage("game-update", gameData2);
+    }
+
+    sendTextChatMessage(message){
+        this.chat += message;
+        this.sendMessageToBothPlayers("update-chat", message);
     }
 }

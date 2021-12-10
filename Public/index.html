@@ -36,5 +36,15 @@
                 <input type="submit" value="Create an Account" id="register" onclick="location.href='register.html'">
             </div>
         </div>
+        <div id="textChatContainer">
+            <textarea id="textChat"readonly></textarea>
+            <div id="textChatInputContainer">
+                <input type="text" id="textChatInput" placeholder="type here...">
+                <input type="button" id="textChatEnter" value="Send" onclick="sendMessageTextChat()">
+            </div>
+        </div>
+        <input type="button" id="textChatHide" value="<" onclick="hideTextChat()">
+        <input type="button" id="textChatShow" value=">" onclick="showTextChat()">
+        <span id="notif">0</span>
     </body>
 </html>
