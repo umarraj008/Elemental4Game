@@ -64,7 +64,7 @@ socket.on("connect", function() {
             loggedIn(data);
             console.log("Requesting to log back into same account as stored in session storage");
         } else {
-            document.getElementById("loginContainer").style.display = "flex";
+            //document.getElementById("loginContainer").style.display = "flex";
         }
 });
 

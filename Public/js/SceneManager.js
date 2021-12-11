@@ -33,6 +33,7 @@ class SceneManager {
         this.selectedPerk = 0;
         this.camera = new Camera();
         this.maps = new Maps();
+        this.angle = 0;
 
         //title screen buttons
         this.playButton = new Button(c.width/2-300,c.height/2-75,600,100, "Play");
@@ -156,7 +157,23 @@ class SceneManager {
         ctx.clearRect(0,0,c.width,c.height);
         //switch scenes
         switch(this.scene) {
-            
+            case -2: //loading screen
+                ctx.fillStyle = "black";
+                ctx.fillRect(0,0,c.width,c.height);
+                ctx.save();
+                ctx.translate(c.width/2,c.height/2);
+                ctx.rotate(this.angle * Math.PI/180);
+                ctx.beginPath();
+                ctx.arc(0,0,100,0,0,270 * Math.PI/180);
+                ctx.strokeStyle = "white";
+                ctx.lineWidth = "10px";
+                ctx.stroke();
+                ctx.fillStyle = "white"
+                ctx.fillRect(-50,-50,100,100);
+                ctx.restore();
+                this.angle += 0.06 * dt;
+                break;
+
             case -1: //login screen
                 ctx.fillStyle = "black";
                 ctx.fillRect(0,0,c.width,c.height);
