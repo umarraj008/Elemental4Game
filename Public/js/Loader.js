@@ -12,7 +12,7 @@ class Loader{
     loadImage(src) {
         let img = new Image();
         img.src = src;
-        img.onload = this.imageLoaded();
+        img.onload = function() {loader.imageLoaded();};
         
         return img;
     }
