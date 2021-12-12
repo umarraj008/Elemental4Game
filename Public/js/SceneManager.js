@@ -1042,7 +1042,7 @@ class SceneManager {
             case 4: //menu screen
                 if (this.matchmakeButton.mouseOver(mouseX, mouseY)) {
                     matchmake();
-                } else if (this.stopMatchmakeButton.mouseOver(mouseX, mouseY)) {
+                } else if (this.matchmaking && this.stopMatchmakeButton.mouseOver(mouseX, mouseY)) {
                     stopMatchmaking();
                 } else if (this.perkScreenButton.mouseOver(mouseX,mouseY)){     
                     if (this.matchmaking) {
