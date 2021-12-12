@@ -11,12 +11,23 @@ canvas {
     margin-top: 0px;
 }
 
+@font-face {
+    font-family: pixel;
+    src: url("/Public/resources/images/pixel\ font-7.ttf");
+}
+
 body {
     background-color: black;
 }
 
 #registerPage {
-    background-color: #3e3d3d;
+
+    height: 100vh;
+    overflow: hidden;
+
+    /* background-image: url("resources/images/RegisterLoginUI/WaterMapFullBlur.png");
+    width: 200px; */
+
 }
 
 #loginContainer {
@@ -53,13 +64,14 @@ p {
 }
 
 #innerRegisterContainer {
+    background-image: url("resources/images/RegisterLoginUI/pannel1.png");
     width: 320px;
-    background-color: #808080;
-    padding: 40px 20px;
-    box-sizing: border-box;
-    border-radius: 7px;
+    /* background-color: #808080; */
+    /* padding: 20px 20px; */
+    /* box-sizing: border-box;
+    border-radius: 7px; */
     position: fixed;
-    left: 50%;
+    left: 45%;
     top: 50%;
     transform: translate(-50%, -50%);
 }
@@ -68,10 +80,25 @@ h1 {
     text-align: center;
     color: #fff;
     font-weight: normal;
-    margin-bottom: 20px;
+    margin-bottom: 75px;
+    margin-left: 150px;
+    font-family: pixel;
 }
 
-input {
+input.register {
+    height: 30px;
+    width: 150%;
+    background: url("/Public/resources/images/RegisterLoginUI/textbox.png");
+    padding: 10px;
+    margin-bottom: 10px;
+    outline: none;
+    border: none;
+    background-repeat: no-repeat;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* input {
     width: 100%;
     background: none;
     border: 1px solid #fff;
@@ -81,9 +108,11 @@ input {
     margin-bottom: 20px;
     font-size: 16px;
     color: #fff;
-}
+} */
 
-input[type="submit"] {
+
+
+/* input[type="submit"] {
     background: #bac675;
     border: 0;
     cursor: pointer;
@@ -96,4 +125,65 @@ input[type="submit"]:hover {
 
 ::placeholder {
     color: #fff;
+} */
+
+/* 
+div.image {
+    
+} */
+
+#pannelImage {
+    /* margin-left: 200px; */
+    /* text-align: center; */
+    /* margin: auto; */
+    display: flex;
+    justify-content: center;
+    margin-top: 80px;
+
+}
+
+
+
+p {
+    display: flex;
+    color: white;
+    justify-content: center;
+}
+
+img {
+    position: absolute;
+    margin-top: 5%;
+}
+
+#register {
+    background: url("/Public/resources/images/RegisterLoginUI/button.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    height: 90px;
+    margin-left: 25%;
+    padding-right: 175px;
+    padding-bottom: 50px;
+    font-family: pixel;
+}
+
+.characters {
+    bottom: 0;
+}
+
+.logo {
+    position: relative;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+    top: -100px;
+}
+
+#register:hover {
+    background: url(/Public/resources/images/RegisterLoginUI/buttonHover.png);
+    background-repeat: no-repeat;
+}
+
+::placeholder {
+    color: white;
 }
