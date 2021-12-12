@@ -27,7 +27,7 @@ class SceneManager {
         // this.windParticleSystem = new WindParticleSystem();
         this.player1HealthBar = new HealthBar(50,120,700,30,0,200, false);
         this.player2HealthBar = new HealthBar(-(c.width-50), 120, 700, 30,0,200, false);
-        this.xpHealthBar = new HealthBar(c.width/2-350, c.height/2, 700, 30, 0, 100, true);
+        this.xpHealthBar = new HealthBar(c.width/2-450, c.height/2+170, 900, 30, 0, 100, true);
         this.xpHealthBar.speed = 0.07;
         this.credits = new Credits();
         this.selectedPerk = 0;
@@ -39,6 +39,7 @@ class SceneManager {
         this.playButton = new Button(c.width/2-300,c.height/2-75,600,100, "Play");
         
         //main menu buttons
+        this.stopMatchmakeButton =  new Button(c.width/2-150,c.height/2-100,300,150, "Stop Matchmaking");
         this.matchmakeButton =  new Button(c.width/2-600,c.height/2-100,300,150, "Matchmake");
         this.perkScreenButton = new Button(c.width/2-150,c.height/2-100,300,150, "Perk Screen");
         this.settingsButton = new Button(c.width/2+300,c.height/2-100,300,150, "Settings");
@@ -74,7 +75,7 @@ class SceneManager {
         };
         
         //game results page buttons
-        this.resultsBackButton = new Button(c.width/2-300,c.height/2+300,600,100, "Back");
+        this.resultsBackButton = new Button(c.width/2-300,c.height/2+400,600,100, "Back");
 
         this.logoutButton = new Button(50, c.height-200,300,150, "Logout");
 
@@ -121,6 +122,7 @@ class SceneManager {
             {string: "Increase the chance of getting a critical hit!", price: 4,},
         ];
 
+        this.indicators = new IndicatorSystem();
         this.perkConfirmWindow = false;
         this.perkConfirmConfirmButton = new Button(c.width/2-310, c.height/2, 300, 100, "Confirm");
         this.perkConfirmCancelButton = new Button(c.width/2+10, c.height/2, 300, 100, "Cancel");
@@ -149,6 +151,8 @@ class SceneManager {
             gameCredits:         new Button(1300, 200, 540, 100, "Game Credits"),
             backButton:          new Button(c.width/2-300,c.height/2+400,600,100, "Back"),
         };
+
+        this.resultsPanel = new Panel(c.width/2-500,c.height/2-300,1000, 600);
     } 
 
 
@@ -289,10 +293,19 @@ class SceneManager {
         this.playButton.draw(dt,mouseX,mouseY);
 
         //logged in as text
-        ctx.fillStyle = "white";
         ctx.textAlign = "left";
         ctx.font = "30px "+FONT;
+        ctx.fillStyle = "black";
+        ctx.fillText("Logged in as " + game.myData.gamerTag, 52, 52);
+        ctx.fillStyle = "white";
         ctx.fillText("Logged in as " + game.myData.gamerTag, 50, 50);
+
+        ctx.textAlign = "center";
+        ctx.font = "30px "+FONT;
+        ctx.fillStyle = "black";
+        ctx.fillText("©Cybercloud Studios", c.width/2+2, c.height-48);
+        ctx.fillStyle = "white";
+        ctx.fillText("©Cybercloud Studios", c.width/2, c.height-50);
 
         //logout
         this.logoutButton.draw(dt, mouseX, mouseY);
@@ -461,32 +474,38 @@ class SceneManager {
         // ctx.fillRect (0,0,c.width, c.height);
         this.maps.drawTransition(false);
 
-        ctx.drawImage(rocks, 0, 0);
-        this.backgroundCharacters.fire.draw();
-        this.backgroundCharacters.water.draw();
+        ctx.drawImage(allCharacters, 0,0,c.width,c.height);
+        //ctx.drawImage(rocks, 0, 0);
+        // this.backgroundCharacters.fire.draw();
+        // this.backgroundCharacters.water.draw();
         
-        ctx.save();
-        ctx.scale(-1,1);
-        this.backgroundCharacters.earth.draw();
-        this.backgroundCharacters.air.draw();
-        ctx.restore();
+        // ctx.save();
+        // ctx.scale(-1,1);
+        // this.backgroundCharacters.earth.draw();
+        // this.backgroundCharacters.air.draw();
+        // ctx.restore();
 
         //this will draw the Menu screen text.
-        ctx.fillStyle= "white";
         ctx.font = "100px "+FONT;
         ctx.textAlign = "center";
-        ctx.fillText("Menu",c.width/2, 200);
+        ctx.fillStyle= "black";
+        ctx.fillText("Main Menu",c.width/2+4, 204);
+        ctx.fillStyle= "white";
+        ctx.fillText("Main Menu",c.width/2, 200);
 
         if (this.matchmaking) {
-            ctx.font = "50px "+FONT;
-            ctx.fillStyle = "Red";
-            ctx.fillText("Matchmaking...", c.width/2, c.height/2-200);
+            ctx.font = "70px "+FONT;
+            ctx.fillStyle = "black";
+            ctx.fillText("Searching For Match", c.width/2+4, c.height/2-196);
+            ctx.fillStyle = "white";
+            ctx.fillText("Searching For Match", c.width/2, c.height/2-200);
+            this.stopMatchmakeButton.draw(dt, mouseX, mouseY);
         } else {
             this.matchmakeButton.draw(dt, mouseX, mouseY);
+            this.perkScreenButton.draw(dt,mouseX,mouseY);
+            this.settingsButton.draw(dt,mouseX,mouseY);
         }
 
-        this.perkScreenButton.draw(dt,mouseX,mouseY);
-        this.settingsButton.draw(dt,mouseX,mouseY);
         this.menuBackButton.draw(dt,mouseX,mouseY);
         this.projectWebsiteButton.draw(dt,mouseX,mouseY);
         
@@ -659,16 +678,64 @@ class SceneManager {
         // ctx.strokeText("Player " + game.whichPlayerAmI, c.width/2, 100);
         // ctx.fillText("Player " + game.whichPlayerAmI, c.width/2, 100);
 
-        if (game.turn) {
-            ctx.strokeText("Your Turn!", c.width/2, 200);
+        if (game.turn && (this.player1Animator.currentAnimation == "idle" && this.player2Animator.currentAnimation == "idle")) {
+            ctx.fillStyle = "black";
+            ctx.fillText("Your Turn!", c.width/2+4, 204);
+            ctx.fillStyle = "white";
             ctx.fillText("Your Turn!", c.width/2, 200);
 
+            if (game.points >= 6 || !(game.health >= 200)) {
+                this.actionButtons.heal.style = "normal";
+                this.actionButtons.heal.draw(dt, mouseX, mouseY);
+                ctx.drawImage(icons, 160,0,40,40, 336+50+148+10,900+70,70,70); //h
+            } else {
+                this.actionButtons.heal.style = "disabled";
+                this.actionButtons.heal.draw(dt, mouseX, mouseY);
+                ctx.drawImage(icons, 160,40,40,40, 336+50+148+10,900+70,70,70); //h
+            }
+            
+            if (game.points >= 3) {
+                this.actionButtons.attack1.style = "normal";
+                this.actionButtons.attack1.draw(dt, mouseX, mouseY);
+                ctx.drawImage(icons, 0,0,40,40, 652+50+148+10, 900+70,70,70); //a1
+            } else {
+                this.actionButtons.attack1.style = "disabled";
+                this.actionButtons.attack1.draw(dt, mouseX, mouseY);
+                ctx.drawImage(icons, 0,40,40,40, 652+50+148+10, 900+70,70,70); //a1
+            }
+            
+            if (game.points >= 4) {
+                this.actionButtons.attack2.style = "normal";
+                this.actionButtons.attack2.draw(dt, mouseX, mouseY);
+                ctx.drawImage(icons, 40,0,40,40, 968+50+148+10, 900+70,70,70); //a2
+            } else {
+                this.actionButtons.attack2.style = "disabled";
+                this.actionButtons.attack2.draw(dt, mouseX, mouseY);
+                ctx.drawImage(icons, 40,40,40,40, 968+50+148+10, 900+70,70,70); //a2
+            }
+
+            if (game.points >= 5) {
+                this.actionButtons.attack3.style = "normal";
+                this.actionButtons.attack3.draw(dt, mouseX, mouseY);
+                ctx.drawImage(icons, 80,0,40,40, 1284+50+148+10, 900+70,70,70); //a3
+            } else {
+                this.actionButtons.attack3.style = "disabled";
+                this.actionButtons.attack3.draw(dt, mouseX, mouseY);
+                ctx.drawImage(icons, 80,40,40,40, 1284+50+148+10, 900+70,70,70); //a3
+            }
+            
+            if (game.points >= 15) {
+                this.actionButtons.ultimate.style = "normal";
+                this.actionButtons.ultimate.draw(dt, mouseX, mouseY);
+                ctx.drawImage(icons, 120,0,40,40, 1600+50+148+10,900+70,70,70); //u
+            } else {
+                this.actionButtons.ultimate.style = "disabled";
+                this.actionButtons.ultimate.draw(dt, mouseX, mouseY);
+                ctx.drawImage(icons, 120,40,40,40, 1600+50+148+10,900+70,70,70); //u
+            }
+
             this.actionButtons.wait.draw(dt, mouseX, mouseY);
-            this.actionButtons.heal.draw(dt, mouseX, mouseY);
-            this.actionButtons.attack1.draw(dt, mouseX, mouseY);
-            this.actionButtons.attack2.draw(dt, mouseX, mouseY);
-            this.actionButtons.attack3.draw(dt, mouseX, mouseY);
-            this.actionButtons.ultimate.draw(dt, mouseX, mouseY);
+
 
             ctx.fillStyle = "black";
             ctx.textAlign = "center";
@@ -705,52 +772,92 @@ class SceneManager {
             ctx.fillText(30 + damageBoost + " Damage",1284+148, 1000);
             ctx.fillText(70 + damageBoost + " Damage",1600+148, 1000);
             
-            
-
         }
 
+        ctx.font = "70px " + FONT;
+        ctx.textAlign = "center";
+        let min = Math.floor(matchTimer/60000);
+        let sec = Math.floor(matchTimer/1000) % 60;
+        min = (min <= 9) ? "0" + min : min;
+        sec = (sec <= 9) ? "0" + sec : sec;
+        ctx.fillStyle = "black";
+        ctx.fillText(min + ":" + sec, c.width/2+4, 104);
         ctx.fillStyle = "white";
+        ctx.fillText(min + ":" + sec, c.width/2, 100);
+        matchTimer += dt;
+
         ctx.textAlign = "left";
         ctx.font = "40px "+FONT;
+        ctx.fillStyle = "black";
+        ctx.fillText("health: " + game.health, 52, 202);
+        ctx.fillText("points: " + game.points, 52, 252);
+        ctx.fillStyle = "white";
         ctx.fillText("health: " + game.health, 50, 200);
         ctx.fillText("points: " + game.points, 50, 250);
         
 
         ctx.textAlign = "right";
+        ctx.fillStyle = "black";
+        ctx.fillText("health: " + game.player2.health, c.width-48, 202);
+        ctx.fillText("points: " + game.player2.points, c.width-48, 252);
+        ctx.fillStyle = "white";
         ctx.fillText("health: " + game.player2.health, c.width-50, 200);
         ctx.fillText("points: " + game.player2.points, c.width-50, 250);
-       
         
-        ctx.fillStyle = "red";
-        ctx.strokeStyle = "black";
-        ctx.lineWidth = 5;
+        
         ctx.textAlign = "left";
         ctx.font = "60px "+FONT;
-        ctx.strokeText(game.myData.gamerTag, 50, 100);
+        ctx.fillStyle = "black";
+        ctx.fillText(game.myData.gamerTag, 54, 104);
+        ctx.fillStyle = "white";
         ctx.fillText(game.myData.gamerTag, 50, 100);
-
-        ctx.textAlign = "right";
         
-        ctx.strokeText(game.player2.gamerTag ,c.width -50, 100);
+        ctx.textAlign = "right";        
+        ctx.fillStyle = "black";
+        ctx.fillText(game.player2.gamerTag ,c.width -48, 104);
+        ctx.fillStyle = "white";
         ctx.fillText(game.player2.gamerTag ,c.width -50, 100);
 
+
+        this.indicators.draw();
 
         if (game.over) {
             ctx.textAlign = "center";
             ctx.font = "100px "+FONT;
             if (game.win) {
-                ctx.fillStyle = "lime";
-                ctx.strokeText("You Win!", c.width/2,c.height/2);
-                ctx.fillText("You Win!", c.width/2,c.height/2);
+                ctx.fillStyle = "rgba(0,255,100,0.3)";
+                ctx.fillRect(0,0,c.width,c.height);
+                ctx.fillStyle = "black";
+                ctx.fillText("Victory", c.width/2+4,c.height/2+4);
+                ctx.fillStyle = "white";
+                ctx.fillText("Victory", c.width/2,c.height/2);
             } else {
-                ctx.fillStyle = "red";
-                ctx.strokeText("You Lose!", c.width/2,c.height/2);
-                ctx.fillText("You Lose!", c.width/2,c.height/2);
+                ctx.fillStyle = "rgba(255,0,0,0.3)";
+                ctx.fillRect(0,0,c.width,c.height);
+                ctx.fillStyle = "black";
+                ctx.fillText("Defeat", c.width/2+4,c.height/2+4);
+                ctx.fillStyle = "white";
+                ctx.fillText("Defeat", c.width/2,c.height/2);
             }
         }
 
         //healthbar
         this.player1HealthBar.draw();
+
+        if (!roundIndicator) {
+            roundIndicator = true;
+            if (game.health <= 40) {
+                this.indicators.makeIndicator("+2 Points", 500,c.height/2, "rgba(0,255,100,");
+            } else {
+                this.indicators.makeIndicator("+3 Points", 500,c.height/2, "rgba(0,255,100,");
+            }
+
+            if (game.player2.health <= 40) {
+                this.indicators.makeIndicator("+2 Points", 1500,c.height/2, "rgba(0,255,100,");
+            } else {
+                this.indicators.makeIndicator("+3 Points", 1500,c.height/2, "rgba(0,255,100,");
+            }
+        }
 
         ctx.save();
         ctx.scale(-1,1);
@@ -759,13 +866,18 @@ class SceneManager {
     }
     drawGameResults() {
         //background
-        ctx.fillStyle = "rgb(100,100,100)";
-        ctx.fillRect(0,0,c.width,c.height);
-
+        switch(whatMapWasIt-1) {
+            case 0: ctx.drawImage(waterMapBlur, 0,0,c.width,c.height); break;
+            case 1: ctx.drawImage(fireMapBlur, 0,0,c.width,c.height); break;
+            case 2: ctx.drawImage(earthMapBlur, 0,0,c.width,c.height); break;
+            case 3: ctx.drawImage(airMapBlur, 0,0,c.width,c.height); break;
+        }
         //this will draw the Game results screen text
-        ctx.fillStyle= "white";
         ctx.font = "100px "+FONT;
         ctx.textAlign = "center";
+        ctx.fillStyle= "black";
+        ctx.fillText("Game Results",c.width/2+4, 204);
+        ctx.fillStyle= "white";
         ctx.fillText("Game Results",c.width/2, 200);
  
         // ctx.textAlign = "center";
@@ -778,20 +890,32 @@ class SceneManager {
         //     ctx.fillText("You Lose!", c.width/2,c.height/2);
         // }
 
+        this.resultsPanel.draw();
+
+        switch(whatCharacterWasI) {
+            case 0: ctx.drawImage(fireCharacter, c.width/2-200, c.height/2-300, 400, 400); break;
+            case 1: ctx.drawImage(waterCharacter, c.width/2-200, c.height/2-300, 400, 400); break;
+            case 2: ctx.drawImage(earthCharacter, c.width/2-200, c.height/2-300, 400, 400); break;
+            case 3: ctx.drawImage(airCharacter, c.width/2-200, c.height/2-300, 400, 400); break;
+        }
+
         ctx.fillStyle = "black";
         ctx.textAlign = "left";
         ctx.font = "30px "+FONT;
-        ctx.fillText("Current XP: " + (Math.floor(this.xpHealthBar.value*100))+"xp", c.width/2-350, c.height/2-100);
-        ctx.fillText("XP Needed for Next Level: "+ (this.xpHealthBar.maxValue*100)+"xp", c.width/2+350, c.height/2-100);
+        ctx.fillText("XP: " + (Math.floor(this.xpHealthBar.value*100)) + "/" + (this.xpHealthBar.maxValue*100), c.width/2-450, c.height/2+150);
+        // ctx.fillText("XP Needed for Next Level: "+ (this.xpHealthBar.maxValue*100)+"xp", c.width/2+350, c.height/2-100);
         
         ctx.textAlign = "center";
-        ctx.fillText("+"+game.xpGain+"xp", c.width/2, c.height/2-100);
-        ctx.fillText("Level " + ((this.xpHealthBar.maxValue/10)-1) , c.width/2, c.height/2-250);
+        ctx.fillText("+"+game.xpGain+"xp", c.width/2, c.height/2+270);
         
+        ctx.font = "50px "+FONT;
+        ctx.textAlign = "center";
+        ctx.fillStyle = "black";
+
         if (game.levelUp) {
-            ctx.textAlign = "center";
-            ctx.fillStyle = "lime";
-            ctx.fillText("Level Up!", c.width/2, c.height/2-200);
+            ctx.fillText("Level Up!", c.width/2, c.height/2+150);
+        } else {
+            ctx.fillText("Level " + ((this.xpHealthBar.maxValue/10)-1) , c.width/2, c.height/2+150);
         }
 
         this.xpHealthBar.draw();
@@ -817,57 +941,80 @@ class SceneManager {
                     break;
                 } else if (this.settingsButtons.gameCredits.mouseOver(mouseX, mouseY)) {
                     this.credits = new Credits();      
-                    this.camera.transitionTo(3,0.005); 
+                    this.camera.transitionTo(3,0.005);
+                    break; 
                 } else if (this.settingsButtons.frameRate30FPS.mouseOver(mouseX, mouseY)) {
                     this.settingsButtons.frameRate30FPS.style = "selected";
                     this.settingsButtons.frameRate60FPS.style = "disabled";
                     SETTINGS.frameRate = 30;
+                    sessionStorage.setItem("frameRate", 30);
+                    break;
                 } else if (this.settingsButtons.frameRate60FPS.mouseOver(mouseX, mouseY)) {
                     this.settingsButtons.frameRate60FPS.style = "selected";
                     this.settingsButtons.frameRate30FPS.style = "disabled";
                     SETTINGS.frameRate = 60;
+                    sessionStorage.setItem("frameRate", 60);
+                    break;
                 } else if (this.settingsButtons.windParticlesOn.mouseOver(mouseX, mouseY)) {
                     this.settingsButtons.windParticlesOn.style = "selected";
                     this.settingsButtons.windParticlesOff.style = "disabled";
                     SETTINGS.windParticles = true;
+                    sessionStorage.setItem("windParticles", true);
+                    break;
                 } else if (this.settingsButtons.windParticlesOff.mouseOver(mouseX, mouseY)) {
                     this.settingsButtons.windParticlesOff.style = "selected";
                     this.settingsButtons.windParticlesOn.style = "disabled";
                     SETTINGS.windParticles = false;
+                    sessionStorage.setItem("windParticles", false);
+                    break;
                 } else if (this.settingsButtons.debrisParticlesOn.mouseOver(mouseX, mouseY)) {
                     this.settingsButtons.debrisParticlesOn.style = "selected";
                     this.settingsButtons.debrisParticlesOff.style = "disabled";
                     SETTINGS.debrisParticles = true;
+                    sessionStorage.setItem("debrisParticles", true);
+                    break;
                 } else if (this.settingsButtons.debrisParticlesOff.mouseOver(mouseX, mouseY)) {
                     this.settingsButtons.debrisParticlesOff.style = "selected";
                     this.settingsButtons.debrisParticlesOn.style = "disabled";
                     SETTINGS.debrisParticles = false;
+                    sessionStorage.setItem("debrisParticles", false);
+                    break;
                 } else if (this.settingsButtons.movingBackgroundOn.mouseOver(mouseX, mouseY)) {
                     this.settingsButtons.movingBackgroundOn.style = "selected";
                     this.settingsButtons.movingBackgroundOff.style = "disabled";
                     SETTINGS.movingBackground = true;
+                    sessionStorage.setItem("movingBackground", true);
+                    break;
                 } else if (this.settingsButtons.movingBackgroundOff.mouseOver(mouseX, mouseY)) {
                     this.settingsButtons.movingBackgroundOff.style = "selected";
                     this.settingsButtons.movingBackgroundOn.style = "disabled";
                     SETTINGS.movingBackground = false;
+                    sessionStorage.setItem("movingBackground", false);
+                    break;
                 } else if (this.settingsButtons.textIndicatorsOn.mouseOver(mouseX, mouseY)) {
                     this.settingsButtons.textIndicatorsOn.style = "selected";
                     this.settingsButtons.textIndicatorsOff.style = "disabled";
                     SETTINGS.textIndicators = true;
+                    sessionStorage.setItem("textIndicators", true);
+                    break;
                 } else if (this.settingsButtons.textIndicatorsOff.mouseOver(mouseX, mouseY)) {
                     this.settingsButtons.textIndicatorsOff.style = "selected";
                     this.settingsButtons.textIndicatorsOn.style = "disabled";
                     SETTINGS.textIndicators = false;
+                    sessionStorage.setItem("textIndicators", false);
+                    break;
                 } else if (this.settingsButtons.fullscreenOn.mouseOver(mouseX, mouseY)) {
                     this.settingsButtons.fullscreenOn.style = "selected";
                     this.settingsButtons.fullscreenOff.style = "disabled";
                     SETTINGS.fullscreen = true;
                     document.getElementsByTagName("body")[0].requestFullscreen();
+                    break;
                 } else if (this.settingsButtons.fullscreenOff.mouseOver(mouseX, mouseY)) {
                     this.settingsButtons.fullscreenOff.style = "selected";
                     this.settingsButtons.fullscreenOn.style = "disabled";
                     SETTINGS.fullscreen = false;
                     document.exitFullscreen();
+                    break;
                 }
 
                 // if(this.settingBackButton.mouseOver(mouseX,mouseY)) {
@@ -895,18 +1042,32 @@ class SceneManager {
             case 4: //menu screen
                 if (this.matchmakeButton.mouseOver(mouseX, mouseY)) {
                     matchmake();
-                } else if (this.perkScreenButton.mouseOver(mouseX,mouseY)){          
+                } else if (this.stopMatchmakeButton.mouseOver(mouseX, mouseY)) {
+                    stopMatchmaking();
+                } else if (this.perkScreenButton.mouseOver(mouseX,mouseY)){     
+                    if (this.matchmaking) {
+                        stopMatchmaking();
+                    }     
                     updatePerkButtons();
                     this.perkButtons[0].style = "selected";
                     this.camera.transitionTo(5,0.005); 
                     break;
 
                 } else if (this.settingsButton.mouseOver(mouseX,mouseY)) {
+                    if (this.matchmaking) {
+                        stopMatchmaking();
+                    } 
                     this.camera.transitionTo(2,0.005); 
                     loadSettings();
                 } else if (this.menuBackButton.mouseOver(mouseX,mouseY)) {
+                    if (this.matchmaking) {
+                        stopMatchmaking();
+                    } 
                     this.camera.transitionTo(1,0.005); 
                 } else if (this.projectWebsiteButton.mouseOver(mouseX,mouseY)) {
+                    if (this.matchmaking) {
+                        stopMatchmaking();
+                    } 
                     location.href = "http://cybercloudstudios.co.uk"; 
                 }   
                 break;

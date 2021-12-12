@@ -47,7 +47,11 @@ const buttonSpriteSheet =    loader.loadImage("resources/images/buttonSpriteShee
 const rocks =                loader.loadImage("resources/images/rocks.png");
 const panelSpriteSheet =     loader.loadImage("resources/images/panelSpriteSheet.png");
 const waterMapBlur =         loader.loadImage("resources/images/WaterMapFullBlur.png");
+const fireMapBlur =          loader.loadImage("resources/images/FireMapFullBlur.png");
+const earthMapBlur =         loader.loadImage("resources/images/EarthMapFullBlur.png");
+const airMapBlur =           loader.loadImage("resources/images/AirMapFullBlur.png");
 const allCharacters =        loader.loadImage("resources/images/allCharacters.png");
+const icons =                loader.loadImage("resources/images/icons.png");
 
 var dt = 0;
 var mouseX, mouseY;
@@ -71,6 +75,21 @@ var SETTINGS = {
 function setup() {
     // c.width = 1920;
     // c.height = 1080;
+
+    let frameRate = sessionStorage.getItem("frameRate");
+    let windParticles = sessionStorage.getItem("windParticles");
+    let debrisParticles = sessionStorage.getItem("debrisParticles");
+    let movingBackground = sessionStorage.getItem("movingBackground");
+    let textIndicators = sessionStorage.getItem("textIndicators");
+    let fullscreen = sessionStorage.getItem("fullscreen");
+    
+    if (frameRate        != null && frameRate        != undefined) SETTINGS.frameRate =        frameRate; 
+    if (windParticles    != null && windParticles    != undefined) SETTINGS.windParticles =    windParticles; 
+    if (debrisParticles  != null && debrisParticles  != undefined) SETTINGS.debrisParticles =  debrisParticles; 
+    if (movingBackground != null && movingBackground != undefined) SETTINGS.movingBackground = movingBackground; 
+    if (textIndicators   != null && textIndicators   != undefined) SETTINGS.textIndicators =   textIndicators; 
+    // if (fullscreen       != null && fullscreen       != undefined) SETTINGS.fullscreen =       fullscreen; 
+    
     ctx.imageSmoothingEnabled = false;
     resizeWindow();
     main();
@@ -120,7 +139,11 @@ window.onclick = function(e) {
 
 window.onkeydown = function (e) {
     if (e.keyCode == 13) {
-        sendMessageTextChat();
+        if (sceneManager.scene == -1) {
+            loginButtonPressed();
+        } else if (sceneManager.scene == 6 || sceneManager.scene == 7) {
+            sendMessageTextChat();
+        }
     }
 }
 

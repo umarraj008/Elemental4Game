@@ -33,7 +33,7 @@ class Animator {
                 this.spriteSheet = waterSpriteSheet;
                 this.animations = {
                     idle:     {totalFrames:  8, counter: 0, offX: 0, offY:  112*0, frameWidth: 224, frameHeight: 112, dontLoop: false},
-                    attack1:  {totalFrames:  8, counter: 0, offX: 0, offY:  112*6, frameWidth: 224, frameHeight: 112, dontLoop: true},
+                    attack1:  {totalFrames:  7, counter: 0, offX: 0, offY:  112*6, frameWidth: 224, frameHeight: 112, dontLoop: true},
                     attack2:  {totalFrames: 21, counter: 0, offX: 0, offY:  112*7, frameWidth: 224, frameHeight: 112, dontLoop: true},
                     attack3:  {totalFrames: 27, counter: 0, offX: 0, offY:  112*8, frameWidth: 224, frameHeight: 112, dontLoop: true},
                     ultimate: {totalFrames: 32, counter: 0, offX: 0, offY:  112*9, frameWidth: 224, frameHeight: 112, dontLoop: true},

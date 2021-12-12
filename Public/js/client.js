@@ -38,6 +38,10 @@ var game = {
     notifValue: 0,
     chatHidden: true,
 }
+var whatCharacterWasI = null;
+var whatMapWasIt = null;
+var matchTimer = 0;
+var roundIndicator = true;
 
 socket.on("connect", function() {
     console.log("connected to server");
@@ -82,6 +86,7 @@ socket.on("pick-character", function(data) {
     sceneManager.player1HealthBar.changeValue(100);
     sceneManager.player2HealthBar.changeValue(100);
     document.getElementById("textChatShow").style.display = "block";
+    whatMapWasIt = game.map;
 });
 
 socket.on("player2-turn", function() {
@@ -96,6 +101,9 @@ socket.on("player1-turn", function() {
 socket.on("game-update", function(data) {
     game.action = data.action;
     game.player2.action = data.p2Action;
+    if (data.action != null || data.action != undefined) nullroundIndicator = true;
+    let p1Damage = game.health - data.health;
+    let p2Damage = game.player2.health - data.p2Health;
 
     window.setTimeout(function() {
         game.points = data.points;
@@ -127,13 +135,22 @@ socket.on("game-update", function(data) {
         case "wait":
             sceneManager.player1Animator.switchAnimation("wait");
             sceneManager.player1HealthBar.changeValue(data.health);
+            sceneManager.indicators.makeIndicator("+2 Points", 500,c.height/2, "rgba(0,255,100,0");
+            sceneManager.indicators.makeIndicator("+10 Health", 500,c.height/2+20, "rgba(0,255,100,0");
             break;
             case "heal":
             sceneManager.player1HealthBar.changeValue(data.health);
             sceneManager.player1Animator.switchAnimation("heal");
+            sceneManager.indicators.makeIndicator("+30 Health", 500,c.height/2, "rgba(0,255,100,0");
             break;
         case "damage":
             //window.setTimeout(function(){sceneManager.player1Animator.switchAnimation("damage")}, game.hitDelay);
+            switch (game.player2.action) {
+                case "attack1": setTimeout(function() {sceneManager.indicators.makeIndicator("-" + p1Damage + " Damage", 500,c.height/2, "rgba(255,0,0,0")}, sceneManager.player2Animator.animations.damageTime1); break;
+                case "attack2": setTimeout(function() {sceneManager.indicators.makeIndicator("-" + p1Damage + " Damage", 500,c.height/2, "rgba(255,0,0,0")}, sceneManager.player2Animator.animations.damageTime2); break;
+                case "attack3": setTimeout(function() {sceneManager.indicators.makeIndicator("-" + p1Damage + " Damage", 500,c.height/2, "rgba(255,0,0,0")}, sceneManager.player2Animator.animations.damageTime3); break;
+                case "attack4": setTimeout(function() {sceneManager.indicators.makeIndicator("-" + p1Damage + " Damage", 500,c.height/2, "rgba(255,0,0,0")}, sceneManager.player2Animator.animations.damageTime4); break;
+            }
             break;
         case "dead":
             window.setTimeout(function(){sceneManager.player1Animator.switchAnimation("dead"); sceneManager.player2HealthBar.changeValue(data.p2Health);}, 2000);
@@ -159,12 +176,21 @@ socket.on("game-update", function(data) {
         case "wait":
             sceneManager.player2Animator.switchAnimation("wait");
             sceneManager.player2HealthBar.changeValue(data.health);
+            sceneManager.indicators.makeIndicator("+2 Points", 1500,c.height/2, "rgba(0,255,100,0");
+            sceneManager.indicators.makeIndicator("+10 Health", 1500,c.height/2+20, "rgba(0,255,100,0");
             break;
         case "heal":
             sceneManager.player2Animator.switchAnimation("heal");
             sceneManager.player2HealthBar.changeValue(data.health);
+            sceneManager.indicators.makeIndicator("+30 Health", 1500,c.height/2, "rgba(0,255,100,0");
             break;
         case "damage":
+            switch (game.action) {
+                case "attack1": setTimeout(function() {sceneManager.indicators.makeIndicator("-" + p2Damage + " Damage", 1500,c.height/2, "rgba(255,0,0,0")}, sceneManager.player1Animator.animations.damageTime1); break;
+                case "attack2": setTimeout(function() {sceneManager.indicators.makeIndicator("-" + p2Damage + " Damage", 1500,c.height/2, "rgba(255,0,0,0")}, sceneManager.player1Animator.animations.damageTime2); break;
+                case "attack3": setTimeout(function() {sceneManager.indicators.makeIndicator("-" + p2Damage + " Damage", 1500,c.height/2, "rgba(255,0,0,0")}, sceneManager.player1Animator.animations.damageTime3); break;
+                case "attack4": setTimeout(function() {sceneManager.indicators.makeIndicator("-" + p2Damage + " Damage", 1500,c.height/2, "rgba(255,0,0,0")}, sceneManager.player1Animator.animations.damageTime4); break;
+            }
             //window.setTimeout(function(){sceneManager.player2Animator.switchAnimation("damage")}, game.hitDelay);
             break;
         case "dead":
@@ -194,6 +220,7 @@ socket.on("game-over", function(data) {
                 game.levelUp = true;
                 sceneManager.xpHealthBar.maxValue = data.newNextLevel/100;
                 sceneManager.xpHealthBar.value = 0;
+                setTimeout(function() {game.levelUp = false}, 3000);
             }, 3000);
         }
 
@@ -354,6 +381,10 @@ socket.on("update-chat", function(data){
         notif.style.display = "block"
     }
 
+});
+
+socket.on("removed-from-matchmaking", function() {
+    sceneManager.matchmaking = false;
 })
 
 function matchmake() {
@@ -361,13 +392,22 @@ function matchmake() {
     sceneManager.matchmaking = true;
 }
 
+function stopMatchmaking() {
+    socket.emit("stop-matchmaking");
+}
+
 function selectPlayer(which) {
+    whatCharacterWasI = which;
     socket.emit("player-selected", {id: game.id, type: which});
     game.characterType = which;
 }
 
 function action(which) {
     let actions = [0,6,3,4,5,15];
+    if (which == 6 && game.health >= 200) {
+        return;
+    }
+
     if (game.points >= actions[which]) {
         socket.emit("player-action", {id: game.id, action: which});
         game.turn = false;
@@ -400,8 +440,9 @@ function resetGame() {
     sceneManager.player1HealthBar.value = 0;
     sceneManager.player2HealthBar.value = 0;
     sceneManager.matchmaking = false;
-
-    
+    game.notifValue = 0;
+    matchTimer = 0;
+    roundIndicator = true;
 }
 
 function login(e, p) {
@@ -503,26 +544,6 @@ function updatePerkButtons() {
     }
 }
 
-function loadSettings() {
-    //frame rate
-    if (SETTINGS.frameRate == 30) {
-        sceneManager.settingsButtons.frameRate30FPS.style = "selected";
-        sceneManager.settingsButtons.frameRate60FPS.style = "disabled";
-    } else if (SETTINGS.frameRate == 60) {
-        sceneManager.settingsButtons.frameRate30FPS.style = "disabled";
-        sceneManager.settingsButtons.frameRate60FPS.style = "selected";
-    }
-
-    //wind particles
-    if (SETTINGS.windParticles) {
-        sceneManager.settingsButtons.windParticlesOn.style = "selected";
-        sceneManager.settingsButtons.windParticlesOff.style = "disabled";
-    } else {
-        sceneManager.settingsButtons.windParticlesOn.style = "disabled";
-        sceneManager.settingsButtons.windParticlesOff.style = "selected";
-    }
-}
-
 function showTextChat(){
     document.getElementById("textChatContainer").style.display = "block";
     document.getElementById("textChatHide").style.display = "block";
@@ -554,9 +575,30 @@ function sendMessageTextChat(){
         socket.emit("send-text-chat", data);
         textinput.value = ""; 
     }
-    
+}
+
+function loadSettings() {
+    console.log(SETTINGS);
+    //frame rate
+    if (SETTINGS.frameRate == 30) {
+        sceneManager.settingsButtons.frameRate30FPS.style = "selected";
+        sceneManager.settingsButtons.frameRate60FPS.style = "disabled";
+    } else if (SETTINGS.frameRate == 60) {
+        sceneManager.settingsButtons.frameRate30FPS.style = "disabled";
+        sceneManager.settingsButtons.frameRate60FPS.style = "selected";
+    }
+
+    //wind particles
+    if (SETTINGS.windParticles == true) {
+        sceneManager.settingsButtons.windParticlesOn.style = "selected";
+        sceneManager.settingsButtons.windParticlesOff.style = "disabled";
+    } else {
+        sceneManager.settingsButtons.windParticlesOn.style = "disabled";
+        sceneManager.settingsButtons.windParticlesOff.style = "selected";
+    }
+
     //debris
-    if (SETTINGS.debrisParticles) {
+    if (SETTINGS.debrisParticles == true) {
         sceneManager.settingsButtons.debrisParticlesOn.style = "selected";
         sceneManager.settingsButtons.debrisParticlesOff.style = "disabled";
     } else {
@@ -565,7 +607,7 @@ function sendMessageTextChat(){
     }
     
     //moving background
-    if (SETTINGS.movingBackground) {
+    if (SETTINGS.movingBackground == true) {
         sceneManager.settingsButtons.movingBackgroundOn.style = "selected";
         sceneManager.settingsButtons.movingBackgroundOff.style = "disabled";
     } else {
@@ -574,7 +616,7 @@ function sendMessageTextChat(){
     }
     
     //text indicators
-    if (SETTINGS.textIndicators) {
+    if (SETTINGS.textIndicators == true) {
         sceneManager.settingsButtons.textIndicatorsOn.style = "selected";
         sceneManager.settingsButtons.textIndicatorsOff.style = "disabled";
     } else {
@@ -583,7 +625,7 @@ function sendMessageTextChat(){
     }
     
     //fullscreen
-    if (SETTINGS.fullscreen) {
+    if (SETTINGS.fullscreen == true) {
         sceneManager.settingsButtons.fullscreenOn.style = "selected";
         sceneManager.settingsButtons.fullscreenOff.style = "disabled";
     } else {

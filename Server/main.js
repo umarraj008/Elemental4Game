@@ -213,6 +213,17 @@ io.sockets.on("connection", function(socket) {
         }
     });
 
+    socket.on("stop-matchmaking", function () {
+        let player = findPlayer(socket.id);
+        for (let i = 0; i < matchmakingQueue.length; i++) {
+            if (matchmakingQueue[i].socket.id == socket.id) {
+                matchmakingQueue.splice(i, 1);
+                socket.emit("removed-from-matchmaking");
+                break;
+            }
+        }
+    })
+
     socket.on("disconnect", function() {
         let player = findPlayer(socket.id);
 
