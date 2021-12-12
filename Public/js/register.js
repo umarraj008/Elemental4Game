@@ -41,6 +41,7 @@ socket.on("register-success", function(data) {
 socket.on("register-failed", function(message) {
     console.log(message);
     logout();
+    location.reload();
 });
 
 function register(firstName,lastName,email,DOB,gamerTag,password) {
