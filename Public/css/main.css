@@ -71,8 +71,8 @@ p {
     /* box-sizing: border-box;
     border-radius: 7px; */
     position: fixed;
-    left: 45%;
-    top: 50%;
+    left: 45.5%;
+    top: 58%;
     transform: translate(-50%, -50%);
 }
 
@@ -80,8 +80,14 @@ h1 {
     text-align: center;
     color: #fff;
     font-weight: normal;
-    margin-bottom: 75px;
+    margin-bottom: 80px;
     margin-left: 150px;
+    font-family: pixel;
+}
+
+.registerHeading {
+    text-align: center;
+    color: white;
     font-family: pixel;
 }
 
@@ -168,6 +174,7 @@ img {
 
 .characters {
     bottom: 0;
+    z-index: -5;
 }
 
 .logo {
@@ -175,8 +182,8 @@ img {
     display: block;
     margin-left: auto;
     margin-right: auto;
-    width: 40%;
-    top: -100px;
+    width: 50%;
+    top: -150px;
 }
 
 #register:hover {
