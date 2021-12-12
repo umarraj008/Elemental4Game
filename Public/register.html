@@ -11,20 +11,31 @@
 </head>
 
 <body id="registerPage">
+    <style type="text/css">
+        body {
+            background-image: url("resources/images/RegisterLoginUI/WaterMapFullBlur.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
     <script src="js/register.js"></script>
+    <div id="pannelImage"><img src="resources/images/RegisterLoginUI/pannel1.png"></div>
+
+    <img class="characters" src="resources/images/RegisterLoginUI/AllCharacters.png">
+    <img class="logo" src="resources/images/RegisterLoginUI/elemental4Logo.png">
 
     <div id="registerContainer">
         <div id="innerRegisterContainer">
-            <h1>Register</h1>
-            <input class="register" type="text" placeholder="firstName" id="firstName">
-            <input class="register" type="text" placeholder="lastName" id="lastName">
-            <input class="register" type="email" placeholder="Email" id="email">
-            <input class="register" type="date" placeholder="dateOfBirth" id="DOB">
-            <input class="register" type="text" placeholder="gamerTag" id="gamerTag">
-            <input class="register" type="password" placeholder="password" id="password">
-            <input class="register" type="password" placeholder="confirmPassword" id="confirmPassword">
-            <input class="register" type="submit" value="Register" id="register" onclick="registerButtonPressed()">
-            <input class="register" type="submit" value="Got an Account? Login!" id="register" onclick="location.href = 'index.html'">
+            <h1 class="registerHeading">Register</h1>
+            <input class="register" type="text" placeholder="First Name" id="firstName">
+            <input class="register" type="text" placeholder="Last Name" id="lastName">
+            <input class="register" type="text" placeholder="Email" id="email">
+            <input class="register" type="date" placeholder="Date Of Birth" id="DOB">
+            <input class="register" type="text" placeholder="Gamertag" id="gamerTag">
+            <input class="register" type="password" placeholder="Password" id="password">
+            <input class="register" type="password" placeholder="Confirm Password" id="confirmPassword">
+            <input class="register" type="submit" value="Register" id="register" onclick="registerButtonPressed()" placeholder="Register">
+            <input class="register" type="submit" value="Already have an account? Log in!" id="register" onclick="location.href='index.html' " placeholder="Already have an account? Login!">
         </div>
     </div>
 </body>
