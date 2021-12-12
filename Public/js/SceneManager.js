@@ -125,12 +125,12 @@ class SceneManager {
         this.perkConfirmConfirmButton = new Button(c.width/2-310, c.height/2, 300, 100, "Confirm");
         this.perkConfirmCancelButton = new Button(c.width/2+10, c.height/2, 300, 100, "Cancel");
 
-        this.backgroundCharacters = {
-            fire: new Animator("fire",-200, 200, 1280,800),
-            water: new Animator("water",-450, 0, 1280,800),
-            earth: new Animator("earth",-c.width-750, -250, 1280*1.4,800*1.4),
-            air: new Animator("air",-c.width-200, 200, 1280,800),
-        };
+        // this.backgroundCharacters = {
+        //     fire: new Animator("fire",-200, 200, 1280,800),
+        //     water: new Animator("water",-450, 0, 1280,800),
+        //     earth: new Animator("earth",-c.width-750, -250, 1280*1.4,800*1.4),
+        //     air: new Animator("air",-c.width-200, 200, 1280,800),
+        // };
 
         this.settingsButtons = {
             panel:               new Panel(20, 120, c.width-50, 800),
@@ -164,24 +164,23 @@ class SceneManager {
                 ctx.translate(c.width/2,c.height/2);
                 ctx.rotate(this.angle * Math.PI/180);
                 ctx.beginPath();
-                ctx.arc(0,0,100,0,0,270 * Math.PI/180);
+                ctx.arc(0,0,100,0,230 * Math.PI/180);
                 ctx.strokeStyle = "white";
-                ctx.lineWidth = "10px";
+                ctx.lineWidth = "20";
                 ctx.stroke();
-                ctx.fillStyle = "white"
-                ctx.fillRect(-50,-50,100,100);
                 ctx.restore();
-                this.angle += 0.06 * dt;
+                this.angle += 0.4 * dt;
                 break;
-
+                
             case -1: //login screen
-                ctx.fillStyle = "black";
-                ctx.fillRect(0,0,c.width,c.height);
+                ctx.drawImage(waterMapBlur, 0, 0, c.width, c.height);
+                ctx.drawImage(titleImage, 0, 198.25, 1389, 198, c.width/2-694,c.height/2-400, 1389, 198);
+                ctx.drawImage(allCharacters, 0, 0, c.width, c.height);
 
-                // ctx.fillStyle = "white";
-                // ctx.textAlign = "center";
-                // ctx.font = "100px Arial";
-                // ctx.fillText("Elemental 4", c.width/2, c.height/2-200);
+                ctx.fillStyle = "white";
+                ctx.textAlign = "center";
+                ctx.font = "16px Arial";
+                ctx.fillText("©Cybercloud Studios", c.width/2, c.height-50);
                 break;
             case 0: //splash screen
                 if (this.splash.draw()) this.camera.transitionTo(1,0.005); ;

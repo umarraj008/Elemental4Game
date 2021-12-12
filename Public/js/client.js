@@ -63,6 +63,7 @@ socket.on("connect", function() {
             let data = {email: sessionEmail, firstName: sessionFirstName, lastName: sessionLastName, gamerTag: sessionGamerTag, DOB: sessionDOB, sessionLoggedIn: true};
             loggedIn(data);
             console.log("Requesting to log back into same account as stored in session storage");
+            document.getElementById("loginContainer").style.display = "none";
         } else {
             //document.getElementById("loginContainer").style.display = "flex";
         }
