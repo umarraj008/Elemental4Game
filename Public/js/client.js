@@ -31,10 +31,17 @@ var game = {
         xpLevel: null,
         perksUnlocked: null,
         nextLevel: null,
+        perkPoints: null,
     },
 
     loggedIn: false,
+    notifValue: 0,
+    chatHidden: true,
 }
+var whatCharacterWasI = null;
+var whatMapWasIt = null;
+var matchTimer = 0;
+var roundIndicator = true;
 
 socket.on("connect", function() {
     console.log("connected to server");
@@ -51,17 +58,18 @@ socket.on("connect", function() {
     let sessionGamerTag = window.sessionStorage.getItem("gamerTag");
     let sessionDOB = window.sessionStorage.getItem("DOB");
 
-    if (sessionEmail != null && sessionEmail != undefined && 
-        sessionFirstName != null && sessionFirstName != undefined && 
-        sessionLastName != null && sessionLastName != undefined && 
-        sessionGamerTag != null && sessionGamerTag != undefined && 
-        sessionDOB != null && sessionDOB != undefined) {
+    if (sessionEmail != null || sessionEmail != undefined && 
+        sessionFirstName != null || sessionFirstName != undefined && 
+        sessionLastName != null || sessionLastName != undefined && 
+        sessionGamerTag != null || sessionGamerTag != undefined && 
+        sessionDOB != null || sessionDOB != undefined) {
 
             let data = {email: sessionEmail, firstName: sessionFirstName, lastName: sessionLastName, gamerTag: sessionGamerTag, DOB: sessionDOB, sessionLoggedIn: true};
             loggedIn(data);
             console.log("Requesting to log back into same account as stored in session storage");
+            document.getElementById("loginContainer").style.display = "none";
         } else {
-            document.getElementById("loginContainer").style.display = "flex";
+            //document.getElementById("loginContainer").style.display = "flex";
         }
 });
 
@@ -77,6 +85,8 @@ socket.on("pick-character", function(data) {
     game.player2.gamerTag = data.p2GT;
     sceneManager.player1HealthBar.changeValue(100);
     sceneManager.player2HealthBar.changeValue(100);
+    document.getElementById("textChatShow").style.display = "block";
+    whatMapWasIt = game.map;
 });
 
 socket.on("player2-turn", function() {
@@ -91,6 +101,9 @@ socket.on("player1-turn", function() {
 socket.on("game-update", function(data) {
     game.action = data.action;
     game.player2.action = data.p2Action;
+    if (data.action != null || data.action != undefined) nullroundIndicator = true;
+    let p1Damage = game.health - data.health;
+    let p2Damage = game.player2.health - data.p2Health;
 
     window.setTimeout(function() {
         game.points = data.points;
@@ -122,13 +135,22 @@ socket.on("game-update", function(data) {
         case "wait":
             sceneManager.player1Animator.switchAnimation("wait");
             sceneManager.player1HealthBar.changeValue(data.health);
+            sceneManager.indicators.makeIndicator("+2 Points", 500,c.height/2, "rgba(0,255,100,0");
+            sceneManager.indicators.makeIndicator("+10 Health", 500,c.height/2+20, "rgba(0,255,100,0");
             break;
             case "heal":
             sceneManager.player1HealthBar.changeValue(data.health);
             sceneManager.player1Animator.switchAnimation("heal");
+            sceneManager.indicators.makeIndicator("+30 Health", 500,c.height/2, "rgba(0,255,100,0");
             break;
         case "damage":
             //window.setTimeout(function(){sceneManager.player1Animator.switchAnimation("damage")}, game.hitDelay);
+            switch (game.player2.action) {
+                case "attack1": setTimeout(function() {sceneManager.indicators.makeIndicator("-" + p1Damage + " Damage", 500,c.height/2, "rgba(255,0,0,0")}, sceneManager.player2Animator.animations.damageTime1); break;
+                case "attack2": setTimeout(function() {sceneManager.indicators.makeIndicator("-" + p1Damage + " Damage", 500,c.height/2, "rgba(255,0,0,0")}, sceneManager.player2Animator.animations.damageTime2); break;
+                case "attack3": setTimeout(function() {sceneManager.indicators.makeIndicator("-" + p1Damage + " Damage", 500,c.height/2, "rgba(255,0,0,0")}, sceneManager.player2Animator.animations.damageTime3); break;
+                case "attack4": setTimeout(function() {sceneManager.indicators.makeIndicator("-" + p1Damage + " Damage", 500,c.height/2, "rgba(255,0,0,0")}, sceneManager.player2Animator.animations.damageTime4); break;
+            }
             break;
         case "dead":
             window.setTimeout(function(){sceneManager.player1Animator.switchAnimation("dead"); sceneManager.player2HealthBar.changeValue(data.p2Health);}, 2000);
@@ -154,12 +176,21 @@ socket.on("game-update", function(data) {
         case "wait":
             sceneManager.player2Animator.switchAnimation("wait");
             sceneManager.player2HealthBar.changeValue(data.health);
+            sceneManager.indicators.makeIndicator("+2 Points", 1500,c.height/2, "rgba(0,255,100,0");
+            sceneManager.indicators.makeIndicator("+10 Health", 1500,c.height/2+20, "rgba(0,255,100,0");
             break;
         case "heal":
             sceneManager.player2Animator.switchAnimation("heal");
             sceneManager.player2HealthBar.changeValue(data.health);
+            sceneManager.indicators.makeIndicator("+30 Health", 1500,c.height/2, "rgba(0,255,100,0");
             break;
         case "damage":
+            switch (game.action) {
+                case "attack1": setTimeout(function() {sceneManager.indicators.makeIndicator("-" + p2Damage + " Damage", 1500,c.height/2, "rgba(255,0,0,0")}, sceneManager.player1Animator.animations.damageTime1); break;
+                case "attack2": setTimeout(function() {sceneManager.indicators.makeIndicator("-" + p2Damage + " Damage", 1500,c.height/2, "rgba(255,0,0,0")}, sceneManager.player1Animator.animations.damageTime2); break;
+                case "attack3": setTimeout(function() {sceneManager.indicators.makeIndicator("-" + p2Damage + " Damage", 1500,c.height/2, "rgba(255,0,0,0")}, sceneManager.player1Animator.animations.damageTime3); break;
+                case "attack4": setTimeout(function() {sceneManager.indicators.makeIndicator("-" + p2Damage + " Damage", 1500,c.height/2, "rgba(255,0,0,0")}, sceneManager.player1Animator.animations.damageTime4); break;
+            }
             //window.setTimeout(function(){sceneManager.player2Animator.switchAnimation("damage")}, game.hitDelay);
             break;
         case "dead":
@@ -189,16 +220,23 @@ socket.on("game-over", function(data) {
                 game.levelUp = true;
                 sceneManager.xpHealthBar.maxValue = data.newNextLevel/100;
                 sceneManager.xpHealthBar.value = 0;
+                setTimeout(function() {game.levelUp = false}, 3000);
             }, 3000);
         }
 
     },7000); 
 
-
+    document.getElementById("textChatShow").style.display = "none";
     game.myData.gamesWon = data.gamesWon;
     game.myData.gamesLost = data.gamesLost;
     game.myData.xpLevel = data.levelUpNewXpLevel;
     game.myData.nextLevel = data.newNextLevel;
+    game.myData.perkPoints = data.perkPoints;
+    document.getElementById("textChat").value = "";
+    document.getElementById("textChatInput").value = "";
+    hideTextChat();
+    document.getElementById("textChatShow").style.display = "none";
+    game.id = null;
     //console.log(data);
 });
 
@@ -272,6 +310,7 @@ socket.on("logged-in", function(userData) {
     game.myData.gamesLost = userData.gamesLost;
     game.myData.xpLevel = userData.xpLevel;
     game.myData.perksUnlocked = userData.perksUnlocked;
+    game.myData.perkPoints = userData.perkPoints;
     game.loggedIn = true;
 
     sessionStorage.setItem("firstName", userData.firstName);
@@ -283,6 +322,7 @@ socket.on("logged-in", function(userData) {
     sessionStorage.setItem("gamesLost", userData.gamesLost);
     sessionStorage.setItem("xpLevel", userData.xpLevel);
     sessionStorage.setItem("perksUnlocked", userData.perksUnlocked);
+    sessionStorage.setItem("perkPoints", userData.perkPoints);
 
     document.getElementById("loginContainer").parentNode.removeChild(document.getElementById("loginContainer"));
     sceneManager.scene = 0;
@@ -291,6 +331,7 @@ socket.on("logged-in", function(userData) {
 
 socket.on("login-failed", function(message) {
     console.log(message);
+    logout();
 });
 
 socket.on("register-success", function(data) {
@@ -303,22 +344,70 @@ socket.on("register-success", function(data) {
     sessionStorage.setItem("gamesLost", data.gamesLost);
     sessionStorage.setItem("xpLevel", data.xpLevel);
     sessionStorage.setItem("perksUnlocked", data.perksUnlocked);
-    
-    location.href = index.html;
+    sessionStorage.setItem("perkPoints", data.perkPoints);
+
+    location.href = "index.html";
 });
+
+socket.on("perk-buy-success", function(data) {
+    game.myData.perkPoints = data.perkPoints;
+    game.myData.perksUnlocked = data.perksUnlocked;
+    sceneManager.perkConfirmWindow = false;
+    updatePerkButtons();
+});
+
+socket.on("perk-buy-failed", function() {
+    console.log("failed to buy perk");
+});
+
+socket.on("update-data", function(data) {
+    game.myData.gamesWon = data.gamesWon;
+    game.myData.gamesLost = data.gamesLost;
+    game.myData.xpLevel = data.xpLevel;
+    game.myData.perkPoints = data.perkPoints;
+    game.myData.nextLevel = data.nextLevel;
+
+});
+
+socket.on("update-chat", function(data){
+    let chat= document.getElementById("textChat");
+    chat.value += data;
+    chat.scrollTop = chat.scrollHeight;
+
+    if(game.chatHidden){
+        let notif=document.getElementById("notif");
+        game.notifValue ++;
+        notif.innerHTML=game.notifValue;
+        notif.style.display = "block"
+    }
+
+});
+
+socket.on("removed-from-matchmaking", function() {
+    sceneManager.matchmaking = false;
+})
 
 function matchmake() {
     socket.emit("matchmake");
     sceneManager.matchmaking = true;
 }
 
+function stopMatchmaking() {
+    socket.emit("stop-matchmaking");
+}
+
 function selectPlayer(which) {
+    whatCharacterWasI = which;
     socket.emit("player-selected", {id: game.id, type: which});
     game.characterType = which;
 }
 
 function action(which) {
     let actions = [0,6,3,4,5,15];
+    if (which == 6 && game.health >= 200) {
+        return;
+    }
+
     if (game.points >= actions[which]) {
         socket.emit("player-action", {id: game.id, action: which});
         game.turn = false;
@@ -351,8 +440,9 @@ function resetGame() {
     sceneManager.player1HealthBar.value = 0;
     sceneManager.player2HealthBar.value = 0;
     sceneManager.matchmaking = false;
-
-    
+    game.notifValue = 0;
+    matchTimer = 0;
+    roundIndicator = true;
 }
 
 function login(e, p) {
@@ -367,4 +457,179 @@ function logout() {
     sessionStorage.clear();
     game.loggedIn = false;
     location.reload();
+}
+
+function buyPerk(perk) {
+    if (game.myData.perkPoints >= sceneManager.perkDescription[sceneManager.selectedPerk].price && !sceneManager.perkButtons[perk].bought) {
+        socket.emit("buy-perk", perk);
+    }
+}
+
+function updatePerkButtons() {
+    sceneManager.perkButtons.forEach(b => {
+        b.bought = false;
+    });
+
+    for (let i = 0; i < sceneManager.perkDescription.length; i++) {
+        if (game.myData.perkPoints >= sceneManager.perkDescription[i].price) {
+            sceneManager.perkButtons[i].style = "normal";
+        } else {
+            sceneManager.perkButtons[i].style = "disabled";
+        }
+    }
+
+    let up = game.myData.perksUnlocked.split(",");
+    if (up[0] == 4) {
+        sceneManager.perkButtons[0].style = "bought";
+        sceneManager.perkButtons[1].style = "bought";
+        sceneManager.perkButtons[2].style = "bought";
+        sceneManager.perkButtons[3].style = "bought";
+    } else if (up[0] == 3) {
+        sceneManager.perkButtons[0].style = "bought";
+        sceneManager.perkButtons[1].style = "bought";
+        sceneManager.perkButtons[2].style = "bought";
+    } else if (up[0] == 2) {
+        sceneManager.perkButtons[0].style = "bought";
+        sceneManager.perkButtons[1].style = "bought";
+    } else if (up[0] == 1) {
+        sceneManager.perkButtons[0].style = "bought";
+    }
+
+    if (up[1] == 4) {
+        sceneManager.perkButtons[4].style = "bought";
+        sceneManager.perkButtons[5].style = "bought";
+        sceneManager.perkButtons[6].style = "bought";
+        sceneManager.perkButtons[7].style = "bought";
+    } else if (up[1] == 3) {
+        sceneManager.perkButtons[4].style = "bought";
+        sceneManager.perkButtons[5].style = "bought";
+        sceneManager.perkButtons[6].style = "bought";
+    } else if (up[1] == 2) {
+        sceneManager.perkButtons[4].style = "bought";
+        sceneManager.perkButtons[5].style = "bought";
+    } else if (up[1] == 1) {
+        sceneManager.perkButtons[4].style = "bought";
+    }
+
+    if (up[2] == 4) {
+        sceneManager.perkButtons[8].style = "bought";
+        sceneManager.perkButtons[9].style = "bought";
+        sceneManager.perkButtons[10].style = "bought";
+        sceneManager.perkButtons[11].style = "bought";
+    } else if (up[2] == 3) {
+        sceneManager.perkButtons[8].style = "bought";
+        sceneManager.perkButtons[9].style = "bought";
+        sceneManager.perkButtons[10].style = "bought";
+    } else if (up[2] == 2) {
+        sceneManager.perkButtons[8].style = "bought";
+        sceneManager.perkButtons[9].style = "bought";
+    } else if (up[2] == 1) {
+        sceneManager.perkButtons[8].style = "bought";
+    }
+
+    if (up[3] == 4) {
+        sceneManager.perkButtons[12].style = "bought";
+        sceneManager.perkButtons[13].style = "bought";
+        sceneManager.perkButtons[14].style = "bought";
+        sceneManager.perkButtons[15].style = "bought";
+    } else if (up[3] == 3) {
+        sceneManager.perkButtons[12].style = "bought";
+        sceneManager.perkButtons[13].style = "bought";
+        sceneManager.perkButtons[14].style = "bought";
+    } else if (up[3] == 2) {
+        sceneManager.perkButtons[12].style = "bought";
+        sceneManager.perkButtons[13].style = "bought";
+    } else if (up[3] == 1) {
+        sceneManager.perkButtons[12].style = "bought";
+    }
+}
+
+function showTextChat(){
+    document.getElementById("textChatContainer").style.display = "block";
+    document.getElementById("textChatHide").style.display = "block";
+    document.getElementById("textChatShow").style.display = "none";
+    document.getElementById("notif").style.display = "none";
+
+    game.notifValue = 0;
+    game.chatHidden = false;
+}
+
+function hideTextChat(){
+    document.getElementById("textChatContainer").style.display = "none";
+    document.getElementById("textChatHide").style.display = "none";
+    document.getElementById("textChatShow").style.display = "block";
+
+    game.chatHidden = true;
+}
+
+function sendMessageTextChat(){
+    let textinput = document.getElementById("textChatInput");
+    let message = textinput.value;
+
+    if (message.length < 1){
+        return;
+    }
+
+    if (game.id != null) {   
+        let data = {id:game.id, message: game.myData.gamerTag + ": " + message + "\n"}
+        socket.emit("send-text-chat", data);
+        textinput.value = ""; 
+    }
+}
+
+function loadSettings() {
+    console.log(SETTINGS);
+    //frame rate
+    if (SETTINGS.frameRate == 30) {
+        sceneManager.settingsButtons.frameRate30FPS.style = "selected";
+        sceneManager.settingsButtons.frameRate60FPS.style = "disabled";
+    } else if (SETTINGS.frameRate == 60) {
+        sceneManager.settingsButtons.frameRate30FPS.style = "disabled";
+        sceneManager.settingsButtons.frameRate60FPS.style = "selected";
+    }
+
+    //wind particles
+    if (SETTINGS.windParticles == true) {
+        sceneManager.settingsButtons.windParticlesOn.style = "selected";
+        sceneManager.settingsButtons.windParticlesOff.style = "disabled";
+    } else {
+        sceneManager.settingsButtons.windParticlesOn.style = "disabled";
+        sceneManager.settingsButtons.windParticlesOff.style = "selected";
+    }
+
+    //debris
+    if (SETTINGS.debrisParticles == true) {
+        sceneManager.settingsButtons.debrisParticlesOn.style = "selected";
+        sceneManager.settingsButtons.debrisParticlesOff.style = "disabled";
+    } else {
+        sceneManager.settingsButtons.debrisParticlesOn.style = "disabled";
+        sceneManager.settingsButtons.debrisParticlesOff.style = "selected";
+    }
+    
+    //moving background
+    if (SETTINGS.movingBackground == true) {
+        sceneManager.settingsButtons.movingBackgroundOn.style = "selected";
+        sceneManager.settingsButtons.movingBackgroundOff.style = "disabled";
+    } else {
+        sceneManager.settingsButtons.movingBackgroundOn.style = "disabled";
+        sceneManager.settingsButtons.movingBackgroundOff.style = "selected";
+    }
+    
+    //text indicators
+    if (SETTINGS.textIndicators == true) {
+        sceneManager.settingsButtons.textIndicatorsOn.style = "selected";
+        sceneManager.settingsButtons.textIndicatorsOff.style = "disabled";
+    } else {
+        sceneManager.settingsButtons.textIndicatorsOn.style = "disabled";
+        sceneManager.settingsButtons.textIndicatorsOff.style = "selected";
+    }
+    
+    //fullscreen
+    if (SETTINGS.fullscreen == true) {
+        sceneManager.settingsButtons.fullscreenOn.style = "selected";
+        sceneManager.settingsButtons.fullscreenOff.style = "disabled";
+    } else {
+        sceneManager.settingsButtons.fullscreenOn.style = "disabled";
+        sceneManager.settingsButtons.fullscreenOff.style = "selected";
+    }
 }

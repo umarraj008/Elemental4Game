@@ -13,6 +13,7 @@ module.exports = class Game {
 
         this.ready = 0;
         this.em = em;
+        this.chat= [];
     }
 
     startGame() {
@@ -122,6 +123,7 @@ module.exports = class Game {
                     this.player1.health += this.player1.attacks[0].heal;
                     this.player1.points -= this.player1.attacks[0].cost;
                     this.player1.action = "wait";
+                    if (this.player1.health >= 200) this.player1.health = 200;
                 } else if (action == 1) { //heal
                     this.player1.health += this.player1.attacks[1].heal;
                     this.player1.points -= this.player1.attacks[1].cost;
@@ -156,6 +158,7 @@ module.exports = class Game {
                     this.player2.health += this.player2.attacks[0].heal;
                     this.player2.points -= this.player2.attacks[0].cost;
                     this.player2.action = "wait";
+                    if (this.player2.health >= 200) this.player2.health = 200;
                 } else if (action == 1) { //heal
                     this.player2.health += this.player2.attacks[1].heal;
                     this.player2.points -= this.player2.attacks[1].cost;
@@ -276,5 +279,10 @@ module.exports = class Game {
         };
         
         this.player2.sendMessage("game-update", gameData2);
+    }
+
+    sendTextChatMessage(message){
+        this.chat += message;
+        this.sendMessageToBothPlayers("update-chat", message);
     }
 }

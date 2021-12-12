@@ -95,6 +95,7 @@ io.sockets.on("connection", function(socket) {
                                 xpLevel: result[0].xpLevel,
                                 perksUnlocked: result[0].perksUnlocked,
                                 nextLevel: result[0].nextLevel,
+                                perkPoints: result[0].perkPoints,
                             }
 
                             let player = new User(socket, userData);
@@ -128,6 +129,7 @@ io.sockets.on("connection", function(socket) {
                                     xpLevel: result[0].xpLevel,
                                     perksUnlocked: result[0].perksUnlocked,
                                     nextLevel: result[0].nextLevel,
+                                    perkPoints: result[0].perkPoints,
                                 }
                                 
                                 let player = new User(socket, userData);
@@ -183,6 +185,7 @@ io.sockets.on("connection", function(socket) {
                 xpLevel: matchmakingQueue[0].xpLevel,
                 perksUnlocked: matchmakingQueue[0].perksUnlocked,
                 nextLevel: matchmakingQueue[0].nextLevel,
+                perkPoints: matchmakingQueue[0].perkPoints,
             };
 
             let player2 = {
@@ -194,6 +197,7 @@ io.sockets.on("connection", function(socket) {
                 xpLevel: matchmakingQueue[1].xpLevel,
                 perksUnlocked: matchmakingQueue[1].perksUnlocked,
                 nextLevel: matchmakingQueue[1].nextLevel,
+                perkPoints: matchmakingQueue[1].perkPoints,
             };
 
             var game = new Game(gameID, em, player1, player2);
@@ -208,6 +212,17 @@ io.sockets.on("connection", function(socket) {
             games[gameID].startGame();
         }
     });
+
+    socket.on("stop-matchmaking", function () {
+        let player = findPlayer(socket.id);
+        for (let i = 0; i < matchmakingQueue.length; i++) {
+            if (matchmakingQueue[i].socket.id == socket.id) {
+                matchmakingQueue.splice(i, 1);
+                socket.emit("removed-from-matchmaking");
+                break;
+            }
+        }
+    })
 
     socket.on("disconnect", function() {
         let player = findPlayer(socket.id);
@@ -248,29 +263,28 @@ io.sockets.on("connection", function(socket) {
             if (!error) {
                 if(result.length >= 1) {
                     socket.emit("register-failed", "Account with the same email already exists");
-                } else {
-
+                    return;
                 }
             } else {
                 socket.emit("register-failed", "Register failed");
+                return;
             }
         });
         db.query("SELECT * FROM users WHERE gamertag='"+data.gamerTag+"'",function(error, result) {
             if (!error) {
                 if(result.length >= 1) {
                     socket.emit("register-failed", "Account with the same gamertag already exists");
-                } else {
-
+                    return;
                 }
             } else {
                 socket.emit("register-failed", "Register failed");
+                return;
             }
         });
         db.query("INSERT INTO users(firstName, lastName, dob, email, password, gamertag, gamesWon, gamesLost, xpLevel, perksUnlocked, nextLevel) VALUES('"+data.firstName+"','"+data.lastName+"','"+data.DOB+"', '"+data.email+"', '"+data.password+"', '"+data.gamerTag+"', '0','0','0','0,0,0,0','1000')",function(error, result) {
-            if (!error) {
-                
-            } else {
+            if (error) {
                 socket.emit("register-failed", "Register failed");
+                return;
             }
         });
         db.query("SELECT * FROM users WHERE email='"+data.email+"'",function(error, result) {
@@ -289,11 +303,63 @@ io.sockets.on("connection", function(socket) {
                         nextLevel: result[0].nextLevel,
                     }
                     socket.emit("register-success", data);
+                    return;
                 } 
             } else {
                 socket.emit("register-failed", "Register failed");
+                return;
             }
         });
+    });
+
+    socket.on("buy-perk", function (data) {
+       let perkPrices = [
+           1,2,3,4,
+           1,2,3,4,
+           1,2,3,4,
+           1,2,3,4,
+       ]; 
+
+       let player = findPlayer(socket.id);
+       
+        if (player.perkPoints >= perkPrices[data]) {  
+
+            let newPerksUnlocked = player.perksUnlocked.split(",");
+            let perk = data % 4;
+            if (data <= 3) {
+                newPerksUnlocked[0] = perk+1;
+            } else if (data >= 4 && data <= 7) {
+                newPerksUnlocked[1] = perk+1;
+            } else if (data >= 8 && data <= 11) {
+                newPerksUnlocked[2] = perk+1;
+            }else if (data >= 12 && data <= 15) {
+                newPerksUnlocked[3] = perk+1;
+            }
+
+            newPerksUnlocked = newPerksUnlocked[0] + "," + newPerksUnlocked[1] + "," + newPerksUnlocked[2] + "," + newPerksUnlocked[3];
+            player.perkPoints--;
+
+            //update account
+           db.query("UPDATE users SET perksUnlocked='"+newPerksUnlocked+"',perkPoints='"+player.perkPoints+"' WHERE playerID='"+player.id+"'", function(error, result) {
+                if (!error) {
+                    player.perksUnlocked = newPerksUnlocked;
+                    let updateData = {
+                        perkPoints: player.perkPoints,
+                        perksUnlocked: player.perksUnlocked,
+                    }
+                    socket.emit("perk-buy-success", updateData);
+                } else {
+                    socket.emit("perk-buy-failed");
+                }
+            });
+        } else {
+            socket.emit("perk-buy-failed");
+        }
+
+    });
+
+    socket.on("send-text-chat",function(data){
+        games[data.id].sendTextChatMessage(data.message);
     });
 });
 
@@ -335,7 +401,7 @@ em.on("game-over", (data) => {
 });
 
 em.on("update-account", (data) => {
-    db.query("UPDATE users SET gamesWon='"+data.gamesWon+"',gamesLost='"+data.gamesLost+"',xpLevel='"+data.levelUpNewXpLevel+"',nextLevel='"+data.newNextLevel+"' WHERE playerID='"+data.id+"'",function(error, result) {
+    db.query("UPDATE users SET gamesWon='"+data.gamesWon+"',gamesLost='"+data.gamesLost+"',xpLevel='"+data.levelUpNewXpLevel+"',nextLevel='"+data.newNextLevel+"',perkPoints='"+data.perkPoints+"' WHERE playerID='"+data.id+"'",function(error, result) {
         if (error) {
             console.log(error);
         } else {
@@ -346,6 +412,8 @@ em.on("update-account", (data) => {
             player.gamesLost = data.gamesLost;
             player.xpLevel = data.levelUpNewXpLevel;
             player.nextLevel = data.newNextLevel;
+            player.perkPoints = data.perkPoints;
+            player.perksUnlocked = data.perksUnlocked;
         }
     });
 });

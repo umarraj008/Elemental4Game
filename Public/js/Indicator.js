@@ -12,10 +12,12 @@ class Indicator{
     }
  
     draw(){
-        ctx.fillStyle = this.color + this.opacity + ")";
         ctx.textAlign = "center";
         ctx.font = this.font;
         
+        ctx.fillStyle = "rgba(0,0,0," + this.opacity + ")";
+        ctx.fillText(this.text,this.x+2,this.y+2);
+        ctx.fillStyle = this.color + this.opacity + ")";
         ctx.fillText(this.text,this.x,this.y);
         this.y -= this.speed*dt;
         this.opacity -= this.opacitySpeed*dt;
