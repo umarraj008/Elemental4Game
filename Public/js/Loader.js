@@ -45,6 +45,10 @@ class Loader{
         if (this.imageLoadingFinished && this.audioLoadingFinished) {
             console.log("Finished Loading");
             sceneManager.scene = -1
+            let s = document.createElement("script");
+            s.setAttribute("id", "s");
+            s.setAttribute("src", "js/client.js");
+            document.getElementsByTagName("body")[0].append(s);
             document.getElementById("loginContainer").style.display = "flex";
         }
     }
