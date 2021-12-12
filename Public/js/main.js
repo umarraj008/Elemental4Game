@@ -7,7 +7,7 @@ var earthSpriteSheet;
 var airSpriteSheet;
 
 var sceneManager = new SceneManager(-2);
-const loader = new Loader(36,0);
+const loader = new Loader(42,0);//DONT FORGET TO CHANGE THE TOTAL WHEN ADDING MORE IMAGES
 loader.audioLoadingFinished = true; //REMOVE WHEN AUDIO IS ADDED
 
 const airBackground =        loader.loadImage("resources/images/AirMapFull.png");
@@ -50,7 +50,7 @@ const waterMapBlur =         loader.loadImage("resources/images/WaterMapFullBlur
 const fireMapBlur =          loader.loadImage("resources/images/FireMapFullBlur.png");
 const earthMapBlur =         loader.loadImage("resources/images/EarthMapFullBlur.png");
 const airMapBlur =           loader.loadImage("resources/images/AirMapFullBlur.png");
-const allCharacters =        loader.loadImage("resources/images/allCharacters.png");
+const allCharacters =        loader.loadImage("resources/images/AllCharacters.png");
 const icons =                loader.loadImage("resources/images/icons.png");
 
 var dt = 0;
