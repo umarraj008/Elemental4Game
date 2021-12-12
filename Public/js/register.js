@@ -34,6 +34,7 @@ socket.on("register-success", function(data) {
     sessionStorage.setItem("xpLevel", data.xpLevel);
     sessionStorage.setItem("perksUnlocked", data.perksUnlocked);
     
+    console.log("Successfull Account Creation");
     location.href = "index.html";
 });
 

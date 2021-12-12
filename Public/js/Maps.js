@@ -2,7 +2,7 @@ class Maps {
     constructor() {
         this.opacityTransision = false;
         this.currentMap1 = 0;
-        this.currentMap2 = 0;
+        this.currentMap2 = Math.floor(Math.random()*3);
         this.timer = 0;
         this.changeTo = 0;
         this.offset = 400;
@@ -60,7 +60,7 @@ class Maps {
             }
         }
 
-        if (SETTINGS.movingBackground) {
+        if (SETTINGS.movingBackground == true) {
             this.update();
         }
     }
@@ -82,7 +82,7 @@ class Maps {
             case 3: this.drawEarth(); break;
         }
 
-        if (SETTINGS.windParticles) {
+        if (SETTINGS.windParticles == true) {
             this.windParticleSystem.draw();
         }
     }

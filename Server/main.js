@@ -213,6 +213,17 @@ io.sockets.on("connection", function(socket) {
         }
     });
 
+    socket.on("stop-matchmaking", function () {
+        let player = findPlayer(socket.id);
+        for (let i = 0; i < matchmakingQueue.length; i++) {
+            if (matchmakingQueue[i].socket.id == socket.id) {
+                matchmakingQueue.splice(i, 1);
+                socket.emit("removed-from-matchmaking");
+                break;
+            }
+        }
+    })
+
     socket.on("disconnect", function() {
         let player = findPlayer(socket.id);
 
@@ -252,29 +263,28 @@ io.sockets.on("connection", function(socket) {
             if (!error) {
                 if(result.length >= 1) {
                     socket.emit("register-failed", "Account with the same email already exists");
-                } else {
-
+                    return;
                 }
             } else {
                 socket.emit("register-failed", "Register failed");
+                return;
             }
         });
         db.query("SELECT * FROM users WHERE gamertag='"+data.gamerTag+"'",function(error, result) {
             if (!error) {
                 if(result.length >= 1) {
                     socket.emit("register-failed", "Account with the same gamertag already exists");
-                } else {
-
+                    return;
                 }
             } else {
                 socket.emit("register-failed", "Register failed");
+                return;
             }
         });
         db.query("INSERT INTO users(firstName, lastName, dob, email, password, gamertag, gamesWon, gamesLost, xpLevel, perksUnlocked, nextLevel) VALUES('"+data.firstName+"','"+data.lastName+"','"+data.DOB+"', '"+data.email+"', '"+data.password+"', '"+data.gamerTag+"', '0','0','0','0,0,0,0','1000')",function(error, result) {
-            if (!error) {
-                
-            } else {
+            if (error) {
                 socket.emit("register-failed", "Register failed");
+                return;
             }
         });
         db.query("SELECT * FROM users WHERE email='"+data.email+"'",function(error, result) {
@@ -293,9 +303,11 @@ io.sockets.on("connection", function(socket) {
                         nextLevel: result[0].nextLevel,
                     }
                     socket.emit("register-success", data);
+                    return;
                 } 
             } else {
                 socket.emit("register-failed", "Register failed");
+                return;
             }
         });
     });
