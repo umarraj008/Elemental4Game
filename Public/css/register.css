@@ -1,0 +1,106 @@
+
+body {
+    overflow-x: hidden;
+}
+
+@font-face {
+    font-family: pixel;
+    src: url("../resources/fonts/pixel-font-7.ttf");
+}
+
+#innerRegisterContainer {
+    background-image: url("resources/images/RegisterLoginUI/pannel1.png");
+    width: 320px;
+    /* background-color: #808080; */
+    /* padding: 20px 20px; */
+    /* box-sizing: border-box;
+    border-radius: 7px; */
+    position: fixed;
+    left: 45.5%;
+    top: 58%;
+    transform: translate(-50%, -50%);
+}
+
+h1 {
+    text-align: center;
+    color: #fff;
+    font-weight: normal;
+    margin-bottom: 80px;
+    margin-left: 150px;
+    font-family: pixel;
+}
+
+.registerHeading {
+    text-align: center;
+    color: white;
+    font-family: pixel;
+}
+
+input.register {
+    height: 30px;
+    width: 150%;
+    background: url("../resources/images/RegisterLoginUI/textbox.png");
+    padding: 10px;
+    margin-bottom: 10px;
+    outline: none;
+    border: none;
+    background-repeat: no-repeat;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#pannelImage {
+    /* margin-left: 200px; */
+    /* text-align: center; */
+    /* margin: auto; */
+    display: flex;
+    justify-content: center;
+    margin-top: 80px;
+
+}
+
+p {
+    display: flex;
+    color: white;
+    justify-content: center;
+}
+
+img {
+    position: absolute;
+    margin-top: 5%;
+}
+
+#register {
+    background: url("../resources/images/RegisterLoginUI/button.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    height: 90px;
+    margin-left: 25%;
+    padding-right: 175px;
+    padding-bottom: 50px;
+    font-family: pixel;
+}
+
+.characters {
+    bottom: 0;
+    z-index: -5;
+}
+
+.logo {
+    position: relative;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    top: -150px;
+}
+
+#register:hover {
+    background: url("../resources/images/RegisterLoginUI/buttonHover.png");
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+
+::placeholder {
+    color: white;
+}
