@@ -42,7 +42,7 @@ socket.on("register-success", function(data) {
 socket.on("register-failed", function(message) {
     console.log(message);
     sessionStorage.clear();
-    location.reload();
+    location.href = "index.html";
 });
 
 function register(firstName,lastName,email,DOB,gamerTag,password) {
