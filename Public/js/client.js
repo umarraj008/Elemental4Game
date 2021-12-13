@@ -324,7 +324,8 @@ socket.on("logged-in", function(userData) {
     sessionStorage.setItem("perksUnlocked", userData.perksUnlocked);
     sessionStorage.setItem("perkPoints", userData.perkPoints);
 
-    document.getElementById("loginContainer").parentNode.removeChild(document.getElementById("loginContainer"));
+    document.getElementById("loginContainer").style.display = "none";
+    // document.getElementById("loginContainer").parentNode.removeChild(document.getElementById("loginContainer"));
     sceneManager.scene = 0;
     console.log("Logged in as " + game.myData.gamerTag);
 });

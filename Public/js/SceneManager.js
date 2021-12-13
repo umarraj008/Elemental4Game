@@ -153,6 +153,8 @@ class SceneManager {
         };
 
         this.resultsPanel = new Panel(c.width/2-500,c.height/2-300,1000, 600);
+        this.perkConfirmPanel = new Panel(c.width/2-400,c.height/2-300, 800, 500);
+        this.perkPanel = new Panel(1300,150,589,766);
     } 
 
 
@@ -512,9 +514,10 @@ class SceneManager {
     }
 
     drawPerkScreen() {
-        // ctx.fillStyle = "blue";
-        // ctx.fillRect (0,0,c.width, c.height);
         this.maps.drawTransition(false);
+
+        //panel
+        this.perkPanel.draw();
 
         //this will draw the Perk screen text
         ctx.fillStyle= "white";
@@ -539,9 +542,6 @@ class SceneManager {
         ctx.fillText("Starting Health",507,200);
         ctx.fillText("Critical Damage",822,200);
         ctx.fillText("Critcal Hit Chance",1137,200);
-
-        ctx.fillStyle = "white";
-        ctx.fillRect(1305,150,589,766);
 
         ctx.fillStyle = "black";
         ctx.fillText("Perk Information", 1599,200);
@@ -569,12 +569,11 @@ class SceneManager {
 
         //confirm window
         if (this.perkConfirmWindow) {
-            ctx.fillStyle = "red";
-            ctx.fillRect(c.width/2-600,c.height/2-300, 1800, 600);
+            this.perkConfirmPanel.draw();            
 
             ctx.fillStyle = "black";
             ctx.textAlign = "center";
-            ctx.font = "30px "+FONT;
+            ctx.font = "60px "+FONT;
             ctx.fillText("Are you sure?", c.width/2, c.height/2-200);
 
             this.perkConfirmConfirmButton.draw(dt, mouseX, mouseY);
@@ -1042,7 +1041,7 @@ class SceneManager {
             case 4: //menu screen
                 if (this.matchmakeButton.mouseOver(mouseX, mouseY)) {
                     matchmake();
-                } else if (this.stopMatchmakeButton.mouseOver(mouseX, mouseY)) {
+                } else if (this.matchmaking && this.stopMatchmakeButton.mouseOver(mouseX, mouseY)) {
                     stopMatchmaking();
                 } else if (this.perkScreenButton.mouseOver(mouseX,mouseY)){     
                     if (this.matchmaking) {

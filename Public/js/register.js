@@ -1,4 +1,5 @@
 const socket = io();
+var registerPressed = false;
 
 socket.on("connect", function() {
     console.log("connected to server");
@@ -40,7 +41,8 @@ socket.on("register-success", function(data) {
 
 socket.on("register-failed", function(message) {
     console.log(message);
-    logout();
+    sessionStorage.clear();
+    location.href = "index.html";
 });
 
 function register(firstName,lastName,email,DOB,gamerTag,password) {
@@ -49,6 +51,7 @@ function register(firstName,lastName,email,DOB,gamerTag,password) {
 }
 
 function registerButtonPressed() {
+    if (registerPressed) return; 
     let firstName = document.getElementById("firstName").value;
     let lastName = document.getElementById("lastName").value;
     let email = document.getElementById("email").value;
@@ -56,10 +59,11 @@ function registerButtonPressed() {
     let gamerTag = document.getElementById("gamerTag").value;
     let password = document.getElementById("password").value;
     let confirmPassword = document.getElementById("confirmPassword").value;
-
+    
     // register();
     if(password == confirmPassword) {
         register(firstName,lastName,email,DOB,gamerTag,password);
+        registerPressed = true;
     } else {
         console.log("passwords dont match");
     }

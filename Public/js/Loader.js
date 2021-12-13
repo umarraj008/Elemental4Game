@@ -12,7 +12,7 @@ class Loader{
     loadImage(src) {
         let img = new Image();
         img.src = src;
-        img.onload = this.imageLoaded();
+        img.onload = function() {loader.imageLoaded();};
         
         return img;
     }
@@ -45,6 +45,10 @@ class Loader{
         if (this.imageLoadingFinished && this.audioLoadingFinished) {
             console.log("Finished Loading");
             sceneManager.scene = -1
+            let s = document.createElement("script");
+            s.setAttribute("id", "s");
+            s.setAttribute("src", "js/client.js");
+            document.getElementsByTagName("body")[0].append(s);
             document.getElementById("loginContainer").style.display = "flex";
         }
     }
