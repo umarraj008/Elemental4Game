@@ -100,6 +100,16 @@ class SceneManager {
             new Button(995,584,285,155,"15% Critical Hit Chance"/*, false, true*/),
             new Button(995,761,285,155,"30% Critical Hit Chance"/*, false, true*/),
         ]
+
+        this.perkButtons[8].font = "25px pixel";
+        this.perkButtons[9].font = "25px pixel";
+        this.perkButtons[10].font = "25px pixel";
+        this.perkButtons[11].font = "25px pixel";
+
+        this.perkButtons[12].font = "25px pixel";
+        this.perkButtons[13].font = "25px pixel";
+        this.perkButtons[14].font = "25px pixel";
+        this.perkButtons[15].font = "25px pixel";
         
         this.perkBuyButton = new Button(1364,400,470,80, "Buy Perk");
         this.perkButtons[0].selected = true;
