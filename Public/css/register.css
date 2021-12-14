@@ -1,6 +1,11 @@
 
 body {
     overflow-x: hidden;
+    background-image: url("../resources/images/RegisterLoginUI/WaterMapFullBlur.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin: 0;
+    padding: 0;
 }
 
 @font-face {
@@ -8,12 +13,86 @@ body {
     src: url("../resources/fonts/pixel-font-7.ttf");
 }
 
+#registerContainer {
+    width: 100%;
+    display: block;
+    justify-content: center;
+    align-items: center;
+}
+
+#characters {
+    width:100%;
+    height:100%;
+    position: fixed;
+    z-index: -10;
+}
+
+#innerRegisterContainer {
+    background-image: url("../resources/images/RegisterLoginUI/pannel1.png");
+    display: block;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 20px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height:550px;
+    width: 500px;
+}
+
+#registerHeading {
+    font-family: pixel;
+    color: white;
+    margin-top: 10px;
+    padding-top: 10px;
+    font-size: 40px;
+}
+
+input.register {
+    display:block;
+    background-image: url("../resources/images/RegisterLoginUI/textbox.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 90%;
+    height: 40px;
+    background-color: transparent;
+    text-indent: 20px;
+    outline: none;
+    border: none;
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+    margin-bottom: 10px;
+    z-index: 10;
+}
+::placeholder {
+    color: white;
+}
+
+input.button {
+    display:block;
+    background-image: url("../resources/images/RegisterLoginUI/button.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 45px;
+    width: 250px;
+    margin-bottom: 10px;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    font-family: Arial, Helvetica, sans-serif;
+    color: black;
+}
+
+input.button:hover {
+    background-image: url("../resources/images/RegisterLoginUI/buttonHover.png");
+    cursor: pointer;
+}
+/* 
 #innerRegisterContainer {
     width: 320px;
     /* background-color: #808080; */
     /* padding: 20px 20px; */
     /* box-sizing: border-box;
-    border-radius: 7px; */
+    border-radius: 7px; 
     position: fixed;
     left: 45.5%;
     top: 58%;
@@ -51,7 +130,7 @@ input.register {
 #pannelImage {
     /* margin-left: 200px; */
     /* text-align: center; */
-    /* margin: auto; */
+    /* margin: auto; 
     display: flex;
     justify-content: center;
     margin-top: 80px;
@@ -102,4 +181,4 @@ img {
 
 ::placeholder {
     color: white;
-}
+} */
