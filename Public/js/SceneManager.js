@@ -45,6 +45,7 @@ class SceneManager {
         this.settingsButton = new Button(c.width/2+300,c.height/2-100,300,150, "Settings");
         this.menuBackButton = new Button(c.width/2-300,c.height/2+300,600,100, "Back");
         this.projectWebsiteButton = new Button(50,c.height-200,300,150, "Project Website");
+        this.profilePageButton = new Button(c.width-350,c.height-200,300,150, "Profile");
         
         //settings buttons
         // this.settingsFullScreenButton = new Button(c.width/2-150,c.height/2-200,300,150, "Fullscreen");
@@ -56,6 +57,10 @@ class SceneManager {
         //credits page buttons
         this.creditBackButton = new Button(c.width/2-150,c.height/2+300,300,150, "Back");
         
+        //profile page buttons
+        this.profileBackButton = new Button(c.width/2-150,c.height/2+300,300,150, "Back");
+        this.profilePagePanel =new Panel(20, 120, c.width-50, 700);
+
         //game buttons
         this.actionButtons = {
             wait: new Button(20,c.height-20-220,296,220,""),
@@ -226,6 +231,9 @@ class SceneManager {
                 break;
             case 8: //results screen
                  this.drawGameResults();
+                break;
+            case 9: //profile page
+                this.drawProfilePage();
                 break;
         }
 
@@ -510,6 +518,7 @@ class SceneManager {
 
         this.menuBackButton.draw(dt,mouseX,mouseY);
         this.projectWebsiteButton.draw(dt,mouseX,mouseY);
+        this.profilePageButton.draw(dt,mouseX,mouseY);
         
     }
 
@@ -922,8 +931,36 @@ class SceneManager {
         this.resultsBackButton.draw(dt,mouseX,mouseY);
     }
 
+    drawProfilePage(){
+          // ctx.fillStyle = "black";
+        // ctx.fillRect (0,0,c.width, c.height);
+        this.maps.drawTransition(false);
 
-    
+        //this will be draw title text 
+        ctx.fillStyle = "white";
+        ctx.font = "100px "+ FONT;
+        ctx.textAlign = "center";
+        ctx.fillText("Profile",c.width/2, 90);
+
+        this.profilePagePanel.draw();
+
+        ctx.fillStyle = "black";
+        ctx.font = "100px "+ FONT;
+        ctx.textAlign = "left";
+        ctx.fillText(game.myData.gamerTag,90, 230);
+
+        ctx.font = "50px "+ FONT;
+        ctx.fillText("XP Level: " + game.myData.xpLevel,100, 350);
+        ctx.fillText("Skill Level: 0",100, 420);
+        ctx.fillText("Games Won: " + game.myData.gamesWon,100, 490);
+        ctx.fillText("Games Lost: " + game.myData.gamesLost,100, 560);
+        ctx.fillText("Games Played: " + (game.myData.gamesWon + game.myData.gamesLost),100, 630);
+
+        this.profileBackButton.draw(dt,mouseX,mouseY);
+        
+
+    }
+
     mouseClick() {
         switch(this.scene) {
             case 1: //title screen
@@ -1068,7 +1105,10 @@ class SceneManager {
                         stopMatchmaking();
                     } 
                     location.href = "http://cybercloudstudios.co.uk"; 
-                }   
+                } else if (this.profilePageButton.mouseOver(mouseX,mouseY)) {
+                    this.camera.transitionTo(9,0.005); 
+                }
+
                 break;
             case 5: //perk screen
                 if(this.perkBackButton.mouseOver(mouseX,mouseY)) {
@@ -1141,7 +1181,13 @@ class SceneManager {
                     this.camera.transitionTo(4,0.005); 
                     resetGame();
                 }
-                break;
+                break;  
+            
+            case 9://profilepage
+            if(this.profileBackButton.mouseOver(mouseX,mouseY)) {
+                this.camera.transitionTo(4,0.005); 
+            }
         }
     }
+
 }
