@@ -956,7 +956,7 @@ class SceneManager {
 
         ctx.font = "50px "+ FONT;
         ctx.fillText("XP Level: " + game.myData.xpLevel,c.width/2-200, 350);
-        ctx.fillText("Skill Level: 0",c.width/2-200, 420);
+        ctx.fillText("Skill Level: " + this.ranks[(Math.floor(game.myData.skillLevel/100)>= 5)? 4:Math.floor(game.myData.skillLevel/100)],c.width/2-200, 420);
         ctx.fillText("Games Won: " + game.myData.gamesWon,c.width/2-200, 490);
         ctx.fillText("Games Lost: " + game.myData.gamesLost,c.width/2-200, 560);
         ctx.fillText("Games Played: " + (game.myData.gamesWon + game.myData.gamesLost),c.width/2-200, 630);
