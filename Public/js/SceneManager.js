@@ -29,23 +29,29 @@ class SceneManager {
         this.player2HealthBar = new HealthBar(-(c.width-50), 120, 700, 30,0,200, false);
         this.xpHealthBar = new HealthBar(c.width/2-450, c.height/2+170, 900, 30, 0, 100, true);
         this.xpHealthBar.speed = 0.07;
+        this.skillLevelHealthBar = new HealthBar(c.width/2-450, c.height/2+280, 900, 30, 0, 100, true);
+        this.skillLevelHealthBar.speed = 0.07;
         this.credits = new Credits();
         this.selectedPerk = 0;
         this.camera = new Camera();
         this.maps = new Maps();
         this.angle = 0;
 
+        this.ranks = ["Copper","Silver","Gold","Diamond","Warrior"];
+
         //title screen buttons
         this.playButton = new Button(c.width/2-300,c.height/2-75,600,100, "Play");
         
         //main menu buttons
         this.stopMatchmakeButton =  new Button(c.width/2-150,c.height/2-100,300,150, "Stop Matchmaking");
-        this.matchmakeButton =  new Button(c.width/2-600,c.height/2-100,300,150, "Matchmake");
+        this.matchmakeButton =  new Button(c.width/2-600,c.height/2-100,300,150, "Quick Matchmake");
         this.perkScreenButton = new Button(c.width/2-150,c.height/2-100,300,150, "Perk Screen");
         this.settingsButton = new Button(c.width/2+300,c.height/2-100,300,150, "Settings");
         this.menuBackButton = new Button(c.width/2-300,c.height/2+300,600,100, "Back");
         this.projectWebsiteButton = new Button(50,c.height-200,300,150, "Project Website");
         this.profilePageButton = new Button(c.width-350,c.height-200,300,150, "Profile");
+        this.rankedMatchmakeButton = new Button(c.width/2-150,c.height/2+100,300,150, "Ranked Matchmake")
+
         
         //settings buttons
         // this.settingsFullScreenButton = new Button(c.width/2-150,c.height/2-200,300,150, "Fullscreen");
@@ -158,6 +164,7 @@ class SceneManager {
         };
 
         this.resultsPanel = new Panel(c.width/2-500,c.height/2-300,1000, 600);
+        this.resultsPanel2 = new Panel(c.width/2-500,c.height/2-300,1000, 680);
         this.perkConfirmPanel = new Panel(c.width/2-400,c.height/2-300, 800, 500);
         this.perkPanel = new Panel(1300,150,589,766);
     } 
@@ -513,6 +520,7 @@ class SceneManager {
             ctx.fillText("Searching For Match", c.width/2, c.height/2-200);
             this.stopMatchmakeButton.draw(dt, mouseX, mouseY);
         } else {
+            this.rankedMatchmakeButton.draw(dt, mouseX, mouseY);
             this.matchmakeButton.draw(dt, mouseX, mouseY);
             this.perkScreenButton.draw(dt,mouseX,mouseY);
             this.settingsButton.draw(dt,mouseX,mouseY);
@@ -818,15 +826,15 @@ class SceneManager {
         ctx.textAlign = "left";
         ctx.font = "60px "+FONT;
         ctx.fillStyle = "black";
-        ctx.fillText(game.myData.gamerTag, 54, 104);
+        ctx.fillText(game.myData.gamerTag + " [" + this.ranks[(Math.floor(game.myData.skillLevel/100) >= 5) ? 4 : (Math.floor(game.myData.skillLevel/100))] + "]", 54, 104);
         ctx.fillStyle = "white";
-        ctx.fillText(game.myData.gamerTag, 50, 100);
+        ctx.fillText(game.myData.gamerTag + " [" + this.ranks[(Math.floor(game.myData.skillLevel/100) >= 5) ? 4 : (Math.floor(game.myData.skillLevel/100))] + "]", 50, 100);
         
         ctx.textAlign = "right";        
         ctx.fillStyle = "black";
-        ctx.fillText(game.player2.gamerTag ,c.width -48, 104);
+        ctx.fillText(game.player2.gamerTag + " [" + this.ranks[(Math.floor(game.player2.skillLevel/100) >= 5) ? 4 : (Math.floor(game.player2.skillLevel/100))] + "]",c.width -48, 104);
         ctx.fillStyle = "white";
-        ctx.fillText(game.player2.gamerTag ,c.width -50, 100);
+        ctx.fillText(game.player2.gamerTag + " [" + this.ranks[(Math.floor(game.player2.skillLevel/100) >= 5) ? 4 : (Math.floor(game.player2.skillLevel/100))] + "]",c.width -50, 100);
 
 
         this.indicators.draw();
@@ -901,6 +909,7 @@ class SceneManager {
         // }
 
         this.resultsPanel.draw();
+        if (game.ranked) this.resultsPanel2.draw(); else this.resultsPanel.draw();
 
         switch(whatCharacterWasI) {
             case 0: ctx.drawImage(fireCharacter, c.width/2-200, c.height/2-300, 400, 400); break;
@@ -916,7 +925,7 @@ class SceneManager {
         // ctx.fillText("XP Needed for Next Level: "+ (this.xpHealthBar.maxValue*100)+"xp", c.width/2+350, c.height/2-100);
         
         ctx.textAlign = "center";
-        ctx.fillText("+"+game.xpGain+"xp", c.width/2, c.height/2+270);
+        ctx.fillText("+"+game.xpGain+"xp", c.width/2, c.height/2+250);
         
         ctx.font = "50px "+FONT;
         ctx.textAlign = "center";
@@ -929,7 +938,14 @@ class SceneManager {
         }
 
         this.xpHealthBar.draw();
+        if (game.ranked) {
+            this.skillLevelHealthBar.draw();
+            ctx.fillStyle = "black";
+            ctx.textAlign = "center";
+            ctx.font = "30px "+FONT;
+            ctx.fillText("Current Rank: " + this.ranks[((Math.floor(game.myData.skillLevel/100) >= 5) ? 4 : Math.floor(game.myData.skillLevel/100))] + " " + Math.floor(this.skillLevelHealthBar.value) + "/" + this.skillLevelHealthBar.maxValue + " -> Next Rank: " + this.ranks[(Math.floor((game.myData.skillLevel/100)+1) >= 5) ? 4 : Math.floor((game.myData.skillLevel/100)+1)], c.width/2, c.height/2+350);
 
+        }
         this.resultsBackButton.draw(dt,mouseX,mouseY);
     }
 
@@ -1082,8 +1098,11 @@ class SceneManager {
                 break;
             case 4: //menu screen
                 if (this.matchmakeButton.mouseOver(mouseX, mouseY)) {
-                    matchmake();
-                } else if (this.matchmaking && this.stopMatchmakeButton.mouseOver(mouseX, mouseY)) {
+                    matchmake(false);
+                } else if (this.rankedMatchmakeButton.mouseOver(mouseX, mouseY)) {
+                    matchmake(true);
+                    game.ranked = true;
+                }else if (this.matchmaking && this.stopMatchmakeButton.mouseOver(mouseX, mouseY)) {
                     stopMatchmaking();
                 } else if (this.perkScreenButton.mouseOver(mouseX,mouseY)){     
                     if (this.matchmaking) {
