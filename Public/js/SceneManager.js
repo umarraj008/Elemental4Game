@@ -59,7 +59,7 @@ class SceneManager {
         
         //profile page buttons
         this.profileBackButton = new Button(c.width/2-150,c.height/2+300,300,150, "Back");
-        this.profilePagePanel =new Panel(20, 120, c.width-50, 700);
+        this.profilePagePanel =new Panel(c.width/2-350, 120, 700, 600);
 
         //game buttons
         this.actionButtons = {
@@ -328,9 +328,11 @@ class SceneManager {
         this.maps.drawTransition(false);
 
         //this will be draw title text 
-        ctx.fillStyle = "white";
         ctx.font = "100px "+ FONT;
         ctx.textAlign = "center";
+        ctx.fillStyle = "black";
+        ctx.fillText("Settings",c.width/2+4, 94);
+        ctx.fillStyle = "white";
         ctx.fillText("Settings",c.width/2, 90);
 
         this.settingsButtons.panel.draw();
@@ -937,24 +939,27 @@ class SceneManager {
         this.maps.drawTransition(false);
 
         //this will be draw title text 
-        ctx.fillStyle = "white";
         ctx.font = "100px "+ FONT;
         ctx.textAlign = "center";
+        ctx.fillStyle = "black";
+        ctx.fillText("Profile",c.width/2+4, 94);
+        ctx.fillStyle = "white";
         ctx.fillText("Profile",c.width/2, 90);
 
         this.profilePagePanel.draw();
 
         ctx.fillStyle = "black";
         ctx.font = "100px "+ FONT;
+        ctx.textAlign = "center";
+        ctx.fillText(game.myData.gamerTag,c.width/2, 250);
         ctx.textAlign = "left";
-        ctx.fillText(game.myData.gamerTag,90, 230);
 
         ctx.font = "50px "+ FONT;
-        ctx.fillText("XP Level: " + game.myData.xpLevel,100, 350);
-        ctx.fillText("Skill Level: 0",100, 420);
-        ctx.fillText("Games Won: " + game.myData.gamesWon,100, 490);
-        ctx.fillText("Games Lost: " + game.myData.gamesLost,100, 560);
-        ctx.fillText("Games Played: " + (game.myData.gamesWon + game.myData.gamesLost),100, 630);
+        ctx.fillText("XP Level: " + game.myData.xpLevel,c.width/2-200, 350);
+        ctx.fillText("Skill Level: 0",c.width/2-200, 420);
+        ctx.fillText("Games Won: " + game.myData.gamesWon,c.width/2-200, 490);
+        ctx.fillText("Games Lost: " + game.myData.gamesLost,c.width/2-200, 560);
+        ctx.fillText("Games Played: " + (game.myData.gamesWon + game.myData.gamesLost),c.width/2-200, 630);
 
         this.profileBackButton.draw(dt,mouseX,mouseY);
         
