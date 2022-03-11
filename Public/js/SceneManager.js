@@ -49,7 +49,9 @@ class SceneManager {
         this.settingsButton = new Button(c.width/2+300,c.height/2-100,300,150, "Settings");
         this.menuBackButton = new Button(c.width/2-300,c.height/2+300,600,100, "Back");
         this.projectWebsiteButton = new Button(50,c.height-200,300,150, "Project Website");
+        this.profilePageButton = new Button(c.width-350,c.height-200,300,150, "Profile");
         this.rankedMatchmakeButton = new Button(c.width/2-150,c.height/2+100,300,150, "Ranked Matchmake")
+
         
         //settings buttons
         // this.settingsFullScreenButton = new Button(c.width/2-150,c.height/2-200,300,150, "Fullscreen");
@@ -61,6 +63,10 @@ class SceneManager {
         //credits page buttons
         this.creditBackButton = new Button(c.width/2-150,c.height/2+300,300,150, "Back");
         
+        //profile page buttons
+        this.profileBackButton = new Button(c.width/2-150,c.height/2+300,300,150, "Back");
+        this.profilePagePanel =new Panel(c.width/2-350, 120, 700, 600);
+
         //game buttons
         this.actionButtons = {
             wait: new Button(20,c.height-20-220,296,220,""),
@@ -233,6 +239,9 @@ class SceneManager {
             case 8: //results screen
                  this.drawGameResults();
                 break;
+            case 9: //profile page
+                this.drawProfilePage();
+                break;
         }
 
         //tell user if they are connected to server
@@ -326,9 +335,11 @@ class SceneManager {
         this.maps.drawTransition(false);
 
         //this will be draw title text 
-        ctx.fillStyle = "white";
         ctx.font = "100px "+ FONT;
         ctx.textAlign = "center";
+        ctx.fillStyle = "black";
+        ctx.fillText("Settings",c.width/2+4, 94);
+        ctx.fillStyle = "white";
         ctx.fillText("Settings",c.width/2, 90);
 
         this.settingsButtons.panel.draw();
@@ -517,6 +528,7 @@ class SceneManager {
 
         this.menuBackButton.draw(dt,mouseX,mouseY);
         this.projectWebsiteButton.draw(dt,mouseX,mouseY);
+        this.profilePageButton.draw(dt,mouseX,mouseY);
         
     }
 
@@ -937,8 +949,39 @@ class SceneManager {
         this.resultsBackButton.draw(dt,mouseX,mouseY);
     }
 
+    drawProfilePage(){
+          // ctx.fillStyle = "black";
+        // ctx.fillRect (0,0,c.width, c.height);
+        this.maps.drawTransition(false);
 
-    
+        //this will be draw title text 
+        ctx.font = "100px "+ FONT;
+        ctx.textAlign = "center";
+        ctx.fillStyle = "black";
+        ctx.fillText("Profile",c.width/2+4, 94);
+        ctx.fillStyle = "white";
+        ctx.fillText("Profile",c.width/2, 90);
+
+        this.profilePagePanel.draw();
+
+        ctx.fillStyle = "black";
+        ctx.font = "100px "+ FONT;
+        ctx.textAlign = "center";
+        ctx.fillText(game.myData.gamerTag,c.width/2, 250);
+        ctx.textAlign = "left";
+
+        ctx.font = "50px "+ FONT;
+        ctx.fillText("XP Level: " + game.myData.xpLevel,c.width/2-200, 350);
+        ctx.fillText("Skill Level: " + this.ranks[(Math.floor(game.myData.skillLevel/100)>= 5)? 4:Math.floor(game.myData.skillLevel/100)],c.width/2-200, 420);
+        ctx.fillText("Games Won: " + game.myData.gamesWon,c.width/2-200, 490);
+        ctx.fillText("Games Lost: " + game.myData.gamesLost,c.width/2-200, 560);
+        ctx.fillText("Games Played: " + (game.myData.gamesWon + game.myData.gamesLost),c.width/2-200, 630);
+
+        this.profileBackButton.draw(dt,mouseX,mouseY);
+        
+
+    }
+
     mouseClick() {
         switch(this.scene) {
             case 1: //title screen
@@ -1086,7 +1129,10 @@ class SceneManager {
                         stopMatchmaking();
                     } 
                     location.href = "http://cybercloudstudios.co.uk"; 
-                }   
+                } else if (this.profilePageButton.mouseOver(mouseX,mouseY)) {
+                    this.camera.transitionTo(9,0.005); 
+                }
+
                 break;
             case 5: //perk screen
                 if(this.perkBackButton.mouseOver(mouseX,mouseY)) {
@@ -1159,7 +1205,13 @@ class SceneManager {
                     this.camera.transitionTo(4,0.005); 
                     resetGame();
                 }
-                break;
+                break;  
+            
+            case 9://profilepage
+            if(this.profileBackButton.mouseOver(mouseX,mouseY)) {
+                this.camera.transitionTo(4,0.005); 
+            }
         }
     }
+
 }
