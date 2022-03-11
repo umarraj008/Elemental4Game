@@ -28,6 +28,7 @@ const io = require("socket.io")(server);
 //list of players connected to the server
 var players = new Map();
 var matchmakingQueue = [];
+var rankedMatchmakingQueue = [];
 var games = {};
 //var rooms = io.sockets.adapter.rooms;
 
@@ -96,6 +97,7 @@ io.sockets.on("connection", function(socket) {
                                 perksUnlocked: result[0].perksUnlocked,
                                 nextLevel: result[0].nextLevel,
                                 perkPoints: result[0].perkPoints,
+                                skillLevel: result[0].skillLevel,
                             }
 
                             let player = new User(socket, userData);
@@ -130,6 +132,7 @@ io.sockets.on("connection", function(socket) {
                                     perksUnlocked: result[0].perksUnlocked,
                                     nextLevel: result[0].nextLevel,
                                     perkPoints: result[0].perkPoints,
+                                    skillLevel: result[0].skillLevel,
                                 }
                                 
                                 let player = new User(socket, userData);
@@ -186,6 +189,7 @@ io.sockets.on("connection", function(socket) {
                 perksUnlocked: matchmakingQueue[0].perksUnlocked,
                 nextLevel: matchmakingQueue[0].nextLevel,
                 perkPoints: matchmakingQueue[0].perkPoints,
+                skillLevel: matchmakingQueue[0].skillLevel,
             };
 
             let player2 = {
@@ -198,9 +202,10 @@ io.sockets.on("connection", function(socket) {
                 perksUnlocked: matchmakingQueue[1].perksUnlocked,
                 nextLevel: matchmakingQueue[1].nextLevel,
                 perkPoints: matchmakingQueue[1].perkPoints,
+                skillLevel: matchmakingQueue[1].skillLevel,
             };
 
-            var game = new Game(gameID, em, player1, player2);
+            var game = new Game(gameID, em, player1, player2, false);
             findPlayer(matchmakingQueue[0].socket.id).gameID = gameID;
             findPlayer(matchmakingQueue[1].socket.id).gameID = gameID;
             
@@ -213,13 +218,86 @@ io.sockets.on("connection", function(socket) {
         }
     });
 
+    socket.on("ranked-matchmake", function() {
+        let player = findPlayer(socket.id);
+        rankedMatchmakingQueue.push(player);
+
+        if (rankedMatchmakingQueue.length >= 2) {
+
+            //make game id
+            let gameID = makeGameID();
+
+            //make players join room
+            //rankedMatchmakingQueue[0].socket.join(gameID);
+            //rankedMatchmakingQueue[1].socket.join(gameID);
+            
+            if (rankedMatchmakingQueue[1].socket == undefined) {
+                rankedMatchmakingQueue.splice(1,1);
+            }
+
+            if (rankedMatchmakingQueue[0].socket == undefined) {
+                rankedMatchmakingQueue.splice(0,1);
+            }
+
+            //make new game
+            let player1 = {
+                socket: rankedMatchmakingQueue[0].socket,
+                id: rankedMatchmakingQueue[0].id,
+                gamerTag: rankedMatchmakingQueue[0].gamerTag,
+                gamesWon: rankedMatchmakingQueue[0].gamesWon,
+                gamesLost: rankedMatchmakingQueue[0].gamesLost,
+                xpLevel: rankedMatchmakingQueue[0].xpLevel,
+                perksUnlocked: rankedMatchmakingQueue[0].perksUnlocked,
+                nextLevel: rankedMatchmakingQueue[0].nextLevel,
+                perkPoints: rankedMatchmakingQueue[0].perkPoints,
+                skillLevel: rankedMatchmakingQueue[0].skillLevel,
+            };
+            console.log(rankedMatchmakingQueue[0].skillLevel, rankedMatchmakingQueue[1].skillLevel);////////////////////////////
+
+            let player2 = {
+                socket: rankedMatchmakingQueue[1].socket,
+                id: rankedMatchmakingQueue[1].id,
+                gamerTag: rankedMatchmakingQueue[1].gamerTag,
+                gamesWon: rankedMatchmakingQueue[1].gamesWon,
+                gamesLost: rankedMatchmakingQueue[1].gamesLost,
+                xpLevel: rankedMatchmakingQueue[1].xpLevel,
+                perksUnlocked: rankedMatchmakingQueue[1].perksUnlocked,
+                nextLevel: rankedMatchmakingQueue[1].nextLevel,
+                perkPoints: rankedMatchmakingQueue[1].perkPoints,
+                skillLevel: rankedMatchmakingQueue[1].skillLevel,
+            };
+
+            var game = new Game(gameID, em, player1, player2, true);
+            findPlayer(rankedMatchmakingQueue[0].socket.id).gameID = gameID;
+            findPlayer(rankedMatchmakingQueue[1].socket.id).gameID = gameID;
+            
+            //remove players from matchmaking queue
+            rankedMatchmakingQueue.splice(0,2);
+
+            //set game
+            games[gameID] = game;
+            games[gameID].startGame();
+        }
+    });
+
     socket.on("stop-matchmaking", function () {
         let player = findPlayer(socket.id);
+        
+        //quick matchmaking queue
         for (let i = 0; i < matchmakingQueue.length; i++) {
             if (matchmakingQueue[i].socket.id == socket.id) {
                 matchmakingQueue.splice(i, 1);
                 socket.emit("removed-from-matchmaking");
-                break;
+                return;
+            }
+        }
+
+        //ranked matchmaking queue
+        for (let i = 0; i < rankedMatchmakingQueue.length; i++) {
+            if (rankedMatchmakingQueue[i].socket.id == socket.id) {
+                rankedMatchmakingQueue.splice(i, 1);
+                socket.emit("removed-from-matchmaking");
+                return;
             }
         }
     })
@@ -235,6 +313,14 @@ io.sockets.on("connection", function(socket) {
         for (i = 0; i < matchmakingQueue.length; i++) {
             if (matchmakingQueue[i].socket.id == socket.id) {
                 matchmakingQueue.splice(i, 1);
+                break;
+            }
+        }
+
+        //if player is in ranked matchmaking queue
+        for (i = 0; i < rankedMatchmakingQueue.length; i++) {
+            if (rankedMatchmakingQueue[i].socket.id == socket.id) {
+                rankedMatchmakingQueue.splice(i, 1);
                 break;
             }
         }
@@ -281,7 +367,7 @@ io.sockets.on("connection", function(socket) {
                 return;
             }
         });
-        db.query("INSERT INTO users(firstName, lastName, dob, email, password, gamertag, gamesWon, gamesLost, xpLevel, perksUnlocked, nextLevel) VALUES('"+data.firstName+"','"+data.lastName+"','"+data.DOB+"', '"+data.email+"', '"+data.password+"', '"+data.gamerTag+"', '0','0','0','0,0,0,0','1000')",function(error, result) {
+        db.query("INSERT INTO users(firstName, lastName, dob, email, password, gamertag, gamesWon, gamesLost, xpLevel, perksUnlocked, nextLevel, skillLevel) VALUES('"+data.firstName+"','"+data.lastName+"','"+data.DOB+"', '"+data.email+"', '"+data.password+"', '"+data.gamerTag+"', '0','0','0','0,0,0,0','1000','0')",function(error, result) {
             if (error) {
                 socket.emit("register-failed", "Register failed");
                 return;
@@ -301,6 +387,7 @@ io.sockets.on("connection", function(socket) {
                         xpLevel: result[0].xpLevel,
                         perksUnlocked: result[0].perksUnlocked,
                         nextLevel: result[0].nextLevel,
+                        skillLevel: result[0].skillLevel,
                     }
                     socket.emit("register-success", data);
                     return;
@@ -401,7 +488,7 @@ em.on("game-over", (data) => {
 });
 
 em.on("update-account", (data) => {
-    db.query("UPDATE users SET gamesWon='"+data.gamesWon+"',gamesLost='"+data.gamesLost+"',xpLevel='"+data.levelUpNewXpLevel+"',nextLevel='"+data.newNextLevel+"',perkPoints='"+data.perkPoints+"' WHERE playerID='"+data.id+"'",function(error, result) {
+    db.query("UPDATE users SET gamesWon='"+data.gamesWon+"',gamesLost='"+data.gamesLost+"',xpLevel='"+data.levelUpNewXpLevel+"',nextLevel='"+data.newNextLevel+"',perkPoints='"+data.perkPoints+"',skillLevel='"+data.skillLevel+"' WHERE playerID='"+data.id+"'",function(error, result) {
         if (error) {
             console.log(error);
         } else {
@@ -414,6 +501,7 @@ em.on("update-account", (data) => {
             player.nextLevel = data.newNextLevel;
             player.perkPoints = data.perkPoints;
             player.perksUnlocked = data.perksUnlocked;
+            player.skillLevel = data.skillLevel;
         }
     });
 });

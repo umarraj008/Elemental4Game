@@ -1,15 +1,16 @@
 const Player = require("./Player");
 
 module.exports = class Game {
-    constructor(id, em, p1, p2) {
+    constructor(id, em, p1, p2, ranked) {
         this.id = id;
         this.player1Socket = p1.socket;
         this.player2Socket = p2.socket;
         this.gameId = id;
         this.map = 0;
+        this.ranked = ranked;
 
-        this.player1 = new Player(p1);
-        this.player2 = new Player(p2);
+        this.player1 = new Player(p1, ranked);
+        this.player2 = new Player(p2, ranked);
 
         this.ready = 0;
         this.em = em;
@@ -20,9 +21,11 @@ module.exports = class Game {
         //tell players to pick characters
         this.map = Math.floor(Math.random() * 4) + 1;
         //this.sendMessageToBothPlayers("game-map", this.map);
-        this.sendMessageToBothPlayers("pick-character", {gameID: this.id, map: this.map});
-        this.player1.sendMessage("your-player", {which: 1, p2GT: this.player2.gamerTag});
-        this.player2.sendMessage("your-player", {which: 2, p2GT: this.player1.gamerTag});
+        this.sendMessageToBothPlayers("pick-character", {gameID: this.id, map: this.map, ranked: this.ranked});
+        this.player1.sendMessage("your-player", {which: 1, p2GT: this.player2.gamerTag, p2SL: this.player2.skillLevel});
+        this.player2.sendMessage("your-player", {which: 2, p2GT: this.player1.gamerTag, p2SL: this.player1.skillLevel});
+        
+        //console.log(this.player1.skillLevel, this.player2.skillLevel);////////////////////////////////////////////
     }
 
     pickRandomPlayer() {
@@ -205,6 +208,11 @@ module.exports = class Game {
         //send to client
         //send to database
         //delete game
+
+        //ranked calculation
+        if (this.ranked) {
+
+        }
 
         let baseXP = 1000;
         let p1Data = this.player1.calculateXP(baseXP, (winner == 1) ? true: false);
