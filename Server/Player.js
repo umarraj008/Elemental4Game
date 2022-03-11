@@ -1,5 +1,5 @@
 module.exports = class Player {
-    constructor(data) {
+    constructor(data, ranked) {
         this.health = 100;
         this.points = 5;
         this.totalDamage = 0;
@@ -16,10 +16,12 @@ module.exports = class Player {
         this.socket = data.socket;
         this.perksUnlocked = data.perksUnlocked.split(",");
         this.perkPoints = data.perkPoints;
+        this.skillLevel = data.skillLevel;
         this.damageBoost = 0;
         this.criticalDamage = 0.2;
         this.criticalDamageChance = 0.01;
         this.critical = false;
+        this.ranked = ranked;
         this.attacks = [
             {name: "Wait", cost: -2, heal: 10},
             {name: "Heal", cost: 6, heal: 30},
@@ -102,10 +104,35 @@ module.exports = class Player {
             this.perkPoints++;
         }
 
+        // let slGain = 0;
+        //let oldSkillLevel = 0;
+        // let newSkillLevel = 0;
+        // let skillLevelUp = false;
+        // let skillLevelDown = false;
+
         if (winner) {
             this.gamesWon++;
+            
+            // if (this.ranked) {
+            //     slGain = 10 + Math.floor((this.totalDamage/this.totalPoints));
+            //     oldSkillLevel = this.skillLevel;
+            //     newSkillLevel = this.skillLevel + slGain;
+            //     skillLevelUp = false;
+
+            //     if (Math.floor(newSkillLevel/100) >= Math.floor((oldSkillLevel/100)+1)) {
+            //         skillLevelUp = true;
+            //     }
+            // }
+            //oldSkillLevel = this.skillLevel;
+            if (this.ranked) this.skillLevel += 10 + Math.floor((this.totalDamage/this.totalPoints));
         } else {
             this.gamesLost++;
+            if (this.ranked) {
+                this.skillLevel -= 10 + Math.floor((this.totalDamage/this.totalPoints));
+                if (this.skillLevel <= 0) {
+                    this.skillLevel = 0;
+                }
+            }
         }
 
         let data = {
@@ -123,6 +150,11 @@ module.exports = class Player {
             newNextLevel: newNextLevel,
             perkPoints: this.perkPoints,
             perksUnlocked: this.perksUnlocked[0] + "," + this.perksUnlocked[1] + "," + this.perksUnlocked[2] + "," + this.perksUnlocked[3],
+            skillLevel: this.skillLevel,
+            // slGain: slGain,
+            //oldSkillLevel: oldSkillLevel,
+            // newSkillLevel: newSkillLevel,
+            // skillLevelUp: skillLevelUp,
         };
 
         this.sendMessage("game-over", data);

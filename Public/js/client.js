@@ -4,6 +4,7 @@
 const socket = io();
 //var gameID = "";
 var game = {
+    ranked: false,
     points: 0,
     health: 0,
     turn: false,
@@ -11,7 +12,7 @@ var game = {
     over: false,
     whichPlayerAmI: null,
     map: 0,
-    player2: {health:100,points:5, turn: false, action: null, gamerTag: null},
+    player2: {health:100,points:5, turn: false, action: null, gamerTag: null, skillLevel: 0},
     characterType: null,
     player2characterType: null,
     win: null,
@@ -19,6 +20,8 @@ var game = {
     hitDelay: 700,
     levelUp: false,
     xpGain: 0,
+    // slGain: 0,
+    // skillLevelUp: false,
 
     myData: {
         firstName: null,
@@ -32,6 +35,7 @@ var game = {
         perksUnlocked: null,
         nextLevel: null,
         perkPoints: null,
+        skillLevel: null,
     },
 
     loggedIn: false,
@@ -87,6 +91,7 @@ socket.on("pick-character", function(data) {
     sceneManager.player2HealthBar.changeValue(100);
     document.getElementById("textChatShow").style.display = "block";
     whatMapWasIt = game.map;
+    game.ranked = data.ranked;
 });
 
 socket.on("player2-turn", function() {
@@ -175,13 +180,13 @@ socket.on("game-update", function(data) {
             break;
         case "wait":
             sceneManager.player2Animator.switchAnimation("wait");
-            sceneManager.player2HealthBar.changeValue(data.health);
+            sceneManager.player2HealthBar.changeValue(data.p2Health);
             sceneManager.indicators.makeIndicator("+2 Points", 1500,c.height/2, "rgba(0,255,100,0");
             sceneManager.indicators.makeIndicator("+10 Health", 1500,c.height/2+20, "rgba(0,255,100,0");
             break;
         case "heal":
             sceneManager.player2Animator.switchAnimation("heal");
-            sceneManager.player2HealthBar.changeValue(data.health);
+            sceneManager.player2HealthBar.changeValue(data.p2Health);
             sceneManager.indicators.makeIndicator("+30 Health", 1500,c.height/2, "rgba(0,255,100,0");
             break;
         case "damage":
@@ -210,16 +215,20 @@ socket.on("game-over", function(data) {
 
     setTimeout(function(){
         sceneManager.scene = 8;
-        game.xpGain = data.xpGain,
+        game.xpGain = data.xpGain;
         sceneManager.xpHealthBar.maxValue = data.oldNextLevel/100;
         sceneManager.xpHealthBar.value = data.oldXpLevel/100;
         sceneManager.xpHealthBar.changeValue(data.newXpLevel);
+
+        // sceneManager.skillLevelHealthBar.maxValue = Math.floor((data.skillLevel/100)+1);
+        sceneManager.skillLevelHealthBar.maxValue = 100;
+        sceneManager.skillLevelHealthBar.value = (data.skillLevel/100 - (Math.floor(data.skillLevel/100)))*100;
         
         if (data.levelUp) {
             setTimeout(function () {
                 game.levelUp = true;
                 sceneManager.xpHealthBar.maxValue = data.newNextLevel/100;
-                sceneManager.xpHealthBar.value = 0;
+                sceneManager.xpHealthBar.value = data.levelUpNewXpLevel;
                 setTimeout(function() {game.levelUp = false}, 3000);
             }, 3000);
         }
@@ -232,6 +241,8 @@ socket.on("game-over", function(data) {
     game.myData.xpLevel = data.levelUpNewXpLevel;
     game.myData.nextLevel = data.newNextLevel;
     game.myData.perkPoints = data.perkPoints;
+    game.myData.skillLevel = data.skillLevel;
+    console.log(game.myData.skillLevel);
     document.getElementById("textChat").value = "";
     document.getElementById("textChatInput").value = "";
     hideTextChat();
@@ -248,6 +259,7 @@ socket.on("game-cancelled", function() {
 socket.on("your-player", function(data) {
     game.whichPlayerAmI = data.which;
     game.player2.gamerTag = data.p2GT;
+    game.player2.skillLevel = data.p2SL;
 });
 
 // socket.on("game-map", function(map) {
@@ -311,6 +323,7 @@ socket.on("logged-in", function(userData) {
     game.myData.xpLevel = userData.xpLevel;
     game.myData.perksUnlocked = userData.perksUnlocked;
     game.myData.perkPoints = userData.perkPoints;
+    game.myData.skillLevel = userData.skillLevel;
     game.loggedIn = true;
 
     sessionStorage.setItem("firstName", userData.firstName);
@@ -323,11 +336,13 @@ socket.on("logged-in", function(userData) {
     sessionStorage.setItem("xpLevel", userData.xpLevel);
     sessionStorage.setItem("perksUnlocked", userData.perksUnlocked);
     sessionStorage.setItem("perkPoints", userData.perkPoints);
+    sessionStorage.setItem("skillLevel", userData.skillLevel);
 
     document.getElementById("loginContainer").style.display = "none";
     // document.getElementById("loginContainer").parentNode.removeChild(document.getElementById("loginContainer"));
     sceneManager.scene = 0;
     console.log("Logged in as " + game.myData.gamerTag);
+    console.log(userData.skillLevel);//////////////////////////////
 });
 
 socket.on("login-failed", function(message) {
@@ -367,6 +382,7 @@ socket.on("update-data", function(data) {
     game.myData.xpLevel = data.xpLevel;
     game.myData.perkPoints = data.perkPoints;
     game.myData.nextLevel = data.nextLevel;
+    game.myData.skillLevel = data.skillLevel;
 
 });
 
@@ -388,8 +404,9 @@ socket.on("removed-from-matchmaking", function() {
     sceneManager.matchmaking = false;
 })
 
-function matchmake() {
-    socket.emit("matchmake");
+function matchmake(ranked) {
+    if (ranked) socket.emit("ranked-matchmake");
+    if (!ranked) socket.emit("matchmake");
     sceneManager.matchmaking = true;
 }
 
@@ -416,34 +433,41 @@ function action(which) {
 }
 
 function resetGame() {
-    gameID = "";
-    game = {
-        points: 0,
-        health: 0,
-        turn: false,
-        winner: null,
-        over: false,
-        whichPlayerAmI: null,
-        map: 0,
-        player2: {health:100,points:5, turn: false, action: null, gamerTag: null},
-        characterType: null,
-        player2characterType: null,
-        win: null,
-        id: null,
-        hitDelay: 700,
-        levelUp: false,
-        myData: game.myData,
-        loggedIn: false,
-        xpGain: 0,
-    }
-    sceneManager.player1Animator = undefined;
-    sceneManager.player2Animator = undefined;
-    sceneManager.player1HealthBar.value = 0;
-    sceneManager.player2HealthBar.value = 0;
+    setTimeout(function() {
+
+        gameID = "";
+        game = {
+            ranked: false,
+            points: 0,
+            health: 0,
+            turn: false,
+            winner: null,
+            over: false,
+            whichPlayerAmI: null,
+            map: 0,
+            player2: {health:100,points:5, turn: false, action: null, gamerTag: null, skillLevel: 0},
+            characterType: null,
+            player2characterType: null,
+            win: null,
+            id: null,
+            hitDelay: 700,
+            levelUp: false,
+            myData: game.myData,
+            loggedIn: false,
+            xpGain: 0,
+            // slGain: 0,
+            // skillLevelUp: false,
+        }
+        sceneManager.player1Animator = undefined;
+        sceneManager.player2Animator = undefined;
+        sceneManager.player1HealthBar.value = 0;
+        sceneManager.player2HealthBar.value = 0;
+        game.notifValue = 0;
+        matchTimer = 0;
+        roundIndicator = true;
+    },1000);
+    
     sceneManager.matchmaking = false;
-    game.notifValue = 0;
-    matchTimer = 0;
-    roundIndicator = true;
 }
 
 function login(e, p) {
