@@ -448,6 +448,49 @@ io.sockets.on("connection", function(socket) {
     socket.on("send-text-chat",function(data){
         games[data.id].sendTextChatMessage(data.message);
     });
+
+    socket.on("request-leaderboard", function() {
+        db.query("SELECT * FROM users ORDER BY gamesWon ASC", function(error, results) {
+            if (error) {
+                socket.emit("recieve-leaderboard", {error: true, errorMessage: "Failed to get leaderboard data."});
+                return;
+            } else {
+                if (results.length > 0) {
+                    // let rawLeaderboard1 = results.sort(compareByWins);
+                    // let rawLeaderboard2 = results.sort(compareBySkillLevel); 
+                    // let rawLeaderboard3 = results.sort(compareByXP); 
+                    // console.table(results);
+                    // console.log("//////////////////////////////");
+                    let rawLeaderboard1 = [];
+                    results.forEach(element => {rawLeaderboard1.unshift(element)});
+
+                    let rawLeaderboard2 = results.sort((b,a) => {return a.skillLevel - b.skillLevel;}); 
+                    let rawLeaderboard3 = results.sort((b,a) => {return (a.nextLevel-1000 + a.xpLevel) - (b.nextLevel-1000 + b.xpLevel);}); 
+                    
+                    let leaderboard1 = [];
+                    let leaderboard2 = [];
+                    let leaderboard3 = [];
+                    
+                    // console.table(rawLeaderboard1);
+                    // console.log("//////////////////////////////");
+                    
+                    for (i = 0; i < 10; i++) {
+                        leaderboard1[i] = {gamertag: rawLeaderboard1[i].gamertag, data: rawLeaderboard1[i].gamesWon};
+                        leaderboard2[i] = {gamertag: rawLeaderboard2[i].gamertag, data: rawLeaderboard2[i].skillLevel + "sr"};
+                        leaderboard3[i] = {gamertag: rawLeaderboard3[i].gamertag, data: (rawLeaderboard3[i].nextLevel-1000 + rawLeaderboard3[i].xpLevel) + "xp"};
+                    }
+                    // console.table(leaderboard1);
+                    // console.log("//////////////////////////////");
+                    
+                    socket.emit("recieve-leaderboard", {error: false, leaderboard1: leaderboard1, leaderboard2: leaderboard2, leaderboard3: leaderboard3});
+                    return;
+                } else {
+                    socket.emit("recieve-leaderboard", {error: true, errorMessage: "Failed to get leaderboard data."});
+                    return;
+                }
+            }
+        });
+    });
 });
 
 function findGame(id) {

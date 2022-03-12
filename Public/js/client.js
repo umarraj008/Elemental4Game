@@ -404,6 +404,20 @@ socket.on("removed-from-matchmaking", function() {
     sceneManager.matchmaking = false;
 })
 
+socket.on("recieve-leaderboard", function(data) {
+    if (data.error) {
+        console.log(data.errorMessage);
+    } else {
+        console.table(data.leaderboard1);
+        console.table(data.leaderboard2);
+        console.table(data.leaderboard3);
+
+        sceneManager.leaderboard1 = data.leaderboard1;
+        sceneManager.leaderboard2 = data.leaderboard2;
+        sceneManager.leaderboard3 = data.leaderboard3;
+    }
+});
+
 function matchmake(ranked) {
     if (ranked) socket.emit("ranked-matchmake");
     if (!ranked) socket.emit("matchmake");
@@ -657,4 +671,8 @@ function loadSettings() {
         sceneManager.settingsButtons.fullscreenOn.style = "disabled";
         sceneManager.settingsButtons.fullscreenOff.style = "selected";
     }
+}
+
+function requestLeaderboard() {
+    socket.emit("request-leaderboard");
 }

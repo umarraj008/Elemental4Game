@@ -39,6 +39,10 @@ class SceneManager {
 
         this.ranks = ["Copper","Silver","Gold","Diamond","Warrior"];
 
+        this.leaderboard1 = [];
+        this.leaderboard2 = [];
+        this.leaderboard3 = [];
+
         //title screen buttons
         this.playButton = new Button(c.width/2-300,c.height/2-75,600,100, "Play");
         
@@ -51,7 +55,7 @@ class SceneManager {
         this.projectWebsiteButton = new Button(50,c.height-200,300,150, "Project Website");
         this.profilePageButton = new Button(c.width-350,c.height-200,300,150, "Profile");
         this.rankedMatchmakeButton = new Button(c.width/2-150,c.height/2+100,300,150, "Ranked Matchmake")
-
+        this.leaderboardButton = new Button(c.width/2-150,c.height/2-270,300,150, "Leaderboard");
         
         //settings buttons
         // this.settingsFullScreenButton = new Button(c.width/2-150,c.height/2-200,300,150, "Fullscreen");
@@ -65,7 +69,7 @@ class SceneManager {
         
         //profile page buttons
         this.profileBackButton = new Button(c.width/2-150,c.height/2+300,300,150, "Back");
-        this.profilePagePanel =new Panel(c.width/2-350, 120, 700, 600);
+        this.profilePagePanel =new Panel(c.width/2-350, 120, 700, 650);
 
         //game buttons
         this.actionButtons = {
@@ -85,6 +89,12 @@ class SceneManager {
             air: new Button(480+480+480,c.height/2-300,480,600,"Air"),
         };
         
+        //Leaderboard buttons
+        this.leaderboardBackButton = new Button(c.width/2-300,c.height/2+400,600,100, "Back");
+        this.leaderboardPanel1 = new Panel(380 - 250, 150, 560, 640);
+        this.leaderboardPanel2 = new Panel(c.width/2 - 250, 150, 560, 640);
+        this.leaderboardPanel3 = new Panel(c.width - 380 -250, 150, 560, 640);
+
         //game results page buttons
         this.resultsBackButton = new Button(c.width/2-300,c.height/2+400,600,100, "Back");
 
@@ -251,6 +261,9 @@ class SceneManager {
                 break;
             case 9: //profile page
                 this.drawProfilePage();
+                break;
+            case 10: //leaderboard page
+                this.drawLeaderboardPage();
                 break;
         }
 
@@ -534,6 +547,7 @@ class SceneManager {
             this.matchmakeButton.draw(dt, mouseX, mouseY);
             this.perkScreenButton.draw(dt,mouseX,mouseY);
             this.settingsButton.draw(dt,mouseX,mouseY);
+            this.leaderboardButton.draw(dt,mouseX,mouseY);
         }
 
         this.menuBackButton.draw(dt,mouseX,mouseY);
@@ -960,7 +974,7 @@ class SceneManager {
     }
 
     drawProfilePage(){
-          // ctx.fillStyle = "black";
+        // ctx.fillStyle = "black";
         // ctx.fillRect (0,0,c.width, c.height);
         this.maps.drawTransition(false);
 
@@ -982,14 +996,73 @@ class SceneManager {
 
         ctx.font = "50px "+ FONT;
         ctx.fillText("XP Level: " + game.myData.xpLevel,c.width/2-200, 350);
-        ctx.fillText("Skill Level: " + this.ranks[(Math.floor(game.myData.skillLevel/100)>= 5)? 4:Math.floor(game.myData.skillLevel/100)],c.width/2-200, 420);
-        ctx.fillText("Games Won: " + game.myData.gamesWon,c.width/2-200, 490);
-        ctx.fillText("Games Lost: " + game.myData.gamesLost,c.width/2-200, 560);
-        ctx.fillText("Games Played: " + (game.myData.gamesWon + game.myData.gamesLost),c.width/2-200, 630);
+        ctx.fillText("Rank: " + this.ranks[(Math.floor(game.myData.skillLevel/100)>= 5)? 4:Math.floor(game.myData.skillLevel/100)],c.width/2-200, 420);
+        ctx.fillText("Skill Level: " + game.myData.skillLevel + "sr",c.width/2-200, 490);
+        ctx.fillText("Games Won: " + game.myData.gamesWon,c.width/2-200, 560);
+        ctx.fillText("Games Lost: " + game.myData.gamesLost,c.width/2-200, 630);
+        ctx.fillText("Games Played: " + (game.myData.gamesWon + game.myData.gamesLost),c.width/2-200, 700);
 
         this.profileBackButton.draw(dt,mouseX,mouseY);
         
 
+    }
+
+    drawLeaderboardPage(){
+        this.maps.drawTransition(false);
+
+        //this will be draw title text 
+        ctx.font = "100px "+ FONT;
+        ctx.textAlign = "center";
+        ctx.fillStyle = "black";
+        ctx.fillText("Leaderboard",c.width/2+4, 94);
+        ctx.fillStyle = "white";
+        ctx.fillText("Leaderboard",c.width/2, 90);
+
+        this.leaderboardPanel1.draw()
+
+        this.leaderboardPanel2.draw()
+
+        this.leaderboardPanel3.draw()
+
+        ctx.font = "50px "+ FONT;
+        ctx.fillStyle = "black";
+        
+        for(let i = 0; i < 10; i++){
+            ctx.textAlign = "left";
+            ctx.fillText(this.leaderboard1[i].gamertag, this.leaderboardPanel1.x + 20, 300 + i * 50);
+            ctx.fillText(this.leaderboard2[i].gamertag, this.leaderboardPanel2.x + 20,300 + i * 50);
+            ctx.fillText(this.leaderboard3[i].gamertag, this.leaderboardPanel3.x + 20,300 + i * 50);
+            
+            ctx.textAlign = "right";
+            ctx.fillText(this.leaderboard1[i].data,this.leaderboardPanel1.x + this.leaderboardPanel1.w - 20, 300 + i * 50);
+            ctx.fillText(this.leaderboard2[i].data,this.leaderboardPanel2.x + this.leaderboardPanel2.w - 20, 300 + i * 50);
+            ctx.fillText(this.leaderboard3[i].data,this.leaderboardPanel3.x + this.leaderboardPanel3.w - 20, 300 + i * 50);
+        }
+        
+        ctx.textAlign = "center";
+        ctx.fillText("Most Games Won",this.leaderboardPanel1.x + this.leaderboardPanel1.w/2,210);
+        ctx.fillText("Top 10 Warriors",this.leaderboardPanel2.x + this.leaderboardPanel2.w/2,210);
+        ctx.fillText("Most XP collected",this.leaderboardPanel3.x + this.leaderboardPanel3.w/2,210);
+
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = "15px";
+        ctx.beginPath();
+        ctx.moveTo(this.leaderboardPanel1.x,230);       
+        ctx.lineTo(this.leaderboardPanel1.x + this.leaderboardPanel1.w, 230);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(this.leaderboardPanel2.x,230);       
+        ctx.lineTo(this.leaderboardPanel2.x + this.leaderboardPanel2.w, 230);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(this.leaderboardPanel3.x,230);       
+        ctx.lineTo(this.leaderboardPanel3.x + this.leaderboardPanel3.w, 230);
+        ctx.stroke();
+
+        this.leaderboardBackButton.draw(dt,mouseX,mouseY);
+        
     }
 
     mouseClick() {
@@ -1141,6 +1214,9 @@ class SceneManager {
                     location.href = "http://cybercloudstudios.co.uk"; 
                 } else if (this.profilePageButton.mouseOver(mouseX,mouseY)) {
                     this.camera.transitionTo(9,0.005); 
+                } else if (this.leaderboardButton.mouseOver(mouseX,mouseY)) {
+                    this.camera.transitionTo(10,0.005); 
+                    requestLeaderboard();
                 }
 
                 break;
@@ -1217,10 +1293,17 @@ class SceneManager {
                 }
                 break;  
             
-            case 9://profilepage
-            if(this.profileBackButton.mouseOver(mouseX,mouseY)) {
-                this.camera.transitionTo(4,0.005); 
-            }
+            case 9://profile page
+                if(this.profileBackButton.mouseOver(mouseX,mouseY)) {
+                    this.camera.transitionTo(4,0.005); 
+                }
+                break;
+
+            case 10://leaderboard
+                if(this.leaderboardBackButton.mouseOver(mouseX,mouseY)){
+                    this.camera.transitionTo(4,0.005)
+                }
+                break;
         }
     }
 
