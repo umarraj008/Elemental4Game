@@ -46,6 +46,7 @@ var whatCharacterWasI = null;
 var whatMapWasIt = null;
 var matchTimer = 0;
 var roundIndicator = true;
+var skillLevelGain = 0;
 
 socket.on("connect", function() {
     console.log("connected to server");
@@ -241,6 +242,7 @@ socket.on("game-over", function(data) {
     game.myData.xpLevel = data.levelUpNewXpLevel;
     game.myData.nextLevel = data.newNextLevel;
     game.myData.perkPoints = data.perkPoints;
+    skillLevelGain = (data.skillLevel - game.myData.skillLevel >= 0) ? ("+" + (data.skillLevel - game.myData.skillLevel) + "sr") : ("-" + Math.abs(data.skillLevel - game.myData.skillLevel) + "sr");
     game.myData.skillLevel = data.skillLevel;
     console.log(game.myData.skillLevel);
     document.getElementById("textChat").value = "";
@@ -260,6 +262,8 @@ socket.on("your-player", function(data) {
     game.whichPlayerAmI = data.which;
     game.player2.gamerTag = data.p2GT;
     game.player2.skillLevel = data.p2SL;
+    game.player2.nextLevel = data.p2NL;
+    game.player2.xpLevel = data.p2XP;
 });
 
 // socket.on("game-map", function(map) {
@@ -324,6 +328,7 @@ socket.on("logged-in", function(userData) {
     game.myData.perksUnlocked = userData.perksUnlocked;
     game.myData.perkPoints = userData.perkPoints;
     game.myData.skillLevel = userData.skillLevel;
+    game.myData.nextLevel = userData.nextLevel;
     game.loggedIn = true;
 
     sessionStorage.setItem("firstName", userData.firstName);

@@ -100,57 +100,44 @@ class SceneManager {
 
         this.logoutButton = new Button(50, c.height-200,300,150, "Logout");
 
+        this.perkButtonWidth = 390;
+        this.perkButtonHeight = 242;
         this.perkButtons = [
-            new Button(50,230,285,155,"+5 Damage"/*, false, true*/),
-            new Button(50,407,285,155,"+10 Damage"/*, false, true*/),
-            new Button(50,584,285,155,"+15 Damage"/*, false, true*/),
-            new Button(50,761,285,155,"+20 Damage"/*, false, true*/),
+            new Button(50,                               150, this.perkButtonWidth, this.perkButtonHeight, "Strength Boost" ),
+            new Button(50 + this.perkButtonWidth + 20,   150, this.perkButtonWidth, this.perkButtonHeight, "Max Health"),
+            new Button(50 + (this.perkButtonWidth+20)*2, 150, this.perkButtonWidth, this.perkButtonHeight, "Points Boost"),
+            
+            new Button(50,                               150+20+this.perkButtonHeight, this.perkButtonWidth, this.perkButtonHeight, "Just Wait"),
+            new Button(50 + this.perkButtonWidth + 20,   150+20+this.perkButtonHeight, this.perkButtonWidth, this.perkButtonHeight, "Double Damage"),
+            new Button(50 + (this.perkButtonWidth+20)*2, 150+20+this.perkButtonHeight, this.perkButtonWidth, this.perkButtonHeight, "Absorption"),
+            
+            new Button(50,                               150+(20+this.perkButtonHeight)*2, this.perkButtonWidth, this.perkButtonHeight, "Rebound"),
+            new Button(50 + this.perkButtonWidth + 20,   150+(20+this.perkButtonHeight)*2, this.perkButtonWidth, this.perkButtonHeight, "Deflection"),
+            new Button(50 + (this.perkButtonWidth+20)*2, 150+(20+this.perkButtonHeight)*2, this.perkButtonWidth, this.perkButtonHeight, "Double Take"),
+        ];
 
-            new Button(365,230,285,155,"+15 Health"/*, false, true*/),
-            new Button(365,407,285,155,"+30 Health"/*, false, true*/),
-            new Button(365,584,285,155,"+50 Health"/*, false, true*/),
-            new Button(365,761,285,155,"+70 Health"/*, false, true*/),
-
-            new Button(680,230,285,155,"x0.4 Critical Damage"/*, false, true*/),
-            new Button(680,407,285,155,"x0.6 Critical Damage"/*, false, true*/),
-            new Button(680,584,285,155,"x0.8 Critical Damage"/*, false, true*/),
-            new Button(680,761,285,155,"x1.0 Critical Damage"/*, false, true*/),
-
-            new Button(995,230,285,155,"3% Critical Hit Chance"/*, false, true*/),
-            new Button(995,407,285,155,"8% Critical Hit Chance"/*, false, true*/),
-            new Button(995,584,285,155,"15% Critical Hit Chance"/*, false, true*/),
-            new Button(995,761,285,155,"30% Critical Hit Chance"/*, false, true*/),
-        ]
-
-        this.perkButtons[8].font = "25px pixel";
-        this.perkButtons[9].font = "25px pixel";
-        this.perkButtons[10].font = "25px pixel";
-        this.perkButtons[11].font = "25px pixel";
-
-        this.perkButtons[12].font = "25px pixel";
-        this.perkButtons[13].font = "25px pixel";
-        this.perkButtons[14].font = "25px pixel";
-        this.perkButtons[15].font = "25px pixel";
+        this.perkButtons[0].font = "40px pixel";
+        this.perkButtons[1].font = "40px pixel";
+        this.perkButtons[2].font = "40px pixel";
+        this.perkButtons[3].font = "40px pixel";
+        this.perkButtons[4].font = "40px pixel";
+        this.perkButtons[5].font = "40px pixel";
+        this.perkButtons[6].font = "40px pixel";
+        this.perkButtons[7].font = "40px pixel";
+        this.perkButtons[8].font = "40px pixel";
         
         this.perkBuyButton = new Button(1364,400,470,80, "Buy Perk");
         this.perkButtons[0].selected = true;
         this.perkDescription = [
-            {string: "This will add extra dammage to your attacks!", price: 1,},
-            {string: "This will add extra dammage to your attacks!", price: 2,},
-            {string: "This will add extra dammage to your attacks!", price: 3,},
-            {string: "This will add extra dammage to your attacks!", price: 4,},
-            {string: "You will start with extra health!", price: 1,},
-            {string: "You will start with extra health!", price: 2,},
-            {string: "You will start with extra health!", price: 3,},
-            {string: "You will start with extra health!", price: 4,},
-            {string: "Increase the damage the critical hit does!", price: 1,},
-            {string: "Increase the damage the critical hit does!", price: 2,},
-            {string: "Increase the damage the critical hit does!", price: 3,},
-            {string: "Increase the damage the critical hit does!", price: 4,},
-            {string: "Increase the chance of getting a critical hit!", price: 1,},
-            {string: "Increase the chance of getting a critical hit!", price: 2,},
-            {string: "Increase the chance of getting a critical hit!", price: 3,},
-            {string: "Increase the chance of getting a critical hit!", price: 4,},
+            {string: "You instantly gain full health.", price: 1},
+            {string: "Your next attack will do 50% increased damage.", price: 1},
+            {string: "You will instantly gain 10 points.", price: 1},
+            {string: "Your opponent cannot attack or heal, they can only wait.", price: 1},
+            {string: "Your next attack will do double damage.", price: 1},
+            {string: "50% of the opponents next attack will be absorbed and converted to health.", price: 1},
+            {string: "The opponents next attack will rebound onto themself.", price: 1},
+            {string: "The opponents next attack will be deflected.", price: 1},
+            {string: "Take a second turn!", price: 1},
         ];
 
         this.indicators = new IndicatorSystem();
@@ -189,7 +176,23 @@ class SceneManager {
         this.perkPanel = new Panel(1300,150,589,766);
     } 
 
-
+    remakePerks(w, h) {
+        this.perkButtonWidth = w;
+        this.perkButtonHeight = h;
+        this.perkButtons = [
+            new Button(50,                               150, this.perkButtonWidth, this.perkButtonHeight, "Strength Boost" ),
+            new Button(50 + this.perkButtonWidth + 20,   150, this.perkButtonWidth, this.perkButtonHeight, "Max Health"),
+            new Button(50 + (this.perkButtonWidth+20)*2, 150, this.perkButtonWidth, this.perkButtonHeight, "Points Boost"),
+            
+            new Button(50,                               150+20+this.perkButtonHeight, this.perkButtonWidth, this.perkButtonHeight, "Just Wait"),
+            new Button(50 + this.perkButtonWidth + 20,   150+20+this.perkButtonHeight, this.perkButtonWidth, this.perkButtonHeight, "Double Damage"),
+            new Button(50 + (this.perkButtonWidth+20)*2, 150+20+this.perkButtonHeight, this.perkButtonWidth, this.perkButtonHeight, "Absorption"),
+            
+            new Button(50,                               150+(20+this.perkButtonHeight)*2, this.perkButtonWidth, this.perkButtonHeight, "Rebound"),
+            new Button(50 + this.perkButtonWidth + 20,   150+(20+this.perkButtonHeight)*2, this.perkButtonWidth, this.perkButtonHeight, "Deflection"),
+            new Button(50 + (this.perkButtonWidth+20)*2, 150+(20+this.perkButtonHeight)*2, this.perkButtonWidth, this.perkButtonHeight, "Double Take"),
+        ];
+    } 
 
     run() {
         ctx.clearRect(0,0,c.width,c.height);
@@ -563,9 +566,11 @@ class SceneManager {
         this.perkPanel.draw();
 
         //this will draw the Perk screen text
-        ctx.fillStyle= "white";
         ctx.font = "100px "+FONT;
         ctx.textAlign = "center";
+        ctx.fillStyle= "black";
+        ctx.fillText("Perk Screen",c.width/2+4, 114);
+        ctx.fillStyle= "white";
         ctx.fillText("Perk Screen",c.width/2, 110);
        
         //Back button
@@ -581,16 +586,16 @@ class SceneManager {
         ctx.textAlign ="center";
         ctx.font = "30px "+FONT;
 
-        ctx.fillText("Damage Boost",192,200);
-        ctx.fillText("Starting Health",507,200);
-        ctx.fillText("Critical Damage",822,200);
-        ctx.fillText("Critcal Hit Chance",1137,200);
+        // ctx.fillText("Damage Boost",192,200);
+        // ctx.fillText("Starting Health",507,200);
+        // ctx.fillText("Critical Damage",822,200);
+        // ctx.fillText("Critcal Hit Chance",1137,200);
 
         ctx.fillStyle = "black";
         ctx.fillText("Perk Information", 1599,200);
         ctx.fillText("Skill Points Available", 1452,633);
         ctx.fillText("Skill Progress", 1746,633);
-        ctx.fillText("5/25", 1746,860);
+        ctx.fillText("5/9", 1746,860);
 
         ctx.font = "180px "+FONT;
         ctx.fillText(game.myData.perkPoints, 1452,815);
@@ -798,14 +803,14 @@ class SceneManager {
             ctx.fillText("Price: 5",1284+148, 950);
             ctx.fillText("Price: 15",1600+148, 950);
 
-            let damageBoost = 0, healthBoost = 0;
-            switch(parseInt(game.myData.perksUnlocked.split(",")[0])) {
-                case 0: damageBoost = 0; break;
-                case 1: damageBoost = 5; break;
-                case 2: damageBoost = 10; break;
-                case 3: damageBoost = 15; break;
-                case 4: damageBoost = 20; break;
-            }
+            let damageBoost = 0;
+            // switch(parseInt(game.myData.perksUnlocked.split(",")[0])) {
+            //     case 0: damageBoost = 0; break;
+            //     case 1: damageBoost = 5; break;
+            //     case 2: damageBoost = 10; break;
+            //     case 3: damageBoost = 15; break;
+            //     case 4: damageBoost = 20; break;
+            // }
 
             ctx.fillText("10 Health, 2 points", 20+148, 1000);
             ctx.fillText("30 Health",336+148, 1000);
@@ -850,15 +855,19 @@ class SceneManager {
         ctx.textAlign = "left";
         ctx.font = "60px "+FONT;
         ctx.fillStyle = "black";
-        ctx.fillText(game.myData.gamerTag + " [" + this.ranks[(Math.floor(game.myData.skillLevel/100) >= 5) ? 4 : (Math.floor(game.myData.skillLevel/100))] + "]", 54, 104);
+        if (game.ranked) ctx.fillText(game.myData.gamerTag + " [" + this.ranks[(Math.floor(game.myData.skillLevel/100) >= 5) ? 4 : (Math.floor(game.myData.skillLevel/100))] + "]", 54, 104);
+        if (!game.ranked) ctx.fillText(game.myData.gamerTag + " [" + (game.myData.nextLevel-1000 + game.myData.xpLevel + "xp") + "]", 54, 104);
         ctx.fillStyle = "white";
-        ctx.fillText(game.myData.gamerTag + " [" + this.ranks[(Math.floor(game.myData.skillLevel/100) >= 5) ? 4 : (Math.floor(game.myData.skillLevel/100))] + "]", 50, 100);
+        if (game.ranked) ctx.fillText(game.myData.gamerTag + " [" + this.ranks[(Math.floor(game.myData.skillLevel/100) >= 5) ? 4 : (Math.floor(game.myData.skillLevel/100))] + "]", 50, 100);
+        if (!game.ranked) ctx.fillText(game.myData.gamerTag + " [" + (game.myData.nextLevel-1000 + game.myData.xpLevel + "xp") + "]", 50, 100);
         
         ctx.textAlign = "right";        
         ctx.fillStyle = "black";
-        ctx.fillText(game.player2.gamerTag + " [" + this.ranks[(Math.floor(game.player2.skillLevel/100) >= 5) ? 4 : (Math.floor(game.player2.skillLevel/100))] + "]",c.width -48, 104);
+        if (game.ranked) ctx.fillText(game.player2.gamerTag + " [" + this.ranks[(Math.floor(game.player2.skillLevel/100) >= 5) ? 4 : (Math.floor(game.player2.skillLevel/100))] + "]",c.width -48, 104);
+        if (!game.ranked) ctx.fillText(game.player2.gamerTag + " [" + (game.player2.nextLevel-1000 + game.player2.xpLevel + "xp") + "]",c.width -48, 104);
         ctx.fillStyle = "white";
-        ctx.fillText(game.player2.gamerTag + " [" + this.ranks[(Math.floor(game.player2.skillLevel/100) >= 5) ? 4 : (Math.floor(game.player2.skillLevel/100))] + "]",c.width -50, 100);
+        if (game.ranked) ctx.fillText(game.player2.gamerTag + " [" + this.ranks[(Math.floor(game.player2.skillLevel/100) >= 5) ? 4 : (Math.floor(game.player2.skillLevel/100))] + "]",c.width -50, 100);
+        if (!game.ranked) ctx.fillText(game.player2.gamerTag + " [" + (game.player2.nextLevel-1000 + game.player2.xpLevel + "xp") + "]",c.width -50, 100);
 
 
         this.indicators.draw();
@@ -967,8 +976,12 @@ class SceneManager {
             ctx.fillStyle = "black";
             ctx.textAlign = "center";
             ctx.font = "30px "+FONT;
-            ctx.fillText("Current Rank: " + this.ranks[((Math.floor(game.myData.skillLevel/100) >= 5) ? 4 : Math.floor(game.myData.skillLevel/100))] + " " + Math.floor(this.skillLevelHealthBar.value) + "/" + this.skillLevelHealthBar.maxValue + " -> Next Rank: " + this.ranks[(Math.floor((game.myData.skillLevel/100)+1) >= 5) ? 4 : Math.floor((game.myData.skillLevel/100)+1)], c.width/2, c.height/2+350);
-
+            // ctx.fillText("Current Rank: " + this.ranks[((Math.floor(game.myData.skillLevel/100) >= 5) ? 4 : Math.floor(game.myData.skillLevel/100))] + " " + Math.floor(this.skillLevelHealthBar.value) + "/" + this.skillLevelHealthBar.maxValue + " -> Next Rank: " + this.ranks[(Math.floor((game.myData.skillLevel/100)+1) >= 5) ? 4 : Math.floor((game.myData.skillLevel/100)+1)], c.width/2, c.height/2+350);
+            ctx.fillText(Math.floor(this.skillLevelHealthBar.value) + "/" + this.skillLevelHealthBar.maxValue, c.width/2, c.height/2+350);
+            ctx.textAlign = "left"
+            ctx.fillText("Current Rank: " + this.ranks[((Math.floor(game.myData.skillLevel/100) >= 5) ? 4 : Math.floor(game.myData.skillLevel/100))], this.skillLevelHealthBar.x, c.height/2+350);
+            ctx.textAlign = "right"
+            ctx.fillText(skillLevelGain, this.skillLevelHealthBar.x + this.skillLevelHealthBar.w, c.height/2+350);
         }
         this.resultsBackButton.draw(dt,mouseX,mouseY);
     }
@@ -1229,10 +1242,10 @@ class SceneManager {
                         this.perkConfirmWindow = true;
                     }
                     break;
-                } else if (this.perkConfirmCancelButton.mouseOver(mouseX, mouseY)) {
+                } else if (this.perkConfirmWindow && this.perkConfirmCancelButton.mouseOver(mouseX, mouseY)) {
                     this.perkConfirmWindow = false;
                     break;
-                } else if (this.perkConfirmConfirmButton.mouseOver(mouseX, mouseY)) {
+                } else if (this.perkConfirmWindow && this.perkConfirmConfirmButton.mouseOver(mouseX, mouseY)) {
                     //buy perk
                     buyPerk(this.selectedPerk);
                     break;

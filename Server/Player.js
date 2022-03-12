@@ -31,37 +31,37 @@ module.exports = class Player {
             {name: "Ultimate", cost: 15, damage: 70},
         ];
 
-        //starting health
-        switch (parseInt(this.perksUnlocked[0])) {
-            case 1: this.damageBoost = 5; break;
-            case 2: this.damageBoost = 10; break;
-            case 3: this.damageBoost = 15; break;
-            case 4: this.damageBoost = 20; break;   
-        } 
+        // //starting health
+        // switch (parseInt(this.perksUnlocked[0])) {
+        //     case 1: this.damageBoost = 5; break;
+        //     case 2: this.damageBoost = 10; break;
+        //     case 3: this.damageBoost = 15; break;
+        //     case 4: this.damageBoost = 20; break;   
+        // } 
 
-        //damage boost
-        switch (parseInt(this.perksUnlocked[1])) {
-            case 1: this.health = 100 + 15; break;  
-            case 2: this.health = 100 + 30; break;
-            case 3: this.health = 100 + 50; break;   
-            case 4: this.health = 100 + 70; break;
-        } 
+        // //damage boost
+        // switch (parseInt(this.perksUnlocked[1])) {
+        //     case 1: this.health = 100 + 15; break;  
+        //     case 2: this.health = 100 + 30; break;
+        //     case 3: this.health = 100 + 50; break;   
+        //     case 4: this.health = 100 + 70; break;
+        // } 
 
-        //critical damage ammount
-        switch (parseInt(this.perksUnlocked[2])) {
-            case 1: this.criticalDamage = 0.4; break;  
-            case 2: this.criticalDamage = 0.6; break;    
-            case 3: this.criticalDamage = 0.8; break;    
-            case 4: this.criticalDamage = 1; break;  
-        } 
+        // //critical damage ammount
+        // switch (parseInt(this.perksUnlocked[2])) {
+        //     case 1: this.criticalDamage = 0.4; break;  
+        //     case 2: this.criticalDamage = 0.6; break;    
+        //     case 3: this.criticalDamage = 0.8; break;    
+        //     case 4: this.criticalDamage = 1; break;  
+        // } 
 
-        //critical damage chance
-        switch (parseInt(this.perksUnlocked[3])) {
-            case 1: this.criticalDamageChance = 0.03; break;  
-            case 2: this.criticalDamageChance = 0.08; break;    
-            case 3: this.criticalDamageChance = 0.15; break;    
-            case 4: this.criticalDamageChance = 0.30; break;    
-        } 
+        // //critical damage chance
+        // switch (parseInt(this.perksUnlocked[3])) {
+        //     case 1: this.criticalDamageChance = 0.03; break;  
+        //     case 2: this.criticalDamageChance = 0.08; break;    
+        //     case 3: this.criticalDamageChance = 0.15; break;    
+        //     case 4: this.criticalDamageChance = 0.30; break;    
+        // } 
     }
     
     takeDamage(ammount) {
@@ -124,11 +124,12 @@ module.exports = class Player {
             //     }
             // }
             //oldSkillLevel = this.skillLevel;
-            if (this.ranked) this.skillLevel += 10 + Math.floor((this.totalDamage/this.totalPoints));
+            // if (this.ranked) this.skillLevel += 10 + Math.floor((this.totalDamage/this.totalPoints));
+            if (this.ranked) this.skillLevel += Math.floor(10 + (5 * (this.totalDamage/100)));
         } else {
             this.gamesLost++;
             if (this.ranked) {
-                this.skillLevel -= 10 + Math.floor((this.totalDamage/this.totalPoints));
+                this.skillLevel -= Math.floor(10 + (5 * (this.totalDamage/100)));
                 if (this.skillLevel <= 0) {
                     this.skillLevel = 0;
                 }

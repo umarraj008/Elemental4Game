@@ -22,8 +22,8 @@ module.exports = class Game {
         this.map = Math.floor(Math.random() * 4) + 1;
         //this.sendMessageToBothPlayers("game-map", this.map);
         this.sendMessageToBothPlayers("pick-character", {gameID: this.id, map: this.map, ranked: this.ranked});
-        this.player1.sendMessage("your-player", {which: 1, p2GT: this.player2.gamerTag, p2SL: this.player2.skillLevel});
-        this.player2.sendMessage("your-player", {which: 2, p2GT: this.player1.gamerTag, p2SL: this.player1.skillLevel});
+        this.player1.sendMessage("your-player", {which: 1, p2GT: this.player2.gamerTag, p2SL: this.player2.skillLevel, p2NL: this.player2.nextLevel, p2XP: this.player2.xpLevel});
+        this.player2.sendMessage("your-player", {which: 2, p2GT: this.player1.gamerTag, p2SL: this.player1.skillLevel, p2NL: this.player1.nextLevel, p2XP: this.player1.xpLevel});
         
         //console.log(this.player1.skillLevel, this.player2.skillLevel);////////////////////////////////////////////
     }
@@ -138,13 +138,13 @@ module.exports = class Game {
                     this.player1.points -= this.player1.attacks[action].cost;
                     this.player1.totalPoints += this.player1.attacks[action].cost;
 
-                    let criticalDamage = 0;
-                    if (Math.random()*100 <= 100*this.player1.criticalDamageChance) {
-                        this.player1.critical = true;
-                        criticalDamage = this.player1.attacks[action].damage * this.player1.criticalDamage;
-                    }
+                    // let criticalDamage = 0;
+                    // if (Math.random()*100 <= 100*this.player1.criticalDamageChance) {
+                    //     this.player1.critical = true;
+                    //     criticalDamage = this.player1.attacks[action].damage * this.player1.criticalDamage;
+                    // }
                     
-                    let damage = this.player1.attacks[action].damage + this.player1.damageBoost + criticalDamage;
+                    let damage = this.player1.attacks[action].damage; // + this.player1.damageBoost + criticalDamage;
 
                     this.player1.totalDamage += damage;
                     this.player2.takeDamage(damage);
@@ -173,13 +173,13 @@ module.exports = class Game {
                     this.player2.points -= this.player2.attacks[action].cost;
                     this.player2.totalPoints += this.player2.attacks[action].cost;
 
-                    let criticalDamage = 0;
-                    if (Math.random()*100 <= 100*this.player2.criticalDamageChance) {
-                        this.player2.critical = true;
-                        criticalDamage = this.player2.attacks[action].damage * this.player2.criticalDamage;
-                    }
+                    // let criticalDamage = 0;
+                    // if (Math.random()*100 <= 100*this.player2.criticalDamageChance) {
+                    //     this.player2.critical = true;
+                    //     criticalDamage = this.player2.attacks[action].damage * this.player2.criticalDamage;
+                    // }
                     
-                    let damage = this.player2.attacks[action].damage + this.player2.damageBoost + criticalDamage;
+                    let damage = this.player2.attacks[action].damage; // + this.player2.damageBoost + criticalDamage;
 
                     this.player2.totalDamage += damage;
                     this.player1.takeDamage(damage);
