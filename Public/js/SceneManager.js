@@ -39,7 +39,9 @@ class SceneManager {
 
         this.ranks = ["Copper","Silver","Gold","Diamond","Warrior"];
 
-        this.leaderboard = ["Copper","Silver","Gold","Diamond","Warrior","Copper","Silver","Gold","Diamond","babatundeirl1234"];
+        this.leaderboard1 = [];
+        this.leaderboard2 = [];
+        this.leaderboard3 = [];
 
         //title screen buttons
         this.playButton = new Button(c.width/2-300,c.height/2-75,600,100, "Play");
@@ -67,7 +69,7 @@ class SceneManager {
         
         //profile page buttons
         this.profileBackButton = new Button(c.width/2-150,c.height/2+300,300,150, "Back");
-        this.profilePagePanel =new Panel(c.width/2-350, 120, 700, 600);
+        this.profilePagePanel =new Panel(c.width/2-350, 120, 700, 650);
 
         //game buttons
         this.actionButtons = {
@@ -89,9 +91,9 @@ class SceneManager {
         
         //Leaderboard buttons
         this.leaderboardBackButton = new Button(c.width/2-300,c.height/2+400,600,100, "Back");
-        this.leaderboardPanel1 = new Panel(380 - 250, 150, 500, 640);
-        this.leaderboardPanel2 = new Panel(c.width/2 - 250, 150, 500, 640);
-        this.leaderboardPanel3 = new Panel(c.width - 380 -250, 150, 500, 640);
+        this.leaderboardPanel1 = new Panel(380 - 250, 150, 560, 640);
+        this.leaderboardPanel2 = new Panel(c.width/2 - 250, 150, 560, 640);
+        this.leaderboardPanel3 = new Panel(c.width - 380 -250, 150, 560, 640);
 
         //game results page buttons
         this.resultsBackButton = new Button(c.width/2-300,c.height/2+400,600,100, "Back");
@@ -984,10 +986,11 @@ class SceneManager {
 
         ctx.font = "50px "+ FONT;
         ctx.fillText("XP Level: " + game.myData.xpLevel,c.width/2-200, 350);
-        ctx.fillText("Skill Level: " + this.ranks[(Math.floor(game.myData.skillLevel/100)>= 5)? 4:Math.floor(game.myData.skillLevel/100)],c.width/2-200, 420);
-        ctx.fillText("Games Won: " + game.myData.gamesWon,c.width/2-200, 490);
-        ctx.fillText("Games Lost: " + game.myData.gamesLost,c.width/2-200, 560);
-        ctx.fillText("Games Played: " + (game.myData.gamesWon + game.myData.gamesLost),c.width/2-200, 630);
+        ctx.fillText("Rank: " + this.ranks[(Math.floor(game.myData.skillLevel/100)>= 5)? 4:Math.floor(game.myData.skillLevel/100)],c.width/2-200, 420);
+        ctx.fillText("Skill Level: " + game.myData.skillLevel + "sr",c.width/2-200, 490);
+        ctx.fillText("Games Won: " + game.myData.gamesWon,c.width/2-200, 560);
+        ctx.fillText("Games Lost: " + game.myData.gamesLost,c.width/2-200, 630);
+        ctx.fillText("Games Played: " + (game.myData.gamesWon + game.myData.gamesLost),c.width/2-200, 700);
 
         this.profileBackButton.draw(dt,mouseX,mouseY);
         
@@ -1012,40 +1015,40 @@ class SceneManager {
         this.leaderboardPanel3.draw()
 
         ctx.font = "50px "+ FONT;
-        ctx.textAlign = "center";
         ctx.fillStyle = "black";
-
+        
         for(let i = 0; i < 10; i++){
-            ctx.fillText(this.leaderboard[i],380,300 + i * 50);
+            ctx.textAlign = "left";
+            ctx.fillText(this.leaderboard1[i].gamertag, this.leaderboardPanel1.x + 20, 300 + i * 50);
+            ctx.fillText(this.leaderboard2[i].gamertag, this.leaderboardPanel2.x + 20,300 + i * 50);
+            ctx.fillText(this.leaderboard3[i].gamertag, this.leaderboardPanel3.x + 20,300 + i * 50);
+            
+            ctx.textAlign = "right";
+            ctx.fillText(this.leaderboard1[i].data,this.leaderboardPanel1.x + this.leaderboardPanel1.w - 20, 300 + i * 50);
+            ctx.fillText(this.leaderboard2[i].data,this.leaderboardPanel2.x + this.leaderboardPanel2.w - 20, 300 + i * 50);
+            ctx.fillText(this.leaderboard3[i].data,this.leaderboardPanel3.x + this.leaderboardPanel3.w - 20, 300 + i * 50);
         }
-
-        for(let i = 0; i < 10; i++){
-            ctx.fillText(this.leaderboard[i],c.width/2,300 + i * 50);
-        }
-
-        for(let i = 0; i < 10; i++){
-            ctx.fillText(this.leaderboard[i],c.width - 380,300 + i * 50);
-        }
-
-        ctx.fillText("Most Games Won",380,210);
-        ctx.fillText("Warrior (Top 10)",c.width/2,210);
-        ctx.fillText("Most XP collected",c.width - 380,210);
+        
+        ctx.textAlign = "center";
+        ctx.fillText("Most Games Won",this.leaderboardPanel1.x + this.leaderboardPanel1.w/2,210);
+        ctx.fillText("Top 10 Warriors",this.leaderboardPanel2.x + this.leaderboardPanel2.w/2,210);
+        ctx.fillText("Most XP collected",this.leaderboardPanel3.x + this.leaderboardPanel3.w/2,210);
 
         ctx.strokeStyle = "black";
         ctx.lineWidth = "15px";
         ctx.beginPath();
-        ctx.moveTo(380-250,230);       
-        ctx.lineTo(380 + 250, 230);
+        ctx.moveTo(this.leaderboardPanel1.x,230);       
+        ctx.lineTo(this.leaderboardPanel1.x + this.leaderboardPanel1.w, 230);
         ctx.stroke();
 
         ctx.beginPath();
-        ctx.moveTo(c.width/2-250,230);       
-        ctx.lineTo(c.width/2 + 250, 230);
+        ctx.moveTo(this.leaderboardPanel2.x,230);       
+        ctx.lineTo(this.leaderboardPanel2.x + this.leaderboardPanel2.w, 230);
         ctx.stroke();
 
         ctx.beginPath();
-        ctx.moveTo(c.width -380-250,230);       
-        ctx.lineTo(c.width - 380 + 250, 230);
+        ctx.moveTo(this.leaderboardPanel3.x,230);       
+        ctx.lineTo(this.leaderboardPanel3.x + this.leaderboardPanel3.w, 230);
         ctx.stroke();
 
         this.leaderboardBackButton.draw(dt,mouseX,mouseY);
@@ -1203,6 +1206,7 @@ class SceneManager {
                     this.camera.transitionTo(9,0.005); 
                 } else if (this.leaderboardButton.mouseOver(mouseX,mouseY)) {
                     this.camera.transitionTo(10,0.005); 
+                    requestLeaderboard();
                 }
 
                 break;

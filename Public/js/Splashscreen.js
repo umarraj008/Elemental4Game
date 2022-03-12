@@ -17,6 +17,8 @@ class Splash {
         ctx.textAlign = "center";
         ctx.font = "70px pixel";
         ctx.fillText("Cybercloud Studios", c.width/2, c.height/2);
+        ctx.font = "50px pixel";
+        ctx.fillText("Presents", c.width/2, c.height/2+50);
 
         //transision in
         if (this.opacity < 1 && this.transisionIn) {
