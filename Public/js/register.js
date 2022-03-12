@@ -60,11 +60,14 @@ function registerButtonPressed() {
     let password = document.getElementById("password").value;
     let confirmPassword = document.getElementById("confirmPassword").value;
     
+    register(firstName,lastName,email,DOB,gamerTag,password);
+    registerPressed = true;
+    location.href = "index.html";
     // register();
-    if(password == confirmPassword) {
-        register(firstName,lastName,email,DOB,gamerTag,password);
-        registerPressed = true;
-    } else {
-        console.log("passwords dont match");
-    }
+    // if(password == confirmPassword) {
+    //     register(firstName,lastName,email,DOB,gamerTag,password);
+    //     registerPressed = true;
+    // } else {
+    //     console.log("passwords dont match");
+    // }
 }
