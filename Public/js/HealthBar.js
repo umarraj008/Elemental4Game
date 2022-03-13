@@ -37,7 +37,7 @@ class HealthBar{
         }
 
         if (this.constant) {
-            this.fillColor = "lime";
+            this.fillColor = this.color1;
         } else {
             if (this.value <= this.range3 && this.value >=0){
                 this.fillColor = this.color3

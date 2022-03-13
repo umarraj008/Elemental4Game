@@ -27,6 +27,8 @@ class SceneManager {
         // this.windParticleSystem = new WindParticleSystem();
         this.player1HealthBar = new HealthBar(50,120,700,30,0,200, false);
         this.player2HealthBar = new HealthBar(-(c.width-50), 120, 700, 30,0,200, false);
+        this.player1PerkBar = new HealthBar(50,150,700,10,0,100, true); this.player1PerkBar.color1 = "yellow";
+        this.player2PerkBar = new HealthBar(-(c.width-50), 150, 700, 10,0,100, true); this.player2PerkBar.color1 = "yellow";
         this.xpHealthBar = new HealthBar(c.width/2-450, c.height/2+170, 900, 30, 0, 100, true);
         this.xpHealthBar.speed = 0.07;
         this.skillLevelHealthBar = new HealthBar(c.width/2-450, c.height/2+280, 900, 30, 0, 100, true);
@@ -103,16 +105,16 @@ class SceneManager {
         this.perkButtonWidth = 390;
         this.perkButtonHeight = 242;
         this.perkButtons = [
-            new Button(50,                               150, this.perkButtonWidth, this.perkButtonHeight, "Strength Boost" ),
-            new Button(50 + this.perkButtonWidth + 20,   150, this.perkButtonWidth, this.perkButtonHeight, "Max Health"),
+            new Button(50,                               150, this.perkButtonWidth, this.perkButtonHeight, "Absorption" ),
+            new Button(50 + this.perkButtonWidth + 20,   150, this.perkButtonWidth, this.perkButtonHeight, "Strength Boost "),
             new Button(50 + (this.perkButtonWidth+20)*2, 150, this.perkButtonWidth, this.perkButtonHeight, "Points Boost"),
             
-            new Button(50,                               150+20+this.perkButtonHeight, this.perkButtonWidth, this.perkButtonHeight, "Just Wait"),
-            new Button(50 + this.perkButtonWidth + 20,   150+20+this.perkButtonHeight, this.perkButtonWidth, this.perkButtonHeight, "Double Damage"),
-            new Button(50 + (this.perkButtonWidth+20)*2, 150+20+this.perkButtonHeight, this.perkButtonWidth, this.perkButtonHeight, "Absorption"),
+            new Button(50 + (this.perkButtonWidth+20)*2, 150+20+this.perkButtonHeight, this.perkButtonWidth, this.perkButtonHeight, "Just Wait"),
+            new Button(50,                               150+20+this.perkButtonHeight, this.perkButtonWidth, this.perkButtonHeight, "Max Health"),
+            new Button(50 + this.perkButtonWidth + 20,   150+20+this.perkButtonHeight, this.perkButtonWidth, this.perkButtonHeight, "Deflection"),
             
             new Button(50,                               150+(20+this.perkButtonHeight)*2, this.perkButtonWidth, this.perkButtonHeight, "Rebound"),
-            new Button(50 + this.perkButtonWidth + 20,   150+(20+this.perkButtonHeight)*2, this.perkButtonWidth, this.perkButtonHeight, "Deflection"),
+            new Button(50 + this.perkButtonWidth + 20,   150+(20+this.perkButtonHeight)*2, this.perkButtonWidth, this.perkButtonHeight, "Double Damage"),
             new Button(50 + (this.perkButtonWidth+20)*2, 150+(20+this.perkButtonHeight)*2, this.perkButtonWidth, this.perkButtonHeight, "Double Take"),
         ];
 
@@ -127,17 +129,18 @@ class SceneManager {
         this.perkButtons[8].font = "40px pixel";
         
         this.perkBuyButton = new Button(1364,400,470,80, "Buy Perk");
+        this.perkActivateButton = new Button(1364,500,470,80, "Activate Perk");
         this.perkButtons[0].selected = true;
         this.perkDescription = [
-            {string: "You instantly gain full health.", price: 1},
-            {string: "Your next attack will do 50% increased damage.", price: 1},
-            {string: "You will instantly gain 10 points.", price: 1},
-            {string: "Your opponent cannot attack or heal, they can only wait.", price: 1},
-            {string: "Your next attack will do double damage.", price: 1},
-            {string: "50% of the opponents next attack will be absorbed and converted to health.", price: 1},
-            {string: "The opponents next attack will rebound onto themself.", price: 1},
-            {string: "The opponents next attack will be deflected.", price: 1},
-            {string: "Take a second turn!", price: 1},
+            {string: "50% of the opponents next attack will be", string2: "absorbed and converted to health.", price: 5},
+            {string: "Your next attack will do 50% increased damage.", price: 5},
+            {string: "You will instantly gain 10 points.", price: 5},
+            {string: "Your opponent cannot attack or heal,", string2: "they can only wait.", price: 10},
+            {string: "You instantly gain full health.", price: 10},
+            {string: "The opponents next attack will be deflected.", price: 10},
+            {string: "The opponents next attack will", string2: "rebound onto themself.", price: 20},
+            {string: "Your next attack will do double damage.", price: 20},
+            {string: "Take a second turn!", price: 20},
         ];
 
         this.indicators = new IndicatorSystem();
@@ -174,24 +177,8 @@ class SceneManager {
         this.resultsPanel2 = new Panel(c.width/2-500,c.height/2-300,1000, 680);
         this.perkConfirmPanel = new Panel(c.width/2-400,c.height/2-300, 800, 500);
         this.perkPanel = new Panel(1300,150,589,766);
-    } 
 
-    remakePerks(w, h) {
-        this.perkButtonWidth = w;
-        this.perkButtonHeight = h;
-        this.perkButtons = [
-            new Button(50,                               150, this.perkButtonWidth, this.perkButtonHeight, "Strength Boost" ),
-            new Button(50 + this.perkButtonWidth + 20,   150, this.perkButtonWidth, this.perkButtonHeight, "Max Health"),
-            new Button(50 + (this.perkButtonWidth+20)*2, 150, this.perkButtonWidth, this.perkButtonHeight, "Points Boost"),
-            
-            new Button(50,                               150+20+this.perkButtonHeight, this.perkButtonWidth, this.perkButtonHeight, "Just Wait"),
-            new Button(50 + this.perkButtonWidth + 20,   150+20+this.perkButtonHeight, this.perkButtonWidth, this.perkButtonHeight, "Double Damage"),
-            new Button(50 + (this.perkButtonWidth+20)*2, 150+20+this.perkButtonHeight, this.perkButtonWidth, this.perkButtonHeight, "Absorption"),
-            
-            new Button(50,                               150+(20+this.perkButtonHeight)*2, this.perkButtonWidth, this.perkButtonHeight, "Rebound"),
-            new Button(50 + this.perkButtonWidth + 20,   150+(20+this.perkButtonHeight)*2, this.perkButtonWidth, this.perkButtonHeight, "Deflection"),
-            new Button(50 + (this.perkButtonWidth+20)*2, 150+(20+this.perkButtonHeight)*2, this.perkButtonWidth, this.perkButtonHeight, "Double Take"),
-        ];
+        this.perkActivationButton = new Button(610, 670, 700, 150, "Activate Perk"); //for in game
     } 
 
     run() {
@@ -595,7 +582,7 @@ class SceneManager {
         ctx.fillText("Perk Information", 1599,200);
         ctx.fillText("Skill Points Available", 1452,633);
         ctx.fillText("Skill Progress", 1746,633);
-        ctx.fillText("5/9", 1746,860);
+        ctx.fillText(perkCount + "/9", 1746,860);
 
         ctx.font = "180px "+FONT;
         ctx.fillText(game.myData.perkPoints, 1452,815);
@@ -605,15 +592,32 @@ class SceneManager {
         ctx.textAlign = "center";
         ctx.font = "25px "+FONT;
         ctx.fillText(this.perkDescription[this.selectedPerk].string, 1599,240);
+        if (this.perkDescription[this.selectedPerk].string2 != undefined) ctx.fillText(this.perkDescription[this.selectedPerk].string2, 1599,265);
+
+        ctx.fillStyle = "black";
+        ctx.fillRect(this.perkPanel.x, 275, this.perkPanel.w, 5);
+        ctx.fillRect(this.perkPanel.x, 595, this.perkPanel.w, 5);
+        ctx.fillRect(this.perkPanel.x+(this.perkPanel.w/2), 595, 4, 320);
+
+        //perk progress
+        ctx.strokeStyle = "black";
+        // ctx.lineWidth = 20;
+        // ctx.arc(this.perkPanel.x + (this.perkPanel.w/2), 1452, 100, 0, progressAngle)
+        // ctx.stroke();
+        
+        ctx.font = "140px "+FONT;
+        ctx.textAlign = "center";
+        ctx.fillText(Math.floor(perkCount/9*100) + "%", this.perkPanel.x + this.perkPanel.w/4*3, 800);
 
         //perk price
         ctx.font = "30px "+FONT;
-        ctx.fillText("Price", 1599,300);
+        ctx.fillText("Price", 1599,310);
         ctx.font = "100px "+FONT;
-        ctx.fillText(this.perkDescription[this.selectedPerk].price, 1599,370);
+        ctx.fillText(this.perkDescription[this.selectedPerk].price, 1599,380);
 
         //Buy button
         this.perkBuyButton.draw(dt,mouseX,mouseY);
+        this.perkActivateButton.draw(dt,mouseX,mouseY);
 
         //confirm window
         if (this.perkConfirmWindow) {
@@ -783,6 +787,10 @@ class SceneManager {
 
             this.actionButtons.wait.draw(dt, mouseX, mouseY);
 
+            //perk button
+            if (game.perkBarValue >= 100) {
+                this.perkActivationButton.draw(dt, mouseX, mouseY);
+            }
 
             ctx.fillStyle = "black";
             ctx.textAlign = "center";
@@ -837,19 +845,23 @@ class SceneManager {
         ctx.font = "40px "+FONT;
         ctx.fillStyle = "black";
         ctx.fillText("health: " + game.health, 52, 202);
-        ctx.fillText("points: " + game.points, 52, 252);
+        ctx.fillText("Perk Stamina: " + game.perkBarValue, 52, 252);
+        ctx.fillText("points: " + game.points, 52, 302);
         ctx.fillStyle = "white";
         ctx.fillText("health: " + game.health, 50, 200);
-        ctx.fillText("points: " + game.points, 50, 250);
+        ctx.fillText("Perk Stamina: " + game.perkBarValue, 50, 250);
+        ctx.fillText("points: " + game.points, 50, 300);
         
 
         ctx.textAlign = "right";
         ctx.fillStyle = "black";
         ctx.fillText("health: " + game.player2.health, c.width-48, 202);
-        ctx.fillText("points: " + game.player2.points, c.width-48, 252);
+        ctx.fillText("Perk Stamina: " + game.player2.perkBarValue, c.width-48, 252);
+        ctx.fillText("points: " + game.player2.points, c.width-48, 302);
         ctx.fillStyle = "white";
         ctx.fillText("health: " + game.player2.health, c.width-50, 200);
-        ctx.fillText("points: " + game.player2.points, c.width-50, 250);
+        ctx.fillText("Perk Stamina: " + game.player2.perkBarValue, c.width-50, 250);
+        ctx.fillText("points: " + game.player2.points, c.width-50, 300);
         
         
         ctx.textAlign = "left";
@@ -894,6 +906,7 @@ class SceneManager {
 
         //healthbar
         this.player1HealthBar.draw();
+        this.player1PerkBar.draw();
 
         if (!roundIndicator) {
             roundIndicator = true;
@@ -913,6 +926,7 @@ class SceneManager {
         ctx.save();
         ctx.scale(-1,1);
         this.player2HealthBar.draw();
+        this.player2PerkBar.draw();
         ctx.restore();
     }
     drawGameResults() {
@@ -1249,17 +1263,22 @@ class SceneManager {
                     //buy perk
                     buyPerk(this.selectedPerk);
                     break;
+                } else if (this.perkActivateButton.mouseOver(mouseX, mouseY)) {
+                    activatePerk(this.selectedPerk);
                 }
-                for (let i= 0;i<this.perkButtons.length; i++){
-                    if (this.perkButtons[i].mouseOver(mouseX,mouseY)){
-                        this.selectedPerk = i;
-                        updatePerkButtons();
-                        this.perkButtons[i].style = "selected";
 
-                        break;
+                if (!this.perkConfirmWindow) {
+                    for (let i= 0;i<this.perkButtons.length; i++){
+                        if (this.perkButtons[i].mouseOver(mouseX,mouseY)){
+                            this.selectedPerk = i;
+                            updatePerkButtons();
+                            this.perkButtons[i].style = "selected";
+                            
+                            break;
+                        }
                     }
                 }
-
+                    
                 break;
             case 6: //character select
                 if (this.characterSelect.fire.mouseOver(mouseX,mouseY)) {
@@ -1295,6 +1314,8 @@ class SceneManager {
                         action(4);
                     } else if (this.actionButtons.ultimate.mouseOver(mouseX, mouseY)) {
                         action(5);
+                    }else if (game.perkBarValue >= 100 && this.perkActivationButton.mouseOver(mouseX, mouseY)) {
+                        action(6);
                     }
                 } 
                 break;

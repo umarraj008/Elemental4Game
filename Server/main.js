@@ -401,10 +401,9 @@ io.sockets.on("connection", function(socket) {
 
     socket.on("buy-perk", function (data) {
        let perkPrices = [
-           1,2,3,4,
-           1,2,3,4,
-           1,2,3,4,
-           1,2,3,4,
+           5,  5,  5,
+           10, 10, 10,
+           20, 20, 20,
        ]; 
 
        let player = findPlayer(socket.id);
@@ -412,19 +411,20 @@ io.sockets.on("connection", function(socket) {
         if (player.perkPoints >= perkPrices[data]) {  
 
             let newPerksUnlocked = player.perksUnlocked.split(",");
-            let perk = data % 4;
-            if (data <= 3) {
-                newPerksUnlocked[0] = perk+1;
-            } else if (data >= 4 && data <= 7) {
-                newPerksUnlocked[1] = perk+1;
-            } else if (data >= 8 && data <= 11) {
-                newPerksUnlocked[2] = perk+1;
-            }else if (data >= 12 && data <= 15) {
-                newPerksUnlocked[3] = perk+1;
-            }
+            // let perk = data % 4;
+            // if (data <= 3) {
+            //     newPerksUnlocked[0] = perk+1;
+            // } else if (data >= 4 && data <= 7) {
+            //     newPerksUnlocked[1] = perk+1;
+            // } else if (data >= 8 && data <= 11) {
+            //     newPerksUnlocked[2] = perk+1;
+            // }else if (data >= 12 && data <= 15) {
+            //     newPerksUnlocked[3] = perk+1;
+            // }
 
-            newPerksUnlocked = newPerksUnlocked[0] + "," + newPerksUnlocked[1] + "," + newPerksUnlocked[2] + "," + newPerksUnlocked[3];
-            player.perkPoints--;
+            newPerksUnlocked[data] = '1';
+            newPerksUnlocked = newPerksUnlocked[0]+","+newPerksUnlocked[1]+","+newPerksUnlocked[2]+","+newPerksUnlocked[3]+","+newPerksUnlocked[4]+","+newPerksUnlocked[5]+","+newPerksUnlocked[6]+","+newPerksUnlocked[7]+","+newPerksUnlocked[8];
+            player.perkPoints -= perkPrices[data];
 
             //update account
            db.query("UPDATE users SET perksUnlocked='"+newPerksUnlocked+"',perkPoints='"+player.perkPoints+"' WHERE playerID='"+player.id+"'", function(error, result) {
@@ -443,6 +443,33 @@ io.sockets.on("connection", function(socket) {
             socket.emit("perk-buy-failed");
         }
 
+    });
+
+    socket.on("activate-perk", function(data) {
+        let player = findPlayer(socket.id);
+        let perksUnlocked = player.perksUnlocked.split(",");
+
+        if (perksUnlocked[data] == '1') {
+            for (i = 0; i < perksUnlocked.length; i++) {
+                if (perksUnlocked[i] == '2') perksUnlocked[i] = '1';
+            }
+
+            perksUnlocked[data] = '2';
+            perksUnlocked = perksUnlocked[0]+","+perksUnlocked[1]+","+perksUnlocked[2]+","+perksUnlocked[3]+","+perksUnlocked[4]+","+perksUnlocked[5]+","+perksUnlocked[6]+","+perksUnlocked[7]+","+perksUnlocked[8];
+            
+            db.query("UPDATE users SET perksUnlocked='"+perksUnlocked+"',perkPoints='"+player.perkPoints+"' WHERE playerID='"+player.id+"'", function(error, result) {
+                if (!error) {
+                    player.perksUnlocked = perksUnlocked;
+                    let updateData = {
+                        perkPoints: player.perkPoints,
+                        perksUnlocked: player.perksUnlocked,
+                    }
+                    socket.emit("perk-buy-success", updateData);
+                } else {
+                    socket.emit("perk-buy-failed");
+                }
+            });
+        }
     });
 
     socket.on("send-text-chat",function(data){
@@ -464,7 +491,7 @@ io.sockets.on("connection", function(socket) {
                     let rawLeaderboard1 = [];
                     results.forEach(element => {rawLeaderboard1.unshift(element)});
 
-                    let rawLeaderboard2 = results.sort((b,a) => {return a.skillLevel - b.skillLevel;}); 
+                    let rawLeaderboard2 = results.sort((b,a) => {return a.skillLevel - b.skillLevel;}); //////THIS IS BROKEN
                     let rawLeaderboard3 = results.sort((b,a) => {return (a.nextLevel-1000 + a.xpLevel) - (b.nextLevel-1000 + b.xpLevel);}); 
                     
                     let leaderboard1 = [];

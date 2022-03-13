@@ -67,6 +67,12 @@ module.exports = class Game {
         this.player1.points += 2;
         this.player2.points += 2;
 
+        //increase perk bar
+        this.player1.perkBarValue += 5;
+        this.player2.perkBarValue += 5;
+        if (this.player1.perkBarValue >= 100) this.player1.perkBarValue = 100;
+        if (this.player2.perkBarValue >= 100) this.player2.perkBarValue = 100;
+
         //give 1 extra point if players health is low
         if (this.player1.health <= 40) {
             this.player1.points++;
@@ -145,11 +151,33 @@ module.exports = class Game {
                     // }
                     
                     let damage = this.player1.attacks[action].damage; // + this.player1.damageBoost + criticalDamage;
-
+                    this.player2.perkBarValue += damage;
+                    if (this.player2.perkBarValue >= 100) this.player2.perkBarValue = 100;
                     this.player1.totalDamage += damage;
                     this.player2.takeDamage(damage);
                     this.player1.action = "attack" + (action-1);
                     this.player2.action = "damage";
+                } else if (action == 6) { //perk activated
+                    switch (this.player1.selectedPerk) {
+                        case 0:
+                            break;
+                        case 1:
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            break;
+                        case 5:
+                            break;
+                        case 6:
+                            break;
+                        case 7:
+                            break;
+                        case 8:
+                            break;
+                    }
                 }
             } else {
                 //console.log("costs too much");
@@ -180,11 +208,33 @@ module.exports = class Game {
                     // }
                     
                     let damage = this.player2.attacks[action].damage; // + this.player2.damageBoost + criticalDamage;
-
+                    this.player1.perkBarValue += damage;
+                    if (this.player1.perkBarValue >= 100) this.player1.perkBarValue = 100;
                     this.player2.totalDamage += damage;
                     this.player1.takeDamage(damage);
                     this.player2.action = "attack" + (action-1);
                     this.player1.action = "damage";
+                } else if (action == 6) { //perk activated
+                    switch (this.player1.selectedPerk) {
+                        case 0:
+                            break;
+                        case 1:
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            break;
+                        case 5:
+                            break;
+                        case 6:
+                            break;
+                        case 7:
+                            break;
+                        case 8:
+                            break;
+                    }
                 }
             } else {
                 //console.log("costs too much");
@@ -262,12 +312,14 @@ module.exports = class Game {
             turn: this.player1.turn,
             action: this.player1.action,
             critical: this.player1.critical,
+            perkBarValue: this.player1.perkBarValue,
             
             p2Points: this.player2.points,
             p2Health: this.player2.health,
             p2Turn: this.player2.turn,
             p2Action: this.player2.action,
             p2Critical: this.player2.critical,
+            p2PerkBarValue: this.player2.perkBarValue,
         };
 
         this.player1.sendMessage("game-update", gameData1);
@@ -278,12 +330,14 @@ module.exports = class Game {
             turn: this.player2.turn,
             action: this.player2.action,
             critical: this.player2.critical,
+            perkBarValue: this.player2.perkBarValue,
 
             p2Points: this.player1.points,
             p2Health: this.player1.health,
             p2Turn: this.player1.turn,
             p2Action: this.player1.action,
             p2Critical: this.player1.critical,
+            p2PerkBarValue: this.player1.perkBarValue,
         };
         
         this.player2.sendMessage("game-update", gameData2);
