@@ -149,7 +149,7 @@ class Animator {
         }
     }
 
-    switchAnimation(to, playerAnimator, healthBar, value) {
+    switchAnimation(to, playerAnimator, healthBar, value, perkBar, value2) {
         switch (to) {
             case "idle":
                 this.animations.idle.counter = 0;
@@ -160,25 +160,25 @@ class Animator {
                 this.animations.attack1.counter = 0;
                 this.animations.attack1.offX = 0;
                 this.currentAnimation = "attack1";
-                window.setTimeout(function() {playerAnimator.switchAnimation("damage"); healthBar.changeValue(value);}, this.animations.damageTime1);
+                window.setTimeout(function() {playerAnimator.switchAnimation("damage"); healthBar.changeValue(value);perkBar.changeValue(value2)}, this.animations.damageTime1);
                 break;
             case "attack2":
                 this.animations.attack2.counter = 0;
                 this.animations.attack2.offX = 0;
                 this.currentAnimation = "attack2";
-                window.setTimeout(function() {playerAnimator.switchAnimation("damage");healthBar.changeValue(value);}, this.animations.damageTime2);
+                window.setTimeout(function() {playerAnimator.switchAnimation("damage");healthBar.changeValue(value);perkBar.changeValue(value2)}, this.animations.damageTime2);
                 break;
             case "attack3":
                 this.animations.attack3.counter = 0;
                 this.animations.attack3.offX = 0;
                 this.currentAnimation = "attack3";
-                window.setTimeout(function() {playerAnimator.switchAnimation("damage");healthBar.changeValue(value);}, this.animations.damageTime3);
+                window.setTimeout(function() {playerAnimator.switchAnimation("damage");healthBar.changeValue(value);perkBar.changeValue(value2)}, this.animations.damageTime3);
                 break; 
             case "ultimate":
                 this.animations.ultimate.counter = 0;
                 this.animations.ultimate.offX = 0;
                 this.currentAnimation = "ultimate";
-                window.setTimeout(function() {playerAnimator.switchAnimation("damage");healthBar.changeValue(value);}, this.animations.damageTime4);
+                window.setTimeout(function() {playerAnimator.switchAnimation("damage");healthBar.changeValue(value);perkBar.changeValue(value2)}, this.animations.damageTime4);
                 break;
             case "wait":
                 this.animations.wait.counter = 0;

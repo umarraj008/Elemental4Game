@@ -12,7 +12,7 @@ var game = {
     over: false,
     whichPlayerAmI: null,
     map: 0,
-    player2: {health:100,points:5, turn: false, action: null, gamerTag: null, skillLevel: 0},
+    player2: {health:100,points:5, turn: false, action: null, gamerTag: null, skillLevel: 0, perkBarValue: 0},
     characterType: null,
     player2characterType: null,
     win: null,
@@ -20,6 +20,9 @@ var game = {
     hitDelay: 700,
     levelUp: false,
     xpGain: 0,
+    perkBarValue: 0,
+    showPerkActivated: {toggle: false, gamertag: null, perk: null},
+    attackButtonsDisabled: false,
     // slGain: 0,
     // skillLevelUp: false,
 
@@ -46,6 +49,8 @@ var whatCharacterWasI = null;
 var whatMapWasIt = null;
 var matchTimer = 0;
 var roundIndicator = true;
+var skillLevelGain = 0;
+var perkCount = 0;
 
 socket.on("connect", function() {
     console.log("connected to server");
@@ -109,6 +114,8 @@ socket.on("game-update", function(data) {
     if (data.action != null || data.action != undefined) nullroundIndicator = true;
     let p1Damage = game.health - data.health;
     let p2Damage = game.player2.health - data.p2Health;
+    game.perkBarValue = data.perkBarValue;
+    game.player2.perkBarValue = data.p2PerkBarValue;
 
     window.setTimeout(function() {
         game.points = data.points;
@@ -117,7 +124,8 @@ socket.on("game-update", function(data) {
         game.player2.points = data.p2Points;
         game.player2.health = (data.p2Health <= 0) ? 0 : data.p2Health;
         game.player2.turn = data.p2Turn
-
+        sceneManager.player1PerkBar.changeValue(game.perkBarValue);
+        sceneManager.player2PerkBar.changeValue(game.player2.perkBarValue);
         if (game.health <= 0 || game.player2.health <= 0) game.turn = false;
     }, game.hitDelay);
 
@@ -126,25 +134,27 @@ socket.on("game-update", function(data) {
             sceneManager.player1Animator.switchAnimation("idle");
             break;
         case "attack1":
-            sceneManager.player1Animator.switchAnimation("attack1", sceneManager.player2Animator, sceneManager.player2HealthBar, data.p2Health);
+            sceneManager.player1Animator.switchAnimation("attack1", sceneManager.player2Animator, sceneManager.player2HealthBar, data.p2Health, sceneManager.player2PerkBar, data.p2PerkBarValue);
             break;
         case "attack2":
-            sceneManager.player1Animator.switchAnimation("attack2", sceneManager.player2Animator, sceneManager.player2HealthBar, data.p2Health);
+            sceneManager.player1Animator.switchAnimation("attack2", sceneManager.player2Animator, sceneManager.player2HealthBar, data.p2Health, sceneManager.player2PerkBar, data.p2PerkBarValue);
             break;
         case "attack3":
-            sceneManager.player1Animator.switchAnimation("attack3", sceneManager.player2Animator, sceneManager.player2HealthBar, data.p2Health);
+            sceneManager.player1Animator.switchAnimation("attack3", sceneManager.player2Animator, sceneManager.player2HealthBar, data.p2Health, sceneManager.player2PerkBar, data.p2PerkBarValue);
             break;
         case "attack4":
-            sceneManager.player1Animator.switchAnimation("ultimate", sceneManager.player2Animator, sceneManager.player2HealthBar, data.p2Health);
+            sceneManager.player1Animator.switchAnimation("ultimate", sceneManager.player2Animator, sceneManager.player2HealthBar, data.p2Health, sceneManager.player2PerkBar, data.p2PerkBarValue);
             break;
         case "wait":
             sceneManager.player1Animator.switchAnimation("wait");
             sceneManager.player1HealthBar.changeValue(data.health);
+            sceneManager.player1PerkBar.changeValue(data.perkBarValue);
             sceneManager.indicators.makeIndicator("+2 Points", 500,c.height/2, "rgba(0,255,100,0");
             sceneManager.indicators.makeIndicator("+10 Health", 500,c.height/2+20, "rgba(0,255,100,0");
             break;
             case "heal":
             sceneManager.player1HealthBar.changeValue(data.health);
+            sceneManager.player1PerkBar.changeValue(data.perkBarValue);
             sceneManager.player1Animator.switchAnimation("heal");
             sceneManager.indicators.makeIndicator("+30 Health", 500,c.height/2, "rgba(0,255,100,0");
             break;
@@ -167,26 +177,28 @@ socket.on("game-update", function(data) {
             sceneManager.player2Animator.switchAnimation("idle");
             break;
         case "attack1":
-            sceneManager.player2Animator.switchAnimation("attack1", sceneManager.player1Animator, sceneManager.player1HealthBar, data.health);
+            sceneManager.player2Animator.switchAnimation("attack1", sceneManager.player1Animator, sceneManager.player1HealthBar, data.health, sceneManager.player1PerkBar, data.perkBarValue);
             break;
         case "attack2":
-            sceneManager.player2Animator.switchAnimation("attack2", sceneManager.player1Animator, sceneManager.player1HealthBar, data.health);
+            sceneManager.player2Animator.switchAnimation("attack2", sceneManager.player1Animator, sceneManager.player1HealthBar, data.health, sceneManager.player1PerkBar, data.perkBarValue);
             break;
         case "attack3":
-            sceneManager.player2Animator.switchAnimation("attack3", sceneManager.player1Animator, sceneManager.player1HealthBar, data.health);
+            sceneManager.player2Animator.switchAnimation("attack3", sceneManager.player1Animator, sceneManager.player1HealthBar, data.health, sceneManager.player1PerkBar, data.perkBarValue);
             break;
         case "attack4":
-            sceneManager.player2Animator.switchAnimation("ultimate", sceneManager.player1Animator, sceneManager.player1HealthBar, data.health);
+            sceneManager.player2Animator.switchAnimation("ultimate", sceneManager.player1Animator, sceneManager.player1HealthBar, data.health, sceneManager.player1PerkBar, data.perkBarValue);
             break;
         case "wait":
             sceneManager.player2Animator.switchAnimation("wait");
             sceneManager.player2HealthBar.changeValue(data.p2Health);
+            sceneManager.player2PerkBar.changeValue(data.p2PerkBarValue);
             sceneManager.indicators.makeIndicator("+2 Points", 1500,c.height/2, "rgba(0,255,100,0");
             sceneManager.indicators.makeIndicator("+10 Health", 1500,c.height/2+20, "rgba(0,255,100,0");
             break;
         case "heal":
             sceneManager.player2Animator.switchAnimation("heal");
             sceneManager.player2HealthBar.changeValue(data.p2Health);
+            sceneManager.player2PerkBar.changeValue(data.p2PerkBarValue);
             sceneManager.indicators.makeIndicator("+30 Health", 1500,c.height/2, "rgba(0,255,100,0");
             break;
         case "damage":
@@ -241,6 +253,7 @@ socket.on("game-over", function(data) {
     game.myData.xpLevel = data.levelUpNewXpLevel;
     game.myData.nextLevel = data.newNextLevel;
     game.myData.perkPoints = data.perkPoints;
+    skillLevelGain = (data.skillLevel - game.myData.skillLevel >= 0) ? ("+" + (data.skillLevel - game.myData.skillLevel) + "sr") : ("-" + Math.abs(data.skillLevel - game.myData.skillLevel) + "sr");
     game.myData.skillLevel = data.skillLevel;
     console.log(game.myData.skillLevel);
     document.getElementById("textChat").value = "";
@@ -253,6 +266,7 @@ socket.on("game-over", function(data) {
 
 socket.on("game-cancelled", function() {
     sceneManager.scene = 4;
+    document.getElementById("textChatShow").style.display = "none";
     resetGame();
 });
 
@@ -260,6 +274,8 @@ socket.on("your-player", function(data) {
     game.whichPlayerAmI = data.which;
     game.player2.gamerTag = data.p2GT;
     game.player2.skillLevel = data.p2SL;
+    game.player2.nextLevel = data.p2NL;
+    game.player2.xpLevel = data.p2XP;
 });
 
 // socket.on("game-map", function(map) {
@@ -324,6 +340,7 @@ socket.on("logged-in", function(userData) {
     game.myData.perksUnlocked = userData.perksUnlocked;
     game.myData.perkPoints = userData.perkPoints;
     game.myData.skillLevel = userData.skillLevel;
+    game.myData.nextLevel = userData.nextLevel;
     game.loggedIn = true;
 
     sessionStorage.setItem("firstName", userData.firstName);
@@ -383,6 +400,7 @@ socket.on("update-data", function(data) {
     game.myData.perkPoints = data.perkPoints;
     game.myData.nextLevel = data.nextLevel;
     game.myData.skillLevel = data.skillLevel;
+    game.perkBarValue = data.perkBarValue;
 
 });
 
@@ -418,6 +436,49 @@ socket.on("recieve-leaderboard", function(data) {
     }
 });
 
+socket.on("perk-activated", function(data) {
+    game.showPerkActivated.toggle = true;
+    game.showPerkActivated.gamertag = data.gamertag;
+    game.showPerkActivated.perk = data.perk;
+
+    if (data.id == socket.id) { //PLAYER 1
+        game.perkBarValue = 0;
+        sceneManager.player1PerkBar.changeValue(0); 
+        
+        if (data.pointChange) { // point boost
+            game.points = data.points;
+        }
+
+        if (data.healthChange) { //Max health
+            game.health = data.health;
+            sceneManager.player1HealthBar.changeValue(game.health)
+        }
+    } else { // PLAYER 2
+        game.player2.perkBarValue = 0;
+        sceneManager.player2PerkBar.changeValue(0); 
+
+        if (data.pointChange) {
+            game.player2.points = data.points;
+        }
+
+        if (data.healthChange) { // point boost
+            game.player2.health = data.health;
+            sceneManager.player2HealthBar.changeValue(game.player2.health)
+        }
+
+        if (data.perk == "Just Wait") {  //Max health
+            game.attackButtonsDisabled = true;
+        }
+    }
+
+    setTimeout(function() {game.showPerkActivated.toggle = false}, 4000);
+});
+
+socket.on("just-wait-over", function() {
+    game.attackButtonsDisabled = false;
+    console.log("test");
+});
+
 function matchmake(ranked) {
     if (ranked) socket.emit("ranked-matchmake");
     if (!ranked) socket.emit("matchmake");
@@ -435,10 +496,10 @@ function selectPlayer(which) {
 }
 
 function action(which) {
-    let actions = [0,6,3,4,5,15];
-    if (which == 6 && game.health >= 200) {
-        return;
-    }
+    let actions = [0,6,3,4,5,15,0];
+    // if (!(which == 6 && game.perkBarValue >= 100)) {
+    //     return;
+    // }
 
     if (game.points >= actions[which]) {
         socket.emit("player-action", {id: game.id, action: which});
@@ -459,7 +520,7 @@ function resetGame() {
             over: false,
             whichPlayerAmI: null,
             map: 0,
-            player2: {health:100,points:5, turn: false, action: null, gamerTag: null, skillLevel: 0},
+            player2: {health:100,points:5, turn: false, action: null, gamerTag: null, skillLevel: 0, perkBarValue: 0},
             characterType: null,
             player2characterType: null,
             win: null,
@@ -469,6 +530,9 @@ function resetGame() {
             myData: game.myData,
             loggedIn: false,
             xpGain: 0,
+            perkBarValue: 0,
+            showPerkActivated: {toggle: false, gamertag: null, perk: null},
+            attackButtonsDisabled: false,
             // slGain: 0,
             // skillLevelUp: false,
         }
@@ -498,10 +562,29 @@ function logout() {
     location.reload();
 }
 
+function usePerk() {
+    socket.emit("use-perk", game.id);
+}
+
 function buyPerk(perk) {
     if (game.myData.perkPoints >= sceneManager.perkDescription[sceneManager.selectedPerk].price && !sceneManager.perkButtons[perk].bought) {
         socket.emit("buy-perk", perk);
     }
+}
+
+function activatePerk(perk) {
+    let up = game.myData.perksUnlocked.split(",");
+    if (up[perk] == 1) {
+        console.log(up);
+        for (i = 0; i < up.length; i++) {
+            if (up[i] == 2) { up[i] = '1'; break; }
+        }
+        console.log(up);
+        up[perk] = 2;
+        game.myData.perksUnlocked = up[0]+","+up[1]+","+up[2]+","+up[3]+","+up[4]+","+up[5]+","+up[6]+","+up[7]+","+up[8];
+        socket.emit("activate-perk", perk);
+        updatePerkButtons();
+    };
 }
 
 function updatePerkButtons() {
@@ -509,77 +592,36 @@ function updatePerkButtons() {
         b.bought = false;
     });
 
-    for (let i = 0; i < sceneManager.perkDescription.length; i++) {
-        if (game.myData.perkPoints >= sceneManager.perkDescription[i].price) {
-            sceneManager.perkButtons[i].style = "normal";
-        } else {
-            sceneManager.perkButtons[i].style = "disabled";
+    let up = game.myData.perksUnlocked.split(",");
+
+    perkCount = 0;
+    for (i = 0; i < up.length; i++) {
+        if (up[i] != '0' ) {
+            perkCount++;
         }
     }
 
-    let up = game.myData.perksUnlocked.split(",");
-    if (up[0] == 4) {
-        sceneManager.perkButtons[0].style = "bought";
-        sceneManager.perkButtons[1].style = "bought";
-        sceneManager.perkButtons[2].style = "bought";
-        sceneManager.perkButtons[3].style = "bought";
-    } else if (up[0] == 3) {
-        sceneManager.perkButtons[0].style = "bought";
-        sceneManager.perkButtons[1].style = "bought";
-        sceneManager.perkButtons[2].style = "bought";
-    } else if (up[0] == 2) {
-        sceneManager.perkButtons[0].style = "bought";
-        sceneManager.perkButtons[1].style = "bought";
-    } else if (up[0] == 1) {
-        sceneManager.perkButtons[0].style = "bought";
+    //makes all buttons disabled for reset
+    for (let i = 0; i < sceneManager.perkDescription.length; i++) {
+        // if (game.myData.perkPoints >= sceneManager.perkDescription[i].price) {
+            // sceneManager.perkButtons[i].style = "normal";
+        // } else {
+            sceneManager.perkButtons[i].style = "disabled";
+            sceneManager.perkActivateButton.style = "disabled";
+        // }
+        
+        if (up[i] == 1) sceneManager.perkButtons[i].style = "normal";
+        if (up[i] == 2) sceneManager.perkButtons[i].style = "bought";
     }
 
-    if (up[1] == 4) {
-        sceneManager.perkButtons[4].style = "bought";
-        sceneManager.perkButtons[5].style = "bought";
-        sceneManager.perkButtons[6].style = "bought";
-        sceneManager.perkButtons[7].style = "bought";
-    } else if (up[1] == 3) {
-        sceneManager.perkButtons[4].style = "bought";
-        sceneManager.perkButtons[5].style = "bought";
-        sceneManager.perkButtons[6].style = "bought";
-    } else if (up[1] == 2) {
-        sceneManager.perkButtons[4].style = "bought";
-        sceneManager.perkButtons[5].style = "bought";
-    } else if (up[1] == 1) {
-        sceneManager.perkButtons[4].style = "bought";
+    if (up[sceneManager.selectedPerk] == 1) {
+        sceneManager.perkActivateButton.style = "normal";
     }
 
-    if (up[2] == 4) {
-        sceneManager.perkButtons[8].style = "bought";
-        sceneManager.perkButtons[9].style = "bought";
-        sceneManager.perkButtons[10].style = "bought";
-        sceneManager.perkButtons[11].style = "bought";
-    } else if (up[2] == 3) {
-        sceneManager.perkButtons[8].style = "bought";
-        sceneManager.perkButtons[9].style = "bought";
-        sceneManager.perkButtons[10].style = "bought";
-    } else if (up[2] == 2) {
-        sceneManager.perkButtons[8].style = "bought";
-        sceneManager.perkButtons[9].style = "bought";
-    } else if (up[2] == 1) {
-        sceneManager.perkButtons[8].style = "bought";
-    }
-
-    if (up[3] == 4) {
-        sceneManager.perkButtons[12].style = "bought";
-        sceneManager.perkButtons[13].style = "bought";
-        sceneManager.perkButtons[14].style = "bought";
-        sceneManager.perkButtons[15].style = "bought";
-    } else if (up[3] == 3) {
-        sceneManager.perkButtons[12].style = "bought";
-        sceneManager.perkButtons[13].style = "bought";
-        sceneManager.perkButtons[14].style = "bought";
-    } else if (up[3] == 2) {
-        sceneManager.perkButtons[12].style = "bought";
-        sceneManager.perkButtons[13].style = "bought";
-    } else if (up[3] == 1) {
-        sceneManager.perkButtons[12].style = "bought";
+    if (game.myData.perkPoints >= sceneManager.perkDescription[sceneManager.selectedPerk].price && up[sceneManager.selectedPerk] == 0) {
+        sceneManager.perkBuyButton.style = "normal";
+    } else {
+        sceneManager.perkBuyButton.style = "disabled";
     }
 }
 

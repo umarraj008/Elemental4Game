@@ -16,7 +16,7 @@ class Maps {
         this.cloud4Pos = {x: 0};
         this.cloud5Pos = {x: 0};
         this.moveSpeed = 0.1;
-        this.windParticleSystem = new WindParticleSystem();
+        this.windParticleSystem = new WindParticleSystem(500);
     }
     
     drawNormal(which) {

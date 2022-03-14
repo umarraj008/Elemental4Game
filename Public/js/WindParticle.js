@@ -1,7 +1,7 @@
 class WindParticle{
-    constructor(){
+    constructor(offset){
         this.x = (Math.random() * c.width);
-        this.y =(Math.random() * c.height-500);
+        this.y =(Math.random() * c.height-offset);
         this.minSpeed = 1;
         this.maxSpeed = 5;
         this.speed = ((Math.random() * this.maxSpeed)+this.minSpeed)/10;
