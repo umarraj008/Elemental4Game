@@ -21,6 +21,8 @@ var game = {
     levelUp: false,
     xpGain: 0,
     perkBarValue: 0,
+    showPerkActivated: {toggle: false, gamertag: null, perk: null},
+    attackButtonsDisabled: false,
     // slGain: 0,
     // skillLevelUp: false,
 
@@ -112,6 +114,8 @@ socket.on("game-update", function(data) {
     if (data.action != null || data.action != undefined) nullroundIndicator = true;
     let p1Damage = game.health - data.health;
     let p2Damage = game.player2.health - data.p2Health;
+    game.perkBarValue = data.perkBarValue;
+    game.player2.perkBarValue = data.p2PerkBarValue;
 
     window.setTimeout(function() {
         game.points = data.points;
@@ -120,10 +124,8 @@ socket.on("game-update", function(data) {
         game.player2.points = data.p2Points;
         game.player2.health = (data.p2Health <= 0) ? 0 : data.p2Health;
         game.player2.turn = data.p2Turn
-        game.perkBarValue = data.perkBarValue;
-        game.player2.perkBarValue = data.p2PerkBarValue;
-        // sceneManager.player1PerkBar.changeValue(game.perkBarValue);
-        // sceneManager.player2PerkBar.changeValue(game.player2.perkBarValue);
+        sceneManager.player1PerkBar.changeValue(game.perkBarValue);
+        sceneManager.player2PerkBar.changeValue(game.player2.perkBarValue);
         if (game.health <= 0 || game.player2.health <= 0) game.turn = false;
     }, game.hitDelay);
 
@@ -434,6 +436,49 @@ socket.on("recieve-leaderboard", function(data) {
     }
 });
 
+socket.on("perk-activated", function(data) {
+    game.showPerkActivated.toggle = true;
+    game.showPerkActivated.gamertag = data.gamertag;
+    game.showPerkActivated.perk = data.perk;
+
+    if (data.id == socket.id) { //PLAYER 1
+        game.perkBarValue = 0;
+        sceneManager.player1PerkBar.changeValue(0); 
+        
+        if (data.pointChange) { // point boost
+            game.points = data.points;
+        }
+
+        if (data.healthChange) { //Max health
+            game.health = data.health;
+            sceneManager.player1HealthBar.changeValue(game.health)
+        }
+    } else { // PLAYER 2
+        game.player2.perkBarValue = 0;
+        sceneManager.player2PerkBar.changeValue(0); 
+
+        if (data.pointChange) {
+            game.player2.points = data.points;
+        }
+
+        if (data.healthChange) { // point boost
+            game.player2.health = data.health;
+            sceneManager.player2HealthBar.changeValue(game.player2.health)
+        }
+
+        if (data.perk == "Just Wait") {  //Max health
+            game.attackButtonsDisabled = true;
+        }
+    }
+
+    setTimeout(function() {game.showPerkActivated.toggle = false}, 4000);
+});
+
+socket.on("just-wait-over", function() {
+    game.attackButtonsDisabled = false;
+    console.log("test");
+});
+
 function matchmake(ranked) {
     if (ranked) socket.emit("ranked-matchmake");
     if (!ranked) socket.emit("matchmake");
@@ -452,9 +497,9 @@ function selectPlayer(which) {
 
 function action(which) {
     let actions = [0,6,3,4,5,15,0];
-    if (!(which == 6 && game.perkBarValue >= 100)) {
-        return;
-    }
+    // if (!(which == 6 && game.perkBarValue >= 100)) {
+    //     return;
+    // }
 
     if (game.points >= actions[which]) {
         socket.emit("player-action", {id: game.id, action: which});
@@ -486,6 +531,8 @@ function resetGame() {
             loggedIn: false,
             xpGain: 0,
             perkBarValue: 0,
+            showPerkActivated: {toggle: false, gamertag: null, perk: null},
+            attackButtonsDisabled: false,
             // slGain: 0,
             // skillLevelUp: false,
         }
@@ -513,6 +560,10 @@ function logout() {
     sessionStorage.clear();
     game.loggedIn = false;
     location.reload();
+}
+
+function usePerk() {
+    socket.emit("use-perk", game.id);
 }
 
 function buyPerk(perk) {

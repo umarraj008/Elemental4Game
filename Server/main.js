@@ -518,6 +518,10 @@ io.sockets.on("connection", function(socket) {
             }
         });
     });
+
+    socket.on("use-perk", function(data) {
+        games[data].activatePerk(socket.id); 
+    });
 });
 
 function findGame(id) {

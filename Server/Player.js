@@ -31,7 +31,9 @@ module.exports = class Player {
             {name: "Ultimate", cost: 15, damage: 70},
         ];
         this.perkBarValue = 0;
-        this.selectedPerk = this.perksUnlocked.forEach(perk => {if (perk == 2) return this.perksUnlocked.indexOf(perk)});
+        this.perkActivated = false;
+        this.currentPerk = null;
+        //this.selectedPerk = this.perksUnlocked.forEach(perk => {if (perk == 2) return this.perksUnlocked.indexOf(perk)});
         // //starting health
         // switch (parseInt(this.perksUnlocked[0])) {
         //     case 1: this.damageBoost = 5; break;

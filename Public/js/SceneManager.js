@@ -109,9 +109,9 @@ class SceneManager {
             new Button(50 + this.perkButtonWidth + 20,   150, this.perkButtonWidth, this.perkButtonHeight, "Strength Boost "),
             new Button(50 + (this.perkButtonWidth+20)*2, 150, this.perkButtonWidth, this.perkButtonHeight, "Points Boost"),
             
-            new Button(50 + (this.perkButtonWidth+20)*2, 150+20+this.perkButtonHeight, this.perkButtonWidth, this.perkButtonHeight, "Just Wait"),
-            new Button(50,                               150+20+this.perkButtonHeight, this.perkButtonWidth, this.perkButtonHeight, "Max Health"),
-            new Button(50 + this.perkButtonWidth + 20,   150+20+this.perkButtonHeight, this.perkButtonWidth, this.perkButtonHeight, "Deflection"),
+            new Button(50,                               150+20+this.perkButtonHeight, this.perkButtonWidth, this.perkButtonHeight, "Just Wait"),
+            new Button(50 + this.perkButtonWidth + 20,   150+20+this.perkButtonHeight, this.perkButtonWidth, this.perkButtonHeight, "Max Health"),
+            new Button(50 + (this.perkButtonWidth+20)*2, 150+20+this.perkButtonHeight, this.perkButtonWidth, this.perkButtonHeight, "Deflection"),
             
             new Button(50,                               150+(20+this.perkButtonHeight)*2, this.perkButtonWidth, this.perkButtonHeight, "Rebound"),
             new Button(50 + this.perkButtonWidth + 20,   150+(20+this.perkButtonHeight)*2, this.perkButtonWidth, this.perkButtonHeight, "Double Damage"),
@@ -132,7 +132,7 @@ class SceneManager {
         this.perkActivateButton = new Button(1364,500,470,80, "Activate Perk");
         this.perkButtons[0].selected = true;
         this.perkDescription = [
-            {string: "50% of the opponents next attack will be", string2: "absorbed and converted to health.", price: 5},
+            {string: "Absorb 50% of the opponents next attack.", price: 5},
             {string: "Your next attack will do 50% increased damage.", price: 5},
             {string: "You will instantly gain 10 points.", price: 5},
             {string: "Your opponent cannot attack or heal,", string2: "they can only wait.", price: 10},
@@ -735,7 +735,7 @@ class SceneManager {
             ctx.fillStyle = "white";
             ctx.fillText("Your Turn!", c.width/2, 200);
 
-            if (game.points >= 6 || !(game.health >= 200)) {
+            if (game.points >= 6 && !(game.health >= 200)) {
                 this.actionButtons.heal.style = "normal";
                 this.actionButtons.heal.draw(dt, mouseX, mouseY);
                 ctx.drawImage(icons, 160,0,40,40, 336+50+148+10,900+70,70,70); //h
@@ -788,7 +788,8 @@ class SceneManager {
             this.actionButtons.wait.draw(dt, mouseX, mouseY);
 
             //perk button
-            if (game.perkBarValue >= 100) {
+            let havePerk = game.myData.perksUnlocked.split(",");
+            if (game.perkBarValue >= 100 && havePerk.includes("2")) {
                 this.perkActivationButton.draw(dt, mouseX, mouseY);
             }
 
@@ -822,11 +823,26 @@ class SceneManager {
 
             ctx.fillText("10 Health, 2 points", 20+148, 1000);
             ctx.fillText("30 Health",336+148, 1000);
-            ctx.fillText(10 + damageBoost + " Damage",652+148, 1000);
-            ctx.fillText(20 + damageBoost + " Damage",968+148, 1000);
-            ctx.fillText(30 + damageBoost + " Damage",1284+148, 1000);
-            ctx.fillText(70 + damageBoost + " Damage",1600+148, 1000);
+            ctx.fillText(10 + " Damage",652+148, 1000);
+            ctx.fillText(20 + " Damage",968+148, 1000);
+            ctx.fillText(30 + " Damage",1284+148, 1000);
+            ctx.fillText(70 + " Damage",1600+148, 1000);
             
+            if (game.attackButtonsDisabled) {
+                /////draw X's
+            }
+
+        }
+
+        if (game.showPerkActivated.toggle) {
+            ctx.textAlign = "center";
+            ctx.font = "100px " + FONT;
+            ctx.fillStyle = "black";
+            ctx.fillText(game.showPerkActivated.gamertag + " has activated their perk!",c.width/2+4, c.height/2+4)
+            ctx.fillText(game.showPerkActivated.perk,c.width/2+4, c.height/2+100+4);
+            ctx.fillStyle = "white";
+            ctx.fillText(game.showPerkActivated.gamertag + " has activated their perk!",c.width/2, c.height/2)
+            ctx.fillText(game.showPerkActivated.perk,c.width/2, c.height/2+100);
         }
 
         ctx.font = "70px " + FONT;
@@ -1304,18 +1320,18 @@ class SceneManager {
                 if (game.turn) {
                     if (this.actionButtons.wait.mouseOver(mouseX, mouseY)) {
                         action(0);
-                    } else if (this.actionButtons.heal.mouseOver(mouseX, mouseY)) {
+                    } else if (this.actionButtons.heal.mouseOver(mouseX, mouseY) && !game.attackButtonsDisabled) {
                         action(1);
-                    } else if (this.actionButtons.attack1.mouseOver(mouseX, mouseY)) {
+                    } else if (this.actionButtons.attack1.mouseOver(mouseX, mouseY) && !game.attackButtonsDisabled) {
                         action(2);
-                    } else if (this.actionButtons.attack2.mouseOver(mouseX, mouseY)) {
+                    } else if (this.actionButtons.attack2.mouseOver(mouseX, mouseY) && !game.attackButtonsDisabled) {
                         action(3);
-                    } else if (this.actionButtons.attack3.mouseOver(mouseX, mouseY)) {
+                    } else if (this.actionButtons.attack3.mouseOver(mouseX, mouseY) && !game.attackButtonsDisabled) {
                         action(4);
-                    } else if (this.actionButtons.ultimate.mouseOver(mouseX, mouseY)) {
+                    } else if (this.actionButtons.ultimate.mouseOver(mouseX, mouseY) && !game.attackButtonsDisabled) {
                         action(5);
                     }else if (game.perkBarValue >= 100 && this.perkActivationButton.mouseOver(mouseX, mouseY)) {
-                        action(6);
+                        usePerk();
                     }
                 } 
                 break;
