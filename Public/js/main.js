@@ -6,6 +6,28 @@ var waterSpriteSheet;
 var earthSpriteSheet;
 var airSpriteSheet;
 
+//lanugage setup
+var LANGUAGE = [];
+var CURRENT_LANGUAGE = {};
+
+var request = new XMLHttpRequest();
+request.open("GET", "../resources/languages.json", false);
+request.send(null)
+LANGUAGE = JSON.parse(request.responseText);
+let l = sessionStorage.getItem("language");
+if (l != null && l != undefined) {
+    switch(l) {
+        case '0': CURRENT_LANGUAGE = LANGUAGE.english; break;
+        case '1': CURRENT_LANGUAGE = LANGUAGE.spanish; break;
+        case '2': CURRENT_LANGUAGE = LANGUAGE.french; break;
+        case '3': CURRENT_LANGUAGE = LANGUAGE.italian; break;
+        case '4': CURRENT_LANGUAGE = LANGUAGE.chinese; break;
+        case '5': CURRENT_LANGUAGE = LANGUAGE.japanese; break;
+    }
+} else {
+    CURRENT_LANGUAGE = language.english;
+}
+
 var sceneManager = new SceneManager(-2);
 const loader = new Loader(42,0);//DONT FORGET TO CHANGE THE TOTAL WHEN ADDING MORE IMAGES
 loader.audioLoadingFinished = true; //REMOVE WHEN AUDIO IS ADDED
@@ -70,6 +92,9 @@ var SETTINGS = {
     movingBackground: true,
     textIndicators: true,
     fullscreen: false,
+    contrast: 100,
+    colorBlindness: 0,
+    language: 0,
 };
 
 function setup() {
@@ -82,15 +107,23 @@ function setup() {
     let movingBackground = sessionStorage.getItem("movingBackground");
     let textIndicators = sessionStorage.getItem("textIndicators");
     let fullscreen = sessionStorage.getItem("fullscreen");
+    let contrast = sessionStorage.getItem("contrast");
+    let colorBlindness = sessionStorage.getItem("colorBlindness");
+    let language = sessionStorage.getItem("language");
     
     if (frameRate        != null && frameRate        != undefined) SETTINGS.frameRate =        frameRate; 
     if (windParticles    != null && windParticles    != undefined) SETTINGS.windParticles =    windParticles; 
     if (debrisParticles  != null && debrisParticles  != undefined) SETTINGS.debrisParticles =  debrisParticles; 
     if (movingBackground != null && movingBackground != undefined) SETTINGS.movingBackground = movingBackground; 
     if (textIndicators   != null && textIndicators   != undefined) SETTINGS.textIndicators =   textIndicators; 
+    if (contrast         != null && contrast         != undefined) SETTINGS.contrast =         contrast; 
+    if (colorBlindness   != null && colorBlindness   != undefined) SETTINGS.colorBlindness =   colorBlindness; 
+    if (language         != null && language         != undefined) SETTINGS.language =         language; 
     // if (fullscreen       != null && fullscreen       != undefined) SETTINGS.fullscreen =       fullscreen; 
-    
+
     ctx.imageSmoothingEnabled = false;
+    sceneManager.updateAllText();
+    //updateAllText();
     resizeWindow();
     main();
 }

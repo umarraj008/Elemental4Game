@@ -170,6 +170,7 @@ class SceneManager {
             fullscreenOn:        new Button(400, 700+100, 400, 100, "On"),
             fullscreenOff:       new Button(800, 700+100, 400, 100, "Off"),
             gameCredits:         new Button(1300, 200, 540, 100, "Game Credits"),
+            accessFeatures:      new Button(1300, 320, 540, 100, "Accessibility Options"),
             backButton:          new Button(c.width/2-300,c.height/2+400,600,100, "Back"),
         };
 
@@ -179,10 +180,37 @@ class SceneManager {
         this.perkPanel = new Panel(1300,150,589,766);
 
         this.perkActivationButton = new Button(610, 670, 700, 150, "Activate Perk"); //for in game
+
+        //accesibility page
+        this.accessPageBackButton = new Button(c.width/2-300,c.height/2+400,600,100, "Back"); 
+        
+        this.accessPageContrastAddButton = new Button(700, 200,100,100,"+");
+        this.accessPageContrastSubtractButton = new Button(400,200,100,100,"-");
+
+        this.accessPageColorBlindnessNoneButton = new Button(400,350,400,100,"None");
+        this.accessPageColorBlindness1Button = new Button(800,350,400,100,"Red-Blind/Protanopia");
+        this.accessPageColorBlindness2Button = new Button(1200,350,400,100,"Green-Blind/Deuteranopia");
+        this.accessPageColorBlindness3Button = new Button(400,450,400,100,"Blue-Blind/Tritanopia");
+
+        this.accessPageLanguage1 = new Button(400,600,400,100,"English");
+        this.accessPageLanguage2 = new Button(800,600,400,100,"Spanish");
+        this.accessPageLanguage3 = new Button(1200,600,400,100,"French");
+        this.accessPageLanguage4 = new Button(400,700,400,100,"Italian");
+        this.accessPageLanguage5 = new Button(800,700,400,100,"Chinese");
+        this.accessPageLanguage6 = new Button(1200,700,400,100,"Japanese");
     } 
 
     run() {
         ctx.clearRect(0,0,c.width,c.height);
+
+        //contrast setting
+        if(SETTINGS.contrast != 100) {
+            ctx.filter = "contrast(" + SETTINGS.contrast/100 + ")";
+        } else {
+            ctx.filter = "none";
+        }
+        
+
         //switch scenes
         switch(this.scene) {
             case -2: //loading screen
@@ -211,7 +239,7 @@ class SceneManager {
                 ctx.fillText("©Cybercloud Studios", c.width/2, c.height-50);
                 break;
             case 0: //splash screen
-                if (this.splash.draw()) this.camera.transitionTo(1,0.005); ;
+                if (this.splash.draw()) {this.camera.transitionTo(1,0.005);} ;
                 break;
             case 1: //title screen
                 this.drawTitleScreen();
@@ -219,12 +247,12 @@ class SceneManager {
                     ctx.fillStyle = "lime";
                     ctx.textAlign = "center";
                     ctx.font = "20px " + FONT;
-                    ctx.fillText("Connected to Server", c.width/2, 30);
+                    ctx.fillText(CURRENT_LANGUAGE.title.connectedToServer, c.width/2, 30);
                 } else {
                     ctx.fillStyle = "red";
                     ctx.textAlign = "center";
                     ctx.font = "20px " + FONT;
-                    ctx.fillText("Not Connected to Server", c.width/2, 30);
+                    ctx.fillText(CURRENT_LANGUAGE.title.connectedToServer, c.width/2, 30);
                     // this.scene = 1;
                 }
                 break;
@@ -254,6 +282,9 @@ class SceneManager {
                 break;
             case 10: //leaderboard page
                 this.drawLeaderboardPage();
+                break;
+            case 11: //accessiblity settings page
+                this.drawAccessSettingsPage();
                 break;
         }
 
@@ -326,9 +357,9 @@ class SceneManager {
         ctx.textAlign = "left";
         ctx.font = "30px "+FONT;
         ctx.fillStyle = "black";
-        ctx.fillText("Logged in as " + game.myData.gamerTag, 52, 52);
+        ctx.fillText(CURRENT_LANGUAGE.title.loggedInAs + " " + game.myData.gamerTag, 52, 52);
         ctx.fillStyle = "white";
-        ctx.fillText("Logged in as " + game.myData.gamerTag, 50, 50);
+        ctx.fillText(CURRENT_LANGUAGE.title.loggedInAs + " " + game.myData.gamerTag, 50, 50);
 
         ctx.textAlign = "center";
         ctx.font = "30px "+FONT;
@@ -340,6 +371,58 @@ class SceneManager {
         //logout
         this.logoutButton.draw(dt, mouseX, mouseY);
      
+    }
+
+    drawAccessSettingsPage() {
+        this.maps.drawTransition(false);
+
+        //this will be draw title text 
+        ctx.font = "100px "+ FONT;
+        ctx.textAlign = "center";
+        ctx.fillStyle = "black";
+        ctx.fillText("Accessibility Options",c.width/2+4, 94);
+        ctx.fillStyle = "white";
+        ctx.fillText("Accessibility Options",c.width/2, 90);
+
+        //panel
+        this.settingsButtons.panel.draw();
+
+        //contrast
+        ctx.fillStyle = "black";
+        ctx.textAlign = "left";
+        
+        ctx.font = "30px " + FONT;
+        ctx.fillText("Contrast: ", 100, 250);
+        
+        ctx.textAlign = "center";
+        ctx.font = "50px " + FONT;
+        ctx.fillText(SETTINGS.contrast, 600, 270);
+        this.accessPageContrastAddButton.draw(dt, mouseX, mouseY);
+        this.accessPageContrastSubtractButton.draw(dt, mouseX, mouseY);
+        
+        //color blindness
+        ctx.font = "30px " + FONT;
+        ctx.textAlign = "left";
+        ctx.fillText("Color Blindness: ", 100, 450);
+        this.accessPageColorBlindnessNoneButton.draw(dt, mouseX, mouseY);
+        this.accessPageColorBlindness1Button.draw(dt, mouseX, mouseY);
+        this.accessPageColorBlindness2Button.draw(dt, mouseX, mouseY);
+        this.accessPageColorBlindness3Button.draw(dt, mouseX, mouseY);
+        
+        //language
+        ctx.font = "30px " + FONT;
+        ctx.textAlign = "left";
+        ctx.fillText("Language: ", 100, 650);
+        this.accessPageLanguage1.draw(dt, mouseX, mouseY);
+        this.accessPageLanguage2.draw(dt, mouseX, mouseY);
+        this.accessPageLanguage3.draw(dt, mouseX, mouseY);
+        this.accessPageLanguage4.draw(dt, mouseX, mouseY);
+        this.accessPageLanguage5.draw(dt, mouseX, mouseY);
+        this.accessPageLanguage6.draw(dt, mouseX, mouseY);
+
+        //back button
+        this.accessPageBackButton.draw(dt, mouseX, mouseY);
+
     }
 
     drawSettings() {
@@ -399,6 +482,7 @@ class SceneManager {
         this.settingsButtons.fullscreenOff.draw(dt, mouseX, mouseY);
         
         this.settingsButtons.gameCredits.draw(dt, mouseX, mouseY);
+        this.settingsButtons.accessFeatures.draw(dt, mouseX, mouseY);
         this.settingsButtons.backButton.draw(dt, mouseX, mouseY);
 
         ctx.beginPath();
@@ -1126,7 +1210,11 @@ class SceneManager {
                     this.credits = new Credits();      
                     this.camera.transitionTo(3,0.005);
                     break; 
-                } else if (this.settingsButtons.frameRate30FPS.mouseOver(mouseX, mouseY)) {
+                } else if (this.settingsButtons.accessFeatures.mouseOver(mouseX, mouseY)) {
+                    loadAccessFeatures();
+                    this.camera.transitionTo(11,0.005);
+                    break; 
+                }  else if (this.settingsButtons.frameRate30FPS.mouseOver(mouseX, mouseY)) {
                     this.settingsButtons.frameRate30FPS.style = "selected";
                     this.settingsButtons.frameRate60FPS.style = "disabled";
                     SETTINGS.frameRate = 30;
@@ -1354,7 +1442,62 @@ class SceneManager {
                     this.camera.transitionTo(4,0.005)
                 }
                 break;
+            case 11: //accesibility page
+                if (this.accessPageBackButton.mouseOver(mouseX, mouseY)) {
+                    this.camera.transitionTo(2, 0.005);
+                } else if (this.accessPageContrastAddButton.mouseOver(mouseX, mouseY)) {
+                    SETTINGS.contrast = SETTINGS.contrast + 5;
+                    if (SETTINGS.contrast >= 200) SETTINGS.contrast = 200;
+                } else if (this.accessPageContrastSubtractButton.mouseOver(mouseX, mouseY)) {
+                    SETTINGS.contrast = SETTINGS.contrast - 5;
+                    if (SETTINGS.contrast <= 0) SETTINGS.contrast = 0;
+                } else if (this.accessPageColorBlindnessNoneButton.mouseOver(mouseX,mouseY)) {
+                    SETTINGS.colorBlindness = 0;
+                    sessionStorage.setItem("colorBlindness", 0);
+                    loadAccessFeatures();
+                } else if (this.accessPageColorBlindness1Button.mouseOver(mouseX,mouseY)) {
+                    SETTINGS.colorBlindness = 1;
+                    sessionStorage.setItem("colorBlindness", 1);
+                    loadAccessFeatures();
+                } else if (this.accessPageColorBlindness2Button.mouseOver(mouseX,mouseY)) {
+                    SETTINGS.colorBlindness = 2;
+                    sessionStorage.setItem("colorBlindness", 2);
+                    loadAccessFeatures();
+                } else if (this.accessPageColorBlindness3Button.mouseOver(mouseX,mouseY)) {
+                    SETTINGS.colorBlindness = 3;
+                    sessionStorage.setItem("colorBlindness", 3);
+                    loadAccessFeatures();
+                } else if (this.accessPageLanguage1.mouseOver(mouseX,mouseY)) {
+                    SETTINGS.language = 0;
+                    sessionStorage.setItem("language", 0);
+                    loadAccessFeatures();
+                } else if (this.accessPageLanguage2.mouseOver(mouseX,mouseY)) {
+                    SETTINGS.language = 1;
+                    sessionStorage.setItem("language", 1);
+                    loadAccessFeatures();
+                } else if (this.accessPageLanguage3.mouseOver(mouseX,mouseY)) {
+                    SETTINGS.language = 2;
+                    sessionStorage.setItem("language", 2);
+                    loadAccessFeatures();
+                } else if (this.accessPageLanguage4.mouseOver(mouseX,mouseY)) {
+                    SETTINGS.language = 3;
+                    sessionStorage.setItem("language", 3);
+                    loadAccessFeatures();
+                } else if (this.accessPageLanguage5.mouseOver(mouseX,mouseY)) {
+                    SETTINGS.language = 4;
+                    sessionStorage.setItem("language", 4);
+                    loadAccessFeatures();
+                } else if (this.accessPageLanguage6.mouseOver(mouseX,mouseY)) {
+                    SETTINGS.language = 5;
+                    sessionStorage.setItem("language", 5);
+                    loadAccessFeatures();
+                }
+                break;
         }
     }
 
+    updateAllText() {
+        this.playButton.text = CURRENT_LANGUAGE.title.playButton;
+        this.logoutButton.text = CURRENT_LANGUAGE.title.logout;
+    }
 }
