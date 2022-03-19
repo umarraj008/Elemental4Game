@@ -49,8 +49,8 @@ class SceneManager {
         this.playButton = new Button(c.width/2-300,c.height/2-75,600,100, "Play");
         
         //main menu buttons
-        this.stopMatchmakeButton =  new Button(c.width/2-150,c.height/2-100,300,150, "Stop Matchmaking");
-        this.matchmakeButton =  new Button(c.width/2-600,c.height/2-100,300,150, "Quick Matchmake");
+        this.stopMatchmakeButton = new Button(c.width/2-150,c.height/2-100,300,150, "Stop Matchmaking");
+        this.matchmakeButton = new Button(c.width/2-600,c.height/2-100,300,150, "Quick Matchmake");
         this.perkScreenButton = new Button(c.width/2-150,c.height/2-100,300,150, "Perk Screen");
         this.settingsButton = new Button(c.width/2+300,c.height/2-100,300,150, "Settings");
         this.menuBackButton = new Button(c.width/2-300,c.height/2+300,600,100, "Back");
@@ -1497,7 +1497,86 @@ class SceneManager {
     }
 
     updateAllText() {
+        // this.playButton.text = CURRENT_LANGUAGE.title.playButton;
+        // this.logoutButton.text = CURRENT_LANGUAGE.title.logout;
+
+        //title page
         this.playButton.text = CURRENT_LANGUAGE.title.playButton;
         this.logoutButton.text = CURRENT_LANGUAGE.title.logout;
+
+        //main menu
+        this.stopMatchmakeButton.text = CURRENT_LANGUAGE.menu.stopMatchmakeButton;
+        this.rankedMatchmakeButton.text = CURRENT_LANGUAGE.menu.rankedMatchmakeButton;
+        this.matchmakeButton.text = CURRENT_LANGUAGE.menu.quickMatchmakeButton;
+        this.perkScreenButton.text = CURRENT_LANGUAGE.menu.perkButton;
+        this.settingsButton.text = CURRENT_LANGUAGE.menu.settingsButton;
+        this.leaderboardButton.text = CURRENT_LANGUAGE.menu.leaderboardButton;
+        this.menuBackButton.text = CURRENT_LANGUAGE.menu.backButton;
+        this.projectWebsiteButton.text = CURRENT_LANGUAGE.menu.projectWebsiteButton;
+        this.profilePageButton.text = CURRENT_LANGUAGE.menu.profileButton;
+
+        //leaderboard page
+        this.leaderboardBackButton.text = CURRENT_LANGUAGE.leaderboard.backButton;
+        
+        //perk page
+        this.perkBackButton.text = CURRENT_LANGUAGE.perkMenu.backButton;
+        this.perkButtons[0].text = CURRENT_LANGUAGE.perkMenu.perk1;
+        this.perkButtons[1].text = CURRENT_LANGUAGE.perkMenu.perk2;
+        this.perkButtons[2].text = CURRENT_LANGUAGE.perkMenu.perk3;
+        this.perkButtons[3].text = CURRENT_LANGUAGE.perkMenu.perk4;
+        this.perkButtons[4].text = CURRENT_LANGUAGE.perkMenu.perk5;
+        this.perkButtons[5].text = CURRENT_LANGUAGE.perkMenu.perk6;
+        this.perkButtons[6].text = CURRENT_LANGUAGE.perkMenu.perk7;
+        this.perkButtons[7].text = CURRENT_LANGUAGE.perkMenu.perk8;
+        this.perkButtons[8].text = CURRENT_LANGUAGE.perkMenu.perk9;
+        this.perkBuyButton.text = CURRENT_LANGUAGE.perkMenu.buyButton;
+        this.perkActivateButton.text = CURRENT_LANGUAGE.perkMenu.activateButton;
+        this.perkConfirmConfirmButton.text = CURRENT_LANGUAGE.perkMenu.confirmButton;
+        this.perkConfirmCancelButton.text = CURRENT_LANGUAGE.perkMenu.cancelButton;
+        
+        //settings page
+        this.settingsButtons.frameRate30FPS.text = CURRENT_LANGUAGE.settings.frameRate30FPS;      
+        this.settingsButtons.frameRate60FPS.text = CURRENT_LANGUAGE.settings.frameRate60FPS;      
+        this.settingsButtons.windParticlesOn.text = CURRENT_LANGUAGE.settings.windParticlesOn;     
+        this.settingsButtons.windParticlesOff.text = CURRENT_LANGUAGE.settings.windParticlesOff;    
+        this.settingsButtons.debrisParticlesOn.text = CURRENT_LANGUAGE.settings.debrisParticlesOn;   
+        this.settingsButtons.debrisParticlesOff.text = CURRENT_LANGUAGE.settings.debrisParticlesOff;  
+        this.settingsButtons.movingBackgroundOn.text = CURRENT_LANGUAGE.settings.movingBackgroundOn;  
+        this.settingsButtons.movingBackgroundOff.text = CURRENT_LANGUAGE.settings.movingBackgroundOff; 
+        this.settingsButtons.textIndicatorsOn.text = CURRENT_LANGUAGE.settings.textIndicatorsOn;    
+        this.settingsButtons.textIndicatorsOff.text = CURRENT_LANGUAGE.settings.textIndicatorsOff;   
+        this.settingsButtons.fullscreenOn.text = CURRENT_LANGUAGE.settings.fullscreenOn;        
+        this.settingsButtons.fullscreenOff.text = CURRENT_LANGUAGE.settings.fullscreenOff;       
+        this.settingsButtons.gameCredits.text = CURRENT_LANGUAGE.settings.gameCredits;         
+        this.settingsButtons.accessFeatures.text = CURRENT_LANGUAGE.settings.accessFeatures;      
+        this.settingsButtons.backButton.text = CURRENT_LANGUAGE.settings.backButton;
+        
+        //accesibility page
+        this.accessPageBackButton.text = CURRENT_LANGUAGE.accessSettings.accessPageBackButton;
+        this.accessPageColorBlindnessNoneButton.text = CURRENT_LANGUAGE.accessSettings.accessPageColorBlindnessNoneButton;
+        this.accessPageColorBlindness1Button.text = CURRENT_LANGUAGE.accessSettings.accessPageColorBlindness1Button;
+        this.accessPageColorBlindness2Button.text = CURRENT_LANGUAGE.accessSettings.accessPageColorBlindness2Button;
+        this.accessPageColorBlindness3Button.text = CURRENT_LANGUAGE.accessSettings.accessPageColorBlindness3Button;
+        
+        //game
+        this.actionButtons.wait.text = CURRENT_LANGUAGE.game.wait;
+        this.actionButtons.heal.text = CURRENT_LANGUAGE.game.heal;
+        this.actionButtons.attack1.text = CURRENT_LANGUAGE.game.attack1;
+        this.actionButtons.attack2.text = CURRENT_LANGUAGE.game.attack2;
+        this.actionButtons.attack3.text = CURRENT_LANGUAGE.game.attack3;
+        this.actionButtons.ultimate.text = CURRENT_LANGUAGE.game.ultimate;
+        this.perkActivationButton.text = CURRENT_LANGUAGE.game.perkActivationButton;
+        
+        //profile page
+        this.profileBackButton.text = CURRENT_LANGUAGE.profile.backButton;
+        
+        //game result
+        this.resultsBackButton.text = CURRENT_LANGUAGE.results.backButton;
+  
+        //character select page
+        this.characterSelect.fire.text = CURRENT_LANGUAGE.characterSelect.fire;
+        this.characterSelect.water.text = CURRENT_LANGUAGE.characterSelect.water;
+        this.characterSelect.earth.text = CURRENT_LANGUAGE.characterSelect.earth;
+        this.characterSelect.air.text = CURRENT_LANGUAGE.characterSelect.air;
     }
 }

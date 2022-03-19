@@ -7,13 +7,8 @@ var earthSpriteSheet;
 var airSpriteSheet;
 
 //lanugage setup
-var LANGUAGE = [];
 var CURRENT_LANGUAGE = {};
 
-var request = new XMLHttpRequest();
-request.open("GET", "../resources/languages.json", false);
-request.send(null)
-LANGUAGE = JSON.parse(request.responseText);
 let l = sessionStorage.getItem("language");
 if (l != null && l != undefined) {
     switch(l) {
@@ -25,7 +20,7 @@ if (l != null && l != undefined) {
         case '5': CURRENT_LANGUAGE = LANGUAGE.japanese; break;
     }
 } else {
-    CURRENT_LANGUAGE = language.english;
+    CURRENT_LANGUAGE = LANGUAGE.english;
 }
 
 var sceneManager = new SceneManager(-2);
@@ -177,6 +172,15 @@ window.onkeydown = function (e) {
         } else if (sceneManager.scene == 6 || sceneManager.scene == 7) {
             sendMessageTextChat();
         }
+    }
+
+    switch(e.keyCode) {
+        case 49:CURRENT_LANGUAGE = LANGUAGE.english;loadLanguage();break;
+        case 50:CURRENT_LANGUAGE = LANGUAGE.spanish;loadLanguage();break;
+        case 51:CURRENT_LANGUAGE = LANGUAGE.french;loadLanguage();break;
+        case 52:CURRENT_LANGUAGE = LANGUAGE.italian;loadLanguage();break;
+        case 53:CURRENT_LANGUAGE = LANGUAGE.chinese;loadLanguage();break;
+        case 54:CURRENT_LANGUAGE = LANGUAGE.japanese;loadLanguage();break;
     }
 }
 
