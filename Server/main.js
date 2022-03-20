@@ -522,6 +522,23 @@ io.sockets.on("connection", function(socket) {
     socket.on("use-perk", function(data) {
         games[data].activatePerk(socket.id); 
     });
+
+    socket.on("request-profile", function(data) {
+        db.query("SELECT * FROM users WHERE gamertag='"+data+"'", function(error, results) {
+            if (error) {
+                socket.emit("recieve-profile", {error: true, errorMessage: "Failed to Find Player1."});
+                return;
+            } else {
+                if (results.length <= 0) {
+                    socket.emit("recieve-profile", {error: true, errorMessage: "Failed to Find Player2."});
+                    return;
+                } else {
+                    socket.emit("recieve-profile", {error: false, player: results[0]});
+                    return;
+                }
+            }
+        });
+    });
 });
 
 function findGame(id) {

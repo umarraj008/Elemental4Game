@@ -55,7 +55,7 @@ class SceneManager {
         this.settingsButton = new Button(c.width/2+300,c.height/2-100,300,150, "Settings");
         this.menuBackButton = new Button(c.width/2-300,c.height/2+300,600,100, "Back");
         this.projectWebsiteButton = new Button(50,c.height-200,300,150, "Project Website");
-        this.profilePageButton = new Button(c.width-350,c.height-200,300,150, "Profile");
+        this.profilePageButton = new Button(c.width-350,c.height-200,300,150, "My Profile");
         this.rankedMatchmakeButton = new Button(c.width/2-150,c.height/2+100,300,150, "Ranked Matchmake")
         this.leaderboardButton = new Button(c.width/2-150,c.height/2-270,300,150, "Leaderboard");
         
@@ -71,7 +71,10 @@ class SceneManager {
         
         //profile page buttons
         this.profileBackButton = new Button(c.width/2-150,c.height/2+300,300,150, "Back");
-        this.profilePagePanel =new Panel(c.width/2-350, 120, 700, 650);
+        this.profilePagePanel = new Panel(c.width/2-350, 120, 700, 650);
+        this.profileSearchForPlayer = new Button(c.width/2-350+720, 120,300,150, "Search for Player");
+        this.profileSearchBackButton = new Button(c.width/2-150,c.height/2+300,300,150, "Back to My Profile");
+        this.searchForPlayerButton = new Button(c.width/2-150,c.height/2,300,150, "Search");
 
         //game buttons
         this.actionButtons = {
@@ -179,6 +182,9 @@ class SceneManager {
         this.perkPanel = new Panel(1300,150,589,766);
 
         this.perkActivationButton = new Button(610, 670, 700, 150, "Activate Perk"); //for in game
+
+        this.profilePlayer = {};
+        this.playerProfileBackButton = new Button(c.width/2-150,c.height/2+300,300,150, "Back to Search");
     } 
 
     run() {
@@ -255,6 +261,11 @@ class SceneManager {
             case 10: //leaderboard page
                 this.drawLeaderboardPage();
                 break;
+            case 12: //profile search page
+                this.drawProfileSearchPage();
+                break;
+            case 13: //player profile page
+                this.drawPlayerProfilePage();
         }
 
         //tell user if they are connected to server
@@ -1046,7 +1057,7 @@ class SceneManager {
         ctx.fillText("Games Played: " + (game.myData.gamesWon + game.myData.gamesLost),c.width/2-200, 700);
 
         this.profileBackButton.draw(dt,mouseX,mouseY);
-        
+        this.profileSearchForPlayer.draw(dt,mouseX,mouseY);
 
     }
 
@@ -1106,6 +1117,43 @@ class SceneManager {
 
         this.leaderboardBackButton.draw(dt,mouseX,mouseY);
         
+    }
+
+    drawProfileSearchPage() {
+        this.maps.drawTransition(false);
+
+        this.searchForPlayerButton.draw(dt, mouseX, mouseY);
+        this.profileSearchBackButton.draw(dt, mouseX, mouseY);
+    }
+
+    drawPlayerProfilePage() {
+        this.maps.drawTransition(false);
+
+        //this will be draw title text 
+        ctx.font = "100px "+ FONT;
+        ctx.textAlign = "center";
+        ctx.fillStyle = "black";
+        ctx.fillText("Profile",c.width/2+4, 94);
+        ctx.fillStyle = "white";
+        ctx.fillText("Profile",c.width/2, 90);
+
+        this.profilePagePanel.draw();
+
+        ctx.fillStyle = "black";
+        ctx.font = "100px "+ FONT;
+        ctx.textAlign = "center";
+        ctx.fillText(this.profilePlayer.gamertag, c.width/2, 250);
+        ctx.textAlign = "left";
+
+        ctx.font = "50px "+ FONT;
+        ctx.fillText("XP Level: " + this.profilePlayer.xpLevel,c.width/2-200, 350);
+        ctx.fillText("Rank: " + this.ranks[(Math.floor(this.profilePlayer.skillLevel/100)>= 5)? 4:Math.floor(this.profilePlayer.skillLevel/100)],c.width/2-200, 420);
+        ctx.fillText("Skill Level: " + this.profilePlayer.skillLevel + "sr",c.width/2-200, 490);
+        ctx.fillText("Games Won: " + this.profilePlayer.gamesWon,c.width/2-200, 560);
+        ctx.fillText("Games Lost: " + this.profilePlayer.gamesLost,c.width/2-200, 630);
+        ctx.fillText("Games Played: " + (this.profilePlayer.gamesWon + this.profilePlayer.gamesLost),c.width/2-200, 700);
+
+        this.playerProfileBackButton.draw(dt, mouseX, mouseY);
     }
 
     mouseClick() {
@@ -1346,12 +1394,29 @@ class SceneManager {
             case 9://profile page
                 if(this.profileBackButton.mouseOver(mouseX,mouseY)) {
                     this.camera.transitionTo(4,0.005); 
+                } else if (this.profileSearchForPlayer.mouseOver(mouseX,mouseY)) {
+                    this.camera.transitionTo(12,0.005); 
+                    profileSearchBar(true, 200);
                 }
                 break;
 
             case 10://leaderboard
                 if(this.leaderboardBackButton.mouseOver(mouseX,mouseY)){
                     this.camera.transitionTo(4,0.005)
+                }
+                break;
+            case 12: //profile search page
+                if (this.profileSearchBackButton.mouseOver(mouseX, mouseY)) {
+                    this.camera.transitionTo(9, 0.005);
+                    profileSearchBar(false, 50);
+                } else if (this.searchForPlayerButton.mouseOver(mouseX, mouseY)) {
+                    searchForPlayer();
+                }
+                break;
+            case 13: //player profile page
+                if (this.playerProfileBackButton.mouseOver(mouseX, mouseY)) {
+                    this.camera.transitionTo(12, 0.005);
+                    profileSearchBar(true,200);
                 }
                 break;
         }
