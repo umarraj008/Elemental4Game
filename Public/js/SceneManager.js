@@ -380,9 +380,9 @@ class SceneManager {
         ctx.font = "100px "+ FONT;
         ctx.textAlign = "center";
         ctx.fillStyle = "black";
-        ctx.fillText("Accessibility Options",c.width/2+4, 94);
+        ctx.fillText(CURRENT_LANGUAGE.accessSettings.title,c.width/2+4, 94);
         ctx.fillStyle = "white";
-        ctx.fillText("Accessibility Options",c.width/2, 90);
+        ctx.fillText(CURRENT_LANGUAGE.accessSettings.title,c.width/2, 90);
 
         //panel
         this.settingsButtons.panel.draw();
@@ -392,7 +392,7 @@ class SceneManager {
         ctx.textAlign = "left";
         
         ctx.font = "30px " + FONT;
-        ctx.fillText("Contrast: ", 100, 250);
+        ctx.fillText(CURRENT_LANGUAGE.accessSettings.contrast, 100, 250);
         
         ctx.textAlign = "center";
         ctx.font = "50px " + FONT;
@@ -403,7 +403,7 @@ class SceneManager {
         //color blindness
         ctx.font = "30px " + FONT;
         ctx.textAlign = "left";
-        ctx.fillText("Color Blindness: ", 100, 450);
+        ctx.fillText(CURRENT_LANGUAGE.accessSettings.colorBlindness, 100, 450);
         this.accessPageColorBlindnessNoneButton.draw(dt, mouseX, mouseY);
         this.accessPageColorBlindness1Button.draw(dt, mouseX, mouseY);
         this.accessPageColorBlindness2Button.draw(dt, mouseX, mouseY);
@@ -412,7 +412,7 @@ class SceneManager {
         //language
         ctx.font = "30px " + FONT;
         ctx.textAlign = "left";
-        ctx.fillText("Language: ", 100, 650);
+        ctx.fillText(CURRENT_LANGUAGE.accessSettings.language, 100, 650);
         this.accessPageLanguage1.draw(dt, mouseX, mouseY);
         this.accessPageLanguage2.draw(dt, mouseX, mouseY);
         this.accessPageLanguage3.draw(dt, mouseX, mouseY);
@@ -434,9 +434,9 @@ class SceneManager {
         ctx.font = "100px "+ FONT;
         ctx.textAlign = "center";
         ctx.fillStyle = "black";
-        ctx.fillText("Settings",c.width/2+4, 94);
+        ctx.fillText(CURRENT_LANGUAGE.settings.settings,c.width/2+4, 94);
         ctx.fillStyle = "white";
-        ctx.fillText("Settings",c.width/2, 90);
+        ctx.fillText(CURRENT_LANGUAGE.settings.settings,c.width/2, 90);
 
         this.settingsButtons.panel.draw();
 
@@ -444,40 +444,40 @@ class SceneManager {
         ctx.textAlign = "left";
         
         ctx.font = "60px " + FONT;
-        ctx.fillText("Graphics", 100, 200);
+        ctx.fillText(CURRENT_LANGUAGE.settings.graphics, 100, 200);
         
         ctx.font = "30px " + FONT;
-        ctx.fillText("Frame Rate: ", 100, 200+50);
+        ctx.fillText(CURRENT_LANGUAGE.settings.frameRate, 100, 200+50);
         this.settingsButtons.frameRate30FPS.draw(dt, mouseX, mouseY);
         this.settingsButtons.frameRate60FPS.draw(dt, mouseX, mouseY);
         
         ctx.font = "30px " + FONT;
         ctx.textAlign = "left";
-        ctx.fillText("Wind Particles: ", 100, 300+20+50);
+        ctx.fillText(CURRENT_LANGUAGE.settings.windParticles, 100, 300+20+50);
         this.settingsButtons.windParticlesOn.draw(dt, mouseX, mouseY);
         this.settingsButtons.windParticlesOff.draw(dt, mouseX, mouseY);
         
         ctx.font = "30px " + FONT;
         ctx.textAlign = "left";
-        ctx.fillText("Debris Particles: ", 100, 400+40+50);
+        ctx.fillText(CURRENT_LANGUAGE.settings.debrisParticles, 100, 400+40+50);
         this.settingsButtons.debrisParticlesOn.draw(dt, mouseX, mouseY);
         this.settingsButtons.debrisParticlesOff.draw(dt, mouseX, mouseY);
         
         ctx.font = "30px " + FONT;
         ctx.textAlign = "left";
-        ctx.fillText("Moving Background: ", 100, 500+60+50);
+        ctx.fillText(CURRENT_LANGUAGE.settings.movingBackground, 100, 500+60+50);
         this.settingsButtons.movingBackgroundOn.draw(dt, mouseX, mouseY);
         this.settingsButtons.movingBackgroundOff.draw(dt, mouseX, mouseY);
         
         ctx.font = "30px " + FONT;
         ctx.textAlign = "left";
-        ctx.fillText("Text Indicators: ", 100, 600+80+50);
+        ctx.fillText(CURRENT_LANGUAGE.settings.textIndicators, 100, 600+80+50);
         this.settingsButtons.textIndicatorsOn.draw(dt, mouseX, mouseY);
         this.settingsButtons.textIndicatorsOff.draw(dt, mouseX, mouseY);
         
         ctx.font = "30px " + FONT;
         ctx.textAlign = "left";
-        ctx.fillText("Fullscreen: ", 100, 700+100+50);
+        ctx.fillText(CURRENT_LANGUAGE.settings.fullscreen, 100, 700+100+50);
         this.settingsButtons.fullscreenOn.draw(dt, mouseX, mouseY);
         this.settingsButtons.fullscreenOff.draw(dt, mouseX, mouseY);
         
@@ -605,16 +605,16 @@ class SceneManager {
         ctx.font = "100px "+FONT;
         ctx.textAlign = "center";
         ctx.fillStyle= "black";
-        ctx.fillText("Main Menu",c.width/2+4, 204);
+        ctx.fillText(CURRENT_LANGUAGE.menu.title,c.width/2+4, 204);
         ctx.fillStyle= "white";
-        ctx.fillText("Main Menu",c.width/2, 200);
+        ctx.fillText(CURRENT_LANGUAGE.menu.title,c.width/2, 200);
 
         if (this.matchmaking) {
             ctx.font = "70px "+FONT;
             ctx.fillStyle = "black";
-            ctx.fillText("Searching For Match", c.width/2+4, c.height/2-196);
+            ctx.fillText(CURRENT_LANGUAGE.menu.seartchingForMatch, c.width/2+4, c.height/2-196);
             ctx.fillStyle = "white";
-            ctx.fillText("Searching For Match", c.width/2, c.height/2-200);
+            ctx.fillText(CURRENT_LANGUAGE.menu.seartchingForMatch, c.width/2, c.height/2-200);
             this.stopMatchmakeButton.draw(dt, mouseX, mouseY);
         } else {
             this.rankedMatchmakeButton.draw(dt, mouseX, mouseY);
@@ -640,9 +640,9 @@ class SceneManager {
         ctx.font = "100px "+FONT;
         ctx.textAlign = "center";
         ctx.fillStyle= "black";
-        ctx.fillText("Perk Screen",c.width/2+4, 114);
+        ctx.fillText(CURRENT_LANGUAGE.perkMenu.title,c.width/2+4, 114);
         ctx.fillStyle= "white";
-        ctx.fillText("Perk Screen",c.width/2, 110);
+        ctx.fillText(CURRENT_LANGUAGE.perkMenu.title,c.width/2, 110);
        
         //Back button
         this.perkBackButton.draw(dt,mouseX,mouseY);
@@ -663,9 +663,9 @@ class SceneManager {
         // ctx.fillText("Critcal Hit Chance",1137,200);
 
         ctx.fillStyle = "black";
-        ctx.fillText("Perk Information", 1599,200);
-        ctx.fillText("Skill Points Available", 1452,633);
-        ctx.fillText("Skill Progress", 1746,633);
+        ctx.fillText(CURRENT_LANGUAGE.perkMenu.perkInformation, 1599,200);
+        ctx.fillText(CURRENT_LANGUAGE.perkMenu.skillPointsAvailable, 1452,633);
+        ctx.fillText(CURRENT_LANGUAGE.perkMenu.skillProgress, 1746,633);
         ctx.fillText(perkCount + "/9", 1746,860);
 
         ctx.font = "180px "+FONT;
@@ -710,7 +710,7 @@ class SceneManager {
             ctx.fillStyle = "black";
             ctx.textAlign = "center";
             ctx.font = "60px "+FONT;
-            ctx.fillText("Are you sure?", c.width/2, c.height/2-200);
+            ctx.fillText(CURRENT_LANGUAGE.perkMenu.areYouSure, c.width/2, c.height/2-200);
 
             this.perkConfirmConfirmButton.draw(dt, mouseX, mouseY);
             this.perkConfirmCancelButton.draw(dt, mouseX, mouseY);
@@ -725,7 +725,7 @@ class SceneManager {
         ctx.fillStyle= "white";
         ctx.font = "80px "+FONT;
         ctx.textAlign = "center";
-        ctx.fillText("Pick your character",c.width/2, 150);
+        ctx.fillText(CURRENT_LANGUAGE.characterSelect.pickYourCharacter,c.width/2, 150);
 
         
         this.characterSelect.fire.draw(dt, mouseX, mouseY);
@@ -741,10 +741,10 @@ class SceneManager {
         ctx.fillStyle = "black";
         ctx.font = "40px "+FONT;
         ctx.textAlign = "center";
-        ctx.fillText("Fire",  c.width/2-720, 700);
-        ctx.fillText("Water", c.width/2-240, 700);
-        ctx.fillText("Earth", c.width/2+240, 700);
-        ctx.fillText("Air",   c.width/2+720, 700);
+        ctx.fillText(CURRENT_LANGUAGE.characterSelect.fire,  c.width/2-720, 700);
+        ctx.fillText(CURRENT_LANGUAGE.characterSelect.water, c.width/2-240, 700);
+        ctx.fillText(CURRENT_LANGUAGE.characterSelect.earth, c.width/2+240, 700);
+        ctx.fillText(CURRENT_LANGUAGE.characterSelect.air,   c.width/2+720, 700);
     }
 
     drawGame() {
@@ -815,9 +815,9 @@ class SceneManager {
 
         if (game.turn && (this.player1Animator.currentAnimation == "idle" && this.player2Animator.currentAnimation == "idle")) {
             ctx.fillStyle = "black";
-            ctx.fillText("Your Turn!", c.width/2+4, 204);
+            ctx.fillText(CURRENT_LANGUAGE.game.yourTurn, c.width/2+4, 204);
             ctx.fillStyle = "white";
-            ctx.fillText("Your Turn!", c.width/2, 200);
+            ctx.fillText(CURRENT_LANGUAGE.game.yourTurn, c.width/2, 200);
 
             if (game.points >= 6 && !(game.health >= 200)) {
                 this.actionButtons.heal.style = "normal";
@@ -880,21 +880,21 @@ class SceneManager {
             ctx.fillStyle = "black";
             ctx.textAlign = "center";
             ctx.font = "30px "+FONT;
-            ctx.fillText("Wait", 20+148, 900);
-            ctx.fillText("Heal",336+148, 900);
-            ctx.fillText("Attack 1",652+148, 900);
-            ctx.fillText("Attack 2",968+148, 900);
-            ctx.fillText("Attack 3",1284+148, 900);
-            ctx.fillText("Ultimate",1600+148, 900);
+            ctx.fillText(CURRENT_LANGUAGE.game.wait, 20+148, 900);
+            ctx.fillText(CURRENT_LANGUAGE.game.heal,336+148, 900);
+            ctx.fillText(CURRENT_LANGUAGE.game.attack1,652+148, 900);
+            ctx.fillText(CURRENT_LANGUAGE.game.attack2,968+148, 900);
+            ctx.fillText(CURRENT_LANGUAGE.game.attack3,1284+148, 900);
+            ctx.fillText(CURRENT_LANGUAGE.game.ultimate,1600+148, 900);
             
             
             ctx.font = "20px "+FONT;
-            ctx.fillText("Price: 0", 20+148, 950);
-            ctx.fillText("Price: 6",336+148, 950);
-            ctx.fillText("Price: 3",652+148, 950);
-            ctx.fillText("Price: 4",968+148, 950);
-            ctx.fillText("Price: 5",1284+148, 950);
-            ctx.fillText("Price: 15",1600+148, 950);
+            ctx.fillText(CURRENT_LANGUAGE.game.price0, 20+148, 950);
+            ctx.fillText(CURRENT_LANGUAGE.game.price6,336+148, 950);
+            ctx.fillText(CURRENT_LANGUAGE.game.price3,652+148, 950);
+            ctx.fillText(CURRENT_LANGUAGE.game.price4,968+148, 950);
+            ctx.fillText(CURRENT_LANGUAGE.game.price5,1284+148, 950);
+            ctx.fillText(CURRENT_LANGUAGE.game.price15,1600+148, 950);
 
             let damageBoost = 0;
             // switch(parseInt(game.myData.perksUnlocked.split(",")[0])) {
@@ -905,12 +905,12 @@ class SceneManager {
             //     case 4: damageBoost = 20; break;
             // }
 
-            ctx.fillText("10 Health, 2 points", 20+148, 1000);
-            ctx.fillText("30 Health",336+148, 1000);
-            ctx.fillText(10 + " Damage",652+148, 1000);
-            ctx.fillText(20 + " Damage",968+148, 1000);
-            ctx.fillText(30 + " Damage",1284+148, 1000);
-            ctx.fillText(70 + " Damage",1600+148, 1000);
+            ctx.fillText(CURRENT_LANGUAGE.game.health10Points2, 20+148, 1000);
+            ctx.fillText(CURRENT_LANGUAGE.game.health30,336+148, 1000);
+            ctx.fillText(CURRENT_LANGUAGE.game.damage10,652+148, 1000);
+            ctx.fillText(CURRENT_LANGUAGE.game.damage20,968+148, 1000);
+            ctx.fillText(CURRENT_LANGUAGE.game.damage30,1284+148, 1000);
+            ctx.fillText(CURRENT_LANGUAGE.game.damage70,1600+148, 1000);
             
             if (game.attackButtonsDisabled) {
                 /////draw X's
@@ -922,10 +922,10 @@ class SceneManager {
             ctx.textAlign = "center";
             ctx.font = "100px " + FONT;
             ctx.fillStyle = "black";
-            ctx.fillText(game.showPerkActivated.gamertag + " has activated their perk!",c.width/2+4, c.height/2+4)
+            ctx.fillText(game.showPerkActivated.gamertag + CURRENT_LANGUAGE.game.hasActivatedTheirPerk,c.width/2+4, c.height/2+4)
             ctx.fillText(game.showPerkActivated.perk,c.width/2+4, c.height/2+100+4);
             ctx.fillStyle = "white";
-            ctx.fillText(game.showPerkActivated.gamertag + " has activated their perk!",c.width/2, c.height/2)
+            ctx.fillText(game.showPerkActivated.gamertag + CURRENT_LANGUAGE.game.hasActivatedTheirPerk,c.width/2, c.height/2)
             ctx.fillText(game.showPerkActivated.perk,c.width/2, c.height/2+100);
         }
 
@@ -944,24 +944,24 @@ class SceneManager {
         ctx.textAlign = "left";
         ctx.font = "40px "+FONT;
         ctx.fillStyle = "black";
-        ctx.fillText("health: " + game.health, 52, 202);
-        ctx.fillText("Perk Stamina: " + game.perkBarValue, 52, 252);
-        ctx.fillText("points: " + game.points, 52, 302);
+        ctx.fillText(CURRENT_LANGUAGE.game.health + game.health, 52, 202);
+        ctx.fillText(CURRENT_LANGUAGE.game.perkStamina + game.perkBarValue, 52, 252);
+        ctx.fillText(CURRENT_LANGUAGE.game.points + game.points, 52, 302);
         ctx.fillStyle = "white";
-        ctx.fillText("health: " + game.health, 50, 200);
-        ctx.fillText("Perk Stamina: " + game.perkBarValue, 50, 250);
-        ctx.fillText("points: " + game.points, 50, 300);
+        ctx.fillText(CURRENT_LANGUAGE.game.health + game.health, 50, 200);
+        ctx.fillText(CURRENT_LANGUAGE.game.perkStamina + game.perkBarValue, 50, 250);
+        ctx.fillText(CURRENT_LANGUAGE.game.points + game.points, 50, 300);
         
 
         ctx.textAlign = "right";
         ctx.fillStyle = "black";
-        ctx.fillText("health: " + game.player2.health, c.width-48, 202);
-        ctx.fillText("Perk Stamina: " + game.player2.perkBarValue, c.width-48, 252);
-        ctx.fillText("points: " + game.player2.points, c.width-48, 302);
+        ctx.fillText(CURRENT_LANGUAGE.game.health + game.player2.health, c.width-48, 202);
+        ctx.fillText(CURRENT_LANGUAGE.game.perkStamina + game.player2.perkBarValue, c.width-48, 252);
+        ctx.fillText(CURRENT_LANGUAGE.game.points + game.player2.points, c.width-48, 302);
         ctx.fillStyle = "white";
-        ctx.fillText("health: " + game.player2.health, c.width-50, 200);
-        ctx.fillText("Perk Stamina: " + game.player2.perkBarValue, c.width-50, 250);
-        ctx.fillText("points: " + game.player2.points, c.width-50, 300);
+        ctx.fillText(CURRENT_LANGUAGE.game.health + game.player2.health, c.width-50, 200);
+        ctx.fillText(CURRENT_LANGUAGE.game.perkStamina + game.player2.perkBarValue, c.width-50, 250);
+        ctx.fillText(CURRENT_LANGUAGE.game.points + game.player2.points, c.width-50, 300);
         
         
         ctx.textAlign = "left";
@@ -991,16 +991,16 @@ class SceneManager {
                 ctx.fillStyle = "rgba(0,255,100,0.3)";
                 ctx.fillRect(0,0,c.width,c.height);
                 ctx.fillStyle = "black";
-                ctx.fillText("Victory", c.width/2+4,c.height/2+4);
+                ctx.fillText(CURRENT_LANGUAGE.game.victory, c.width/2+4,c.height/2+4);
                 ctx.fillStyle = "white";
-                ctx.fillText("Victory", c.width/2,c.height/2);
+                ctx.fillText(CURRENT_LANGUAGE.game.victory, c.width/2,c.height/2);
             } else {
                 ctx.fillStyle = "rgba(255,0,0,0.3)";
                 ctx.fillRect(0,0,c.width,c.height);
                 ctx.fillStyle = "black";
-                ctx.fillText("Defeat", c.width/2+4,c.height/2+4);
+                ctx.fillText(CURRENT_LANGUAGE.game.defeat, c.width/2+4,c.height/2+4);
                 ctx.fillStyle = "white";
-                ctx.fillText("Defeat", c.width/2,c.height/2);
+                ctx.fillText(CURRENT_LANGUAGE.game.defeat, c.width/2,c.height/2);
             }
         }
 
@@ -1041,9 +1041,9 @@ class SceneManager {
         ctx.font = "100px "+FONT;
         ctx.textAlign = "center";
         ctx.fillStyle= "black";
-        ctx.fillText("Game Results",c.width/2+4, 204);
+        ctx.fillText(CURRENT_LANGUAGE.results.gameResults,c.width/2+4, 204);
         ctx.fillStyle= "white";
-        ctx.fillText("Game Results",c.width/2, 200);
+        ctx.fillText(CURRENT_LANGUAGE.results.gameResults,c.width/2, 200);
  
         // ctx.textAlign = "center";
         // ctx.font = "100px Arial";
@@ -1079,9 +1079,9 @@ class SceneManager {
         ctx.fillStyle = "black";
 
         if (game.levelUp) {
-            ctx.fillText("Level Up!", c.width/2, c.height/2+150);
+            ctx.fillText(CURRENT_LANGUAGE.results.levelUp, c.width/2, c.height/2+150);
         } else {
-            ctx.fillText("Level " + ((this.xpHealthBar.maxValue/10)-1) , c.width/2, c.height/2+150);
+            ctx.fillText(CURRENT_LANGUAGE.results.level + ((this.xpHealthBar.maxValue/10)-1) , c.width/2, c.height/2+150);
         }
 
         this.xpHealthBar.draw();
@@ -1093,7 +1093,7 @@ class SceneManager {
             // ctx.fillText("Current Rank: " + this.ranks[((Math.floor(game.myData.skillLevel/100) >= 5) ? 4 : Math.floor(game.myData.skillLevel/100))] + " " + Math.floor(this.skillLevelHealthBar.value) + "/" + this.skillLevelHealthBar.maxValue + " -> Next Rank: " + this.ranks[(Math.floor((game.myData.skillLevel/100)+1) >= 5) ? 4 : Math.floor((game.myData.skillLevel/100)+1)], c.width/2, c.height/2+350);
             ctx.fillText(Math.floor(this.skillLevelHealthBar.value) + "/" + this.skillLevelHealthBar.maxValue, c.width/2, c.height/2+350);
             ctx.textAlign = "left"
-            ctx.fillText("Current Rank: " + this.ranks[((Math.floor(game.myData.skillLevel/100) >= 5) ? 4 : Math.floor(game.myData.skillLevel/100))], this.skillLevelHealthBar.x, c.height/2+350);
+            ctx.fillText(CURRENT_LANGUAGE.results.currentRank + this.ranks[((Math.floor(game.myData.skillLevel/100) >= 5) ? 4 : Math.floor(game.myData.skillLevel/100))], this.skillLevelHealthBar.x, c.height/2+350);
             ctx.textAlign = "right"
             ctx.fillText(skillLevelGain, this.skillLevelHealthBar.x + this.skillLevelHealthBar.w, c.height/2+350);
         }
@@ -1109,9 +1109,9 @@ class SceneManager {
         ctx.font = "100px "+ FONT;
         ctx.textAlign = "center";
         ctx.fillStyle = "black";
-        ctx.fillText("Profile",c.width/2+4, 94);
+        ctx.fillText(CURRENT_LANGUAGE.profile.title,c.width/2+4, 94);
         ctx.fillStyle = "white";
-        ctx.fillText("Profile",c.width/2, 90);
+        ctx.fillText(CURRENT_LANGUAGE.profile.title,c.width/2, 90);
 
         this.profilePagePanel.draw();
 
@@ -1122,12 +1122,12 @@ class SceneManager {
         ctx.textAlign = "left";
 
         ctx.font = "50px "+ FONT;
-        ctx.fillText("XP Level: " + game.myData.xpLevel,c.width/2-200, 350);
-        ctx.fillText("Rank: " + this.ranks[(Math.floor(game.myData.skillLevel/100)>= 5)? 4:Math.floor(game.myData.skillLevel/100)],c.width/2-200, 420);
-        ctx.fillText("Skill Level: " + game.myData.skillLevel + "sr",c.width/2-200, 490);
-        ctx.fillText("Games Won: " + game.myData.gamesWon,c.width/2-200, 560);
-        ctx.fillText("Games Lost: " + game.myData.gamesLost,c.width/2-200, 630);
-        ctx.fillText("Games Played: " + (game.myData.gamesWon + game.myData.gamesLost),c.width/2-200, 700);
+        ctx.fillText(CURRENT_LANGUAGE.profile.XPLevel + game.myData.xpLevel,c.width/2-200, 350);
+        ctx.fillText(CURRENT_LANGUAGE.profile.rank + this.ranks[(Math.floor(game.myData.skillLevel/100)>= 5)? 4:Math.floor(game.myData.skillLevel/100)],c.width/2-200, 420);
+        ctx.fillText(CURRENT_LANGUAGE.profile.skillLevel + game.myData.skillLevel + "sr",c.width/2-200, 490);
+        ctx.fillText(CURRENT_LANGUAGE.profile.gamesWon + game.myData.gamesWon,c.width/2-200, 560);
+        ctx.fillText(CURRENT_LANGUAGE.profile.gamesLost + game.myData.gamesLost,c.width/2-200, 630);
+        ctx.fillText(CURRENT_LANGUAGE.profile.gamesPlayed + (game.myData.gamesWon + game.myData.gamesLost),c.width/2-200, 700);
 
         this.profileBackButton.draw(dt,mouseX,mouseY);
         
@@ -1141,9 +1141,9 @@ class SceneManager {
         ctx.font = "100px "+ FONT;
         ctx.textAlign = "center";
         ctx.fillStyle = "black";
-        ctx.fillText("Leaderboard",c.width/2+4, 94);
+        ctx.fillText(CURRENT_LANGUAGE.leaderboard.title,c.width/2+4, 94);
         ctx.fillStyle = "white";
-        ctx.fillText("Leaderboard",c.width/2, 90);
+        ctx.fillText(CURRENT_LANGUAGE.leaderboard.title,c.width/2, 90);
 
         this.leaderboardPanel1.draw()
 
@@ -1167,9 +1167,9 @@ class SceneManager {
         }
         
         ctx.textAlign = "center";
-        ctx.fillText("Most Games Won",this.leaderboardPanel1.x + this.leaderboardPanel1.w/2,210);
-        ctx.fillText("Top 10 Warriors",this.leaderboardPanel2.x + this.leaderboardPanel2.w/2,210);
-        ctx.fillText("Most XP collected",this.leaderboardPanel3.x + this.leaderboardPanel3.w/2,210);
+        ctx.fillText(CURRENT_LANGUAGE.leaderboard.mostGamesWon,this.leaderboardPanel1.x + this.leaderboardPanel1.w/2,210);
+        ctx.fillText(CURRENT_LANGUAGE.leaderboard.top10Warriors,this.leaderboardPanel2.x + this.leaderboardPanel2.w/2,210);
+        ctx.fillText(CURRENT_LANGUAGE.leaderboard.mostXPcollected,this.leaderboardPanel3.x + this.leaderboardPanel3.w/2,210);
 
         ctx.strokeStyle = "black";
         ctx.lineWidth = "15px";
@@ -1533,6 +1533,7 @@ class SceneManager {
         this.perkActivateButton.text = CURRENT_LANGUAGE.perkMenu.activateButton;
         this.perkConfirmConfirmButton.text = CURRENT_LANGUAGE.perkMenu.confirmButton;
         this.perkConfirmCancelButton.text = CURRENT_LANGUAGE.perkMenu.cancelButton;
+        this.perkDescription = CURRENT_LANGUAGE.perkMenu.perkDescription;
         
         //settings page
         this.settingsButtons.frameRate30FPS.text = CURRENT_LANGUAGE.settings.frameRate30FPS;      
@@ -1559,24 +1560,12 @@ class SceneManager {
         this.accessPageColorBlindness3Button.text = CURRENT_LANGUAGE.accessSettings.accessPageColorBlindness3Button;
         
         //game
-        this.actionButtons.wait.text = CURRENT_LANGUAGE.game.wait;
-        this.actionButtons.heal.text = CURRENT_LANGUAGE.game.heal;
-        this.actionButtons.attack1.text = CURRENT_LANGUAGE.game.attack1;
-        this.actionButtons.attack2.text = CURRENT_LANGUAGE.game.attack2;
-        this.actionButtons.attack3.text = CURRENT_LANGUAGE.game.attack3;
-        this.actionButtons.ultimate.text = CURRENT_LANGUAGE.game.ultimate;
         this.perkActivationButton.text = CURRENT_LANGUAGE.game.perkActivationButton;
         
         //profile page
         this.profileBackButton.text = CURRENT_LANGUAGE.profile.backButton;
         
         //game result
-        this.resultsBackButton.text = CURRENT_LANGUAGE.results.backButton;
-  
-        //character select page
-        this.characterSelect.fire.text = CURRENT_LANGUAGE.characterSelect.fire;
-        this.characterSelect.water.text = CURRENT_LANGUAGE.characterSelect.water;
-        this.characterSelect.earth.text = CURRENT_LANGUAGE.characterSelect.earth;
-        this.characterSelect.air.text = CURRENT_LANGUAGE.characterSelect.air;
+        this.resultsBackButton.text = CURRENT_LANGUAGE.results.backButton;  
     }
 }
