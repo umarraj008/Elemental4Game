@@ -474,6 +474,17 @@ socket.on("perk-activated", function(data) {
     setTimeout(function() {game.showPerkActivated.toggle = false}, 4000);
 });
 
+socket.on("recieve-profile", function(data) {
+    if (data.error) {
+        console.log(data.errorMessage);
+    } else {
+        sceneManager.profilePlayer = data.player;
+        sceneManager.camera.transitionTo(13,0.005);
+        profileSearchBar(false, 50);
+        document.getElementById("profileSearchBar").value = "";
+    }
+});
+
 socket.on("just-wait-over", function() {
     game.attackButtonsDisabled = false;
     console.log("test");
@@ -806,4 +817,21 @@ function loadLanguage(which) {
 
 function requestLeaderboard() {
     socket.emit("request-leaderboard");
+}
+
+function profileSearchBar(on, val) {
+    console.log(on)
+    if (on) {
+        setTimeout(function() {document.getElementById("profileSearchBarContainer").style.display = "flex"}, val);
+    } else {
+        setTimeout(function() {document.getElementById("profileSearchBarContainer").style.display = "none"}, val);
+    }
+}
+
+function searchForPlayer() {
+    let gamertag = document.getElementById("profileSearchBar").value;
+    console.log("searching for player: " + gamertag);
+    if (gamertag.length <= 0) { document.getElementById("profileSearchBar").value = ""; return };
+    if (gamertag.length >= 15) { document.getElementById("profileSearchBar").value = ""; return };
+    socket.emit("request-profile", gamertag);
 }
