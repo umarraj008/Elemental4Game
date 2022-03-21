@@ -35,6 +35,7 @@ class SceneManager {
         this.skillLevelHealthBar.speed = 0.07;
         this.credits = new Credits();
         this.selectedPerk = 0;
+        this.errorMessageHandler = new ErrorMessageHandler();
         this.camera = new Camera();
         this.maps = new Maps();
         this.angle = 0;
@@ -346,7 +347,7 @@ class SceneManager {
                 break;
             }
         }
-
+        this.errorMessageHandler.draw();
         this.camera.drawTransition();
     }
 
