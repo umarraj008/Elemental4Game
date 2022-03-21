@@ -726,6 +726,95 @@ function loadSettings() {
     }
 }
 
+function loadAccessFeatures() {
+    //color blindness
+    if (SETTINGS.colorBlindness == 0) {
+        sceneManager.accessPageColorBlindnessNoneButton.style = "selected";
+        sceneManager.accessPageColorBlindness1Button.style = "disabled";
+        sceneManager.accessPageColorBlindness2Button.style = "disabled";
+        sceneManager.accessPageColorBlindness3Button.style = "disabled";
+    } else if (SETTINGS.colorBlindness == 1) {
+        sceneManager.accessPageColorBlindnessNoneButton.style = "disabled";
+        sceneManager.accessPageColorBlindness1Button.style = "selected";
+        sceneManager.accessPageColorBlindness2Button.style = "disabled";
+        sceneManager.accessPageColorBlindness3Button.style = "disabled";
+    } else if (SETTINGS.colorBlindness == 2) {
+        sceneManager.accessPageColorBlindnessNoneButton.style = "disabled";
+        sceneManager.accessPageColorBlindness1Button.style = "disabled";
+        sceneManager.accessPageColorBlindness2Button.style = "selected";
+        sceneManager.accessPageColorBlindness3Button.style = "disabled";
+    } else if (SETTINGS.colorBlindness == 3) {
+        sceneManager.accessPageColorBlindnessNoneButton.style = "disabled";
+        sceneManager.accessPageColorBlindness1Button.style = "disabled";
+        sceneManager.accessPageColorBlindness2Button.style = "disabled";
+        sceneManager.accessPageColorBlindness3Button.style = "selected";
+    }
+
+    //language
+    if (SETTINGS.language == 0) {
+        sceneManager.accessPageLanguage1.style = "selected";
+        sceneManager.accessPageLanguage2.style = "disabled";
+        sceneManager.accessPageLanguage3.style = "disabled";
+        sceneManager.accessPageLanguage4.style = "disabled";
+        sceneManager.accessPageLanguage5.style = "disabled";
+        sceneManager.accessPageLanguage6.style = "disabled";
+        loadLanguage(0);
+    } else if (SETTINGS.language == 1) {
+        sceneManager.accessPageLanguage1.style = "disabled";
+        sceneManager.accessPageLanguage2.style = "selected";
+        sceneManager.accessPageLanguage3.style = "disabled";
+        sceneManager.accessPageLanguage4.style = "disabled";
+        sceneManager.accessPageLanguage5.style = "disabled";
+        sceneManager.accessPageLanguage6.style = "disabled";
+        loadLanguage(1);
+    } else if (SETTINGS.language == 2) {
+        sceneManager.accessPageLanguage1.style = "disabled";
+        sceneManager.accessPageLanguage2.style = "disabled";
+        sceneManager.accessPageLanguage3.style = "selected";
+        sceneManager.accessPageLanguage4.style = "disabled";
+        sceneManager.accessPageLanguage5.style = "disabled";
+        sceneManager.accessPageLanguage6.style = "disabled";
+        loadLanguage(2);
+    } else if (SETTINGS.language == 3) {
+        sceneManager.accessPageLanguage1.style = "disabled";
+        sceneManager.accessPageLanguage2.style = "disabled";
+        sceneManager.accessPageLanguage3.style = "disabled";
+        sceneManager.accessPageLanguage4.style = "selected";
+        sceneManager.accessPageLanguage5.style = "disabled";
+        sceneManager.accessPageLanguage6.style = "disabled";
+        loadLanguage(3);
+    } else if (SETTINGS.language == 4) {
+        sceneManager.accessPageLanguage1.style = "disabled";
+        sceneManager.accessPageLanguage2.style = "disabled";
+        sceneManager.accessPageLanguage3.style = "disabled";
+        sceneManager.accessPageLanguage4.style = "disabled";
+        sceneManager.accessPageLanguage5.style = "selected";
+        sceneManager.accessPageLanguage6.style = "disabled";
+        loadLanguage(4);
+    } else if (SETTINGS.language == 5) {
+        sceneManager.accessPageLanguage1.style = "disabled";
+        sceneManager.accessPageLanguage2.style = "disabled";
+        sceneManager.accessPageLanguage3.style = "disabled";
+        sceneManager.accessPageLanguage4.style = "disabled";
+        sceneManager.accessPageLanguage5.style = "disabled";
+        sceneManager.accessPageLanguage6.style = "selected";
+        loadLanguage(5);
+    }
+}
+
+function loadLanguage(which) {
+    switch(which) {
+        case 0: CURRENT_LANGUAGE = LANGUAGE.english; break;
+        case 1: CURRENT_LANGUAGE = LANGUAGE.spanish; break;
+        case 2: CURRENT_LANGUAGE = LANGUAGE.french; break;
+        case 3: CURRENT_LANGUAGE = LANGUAGE.italian; break;
+        case 4: CURRENT_LANGUAGE = LANGUAGE.chinese; break;
+        case 5: CURRENT_LANGUAGE = LANGUAGE.japanese; break;
+    }
+
+    sceneManager.updateAllText();
+}
+
 function requestLeaderboard() {
     socket.emit("request-leaderboard");
 }
