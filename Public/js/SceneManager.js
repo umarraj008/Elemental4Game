@@ -1634,5 +1634,11 @@ class SceneManager {
         
         //game result
         this.resultsBackButton.text = CURRENT_LANGUAGE.results.backButton;  
+        
+        //search page
+        this.searchForPlayerButton.text = CURRENT_LANGUAGE.profile.searchForPlayerButton;
+        this.profileSearchForPlayer.text = CURRENT_LANGUAGE.profile.profileSearchForPlayer;
+        this.profileSearchBackButton.text = CURRENT_LANGUAGE.profile.profileSearchBackButton;
+        this.playerProfileBackButton.text = CURRENT_LANGUAGE.profile.playerProfileBackButton;
     }
 }

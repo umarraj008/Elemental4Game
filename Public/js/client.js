@@ -84,6 +84,7 @@ socket.on("connect", function() {
 
 socket.on("disconnect", function() {
     console.log("disconnected to server");
+    sceneManager.errorMessageHandler.makeError(CURRENT_LANGUAGE.errorMessages[0]);
 });
 
 socket.on("pick-character", function(data) {
@@ -363,6 +364,7 @@ socket.on("logged-in", function(userData) {
 });
 
 socket.on("login-failed", function(message) {
+    sceneManager.errorMessageHandler.makeError(CURRENT_LANGUAGE.errorMessages[message]);
     console.log(message);
     logout();
 });
@@ -390,6 +392,7 @@ socket.on("perk-buy-success", function(data) {
 });
 
 socket.on("perk-buy-failed", function() {
+    sceneManager.errorMessageHandler.makeError("Failed to Buy Perk.");
     console.log("failed to buy perk");
 });
 
@@ -424,11 +427,12 @@ socket.on("removed-from-matchmaking", function() {
 
 socket.on("recieve-leaderboard", function(data) {
     if (data.error) {
+        sceneManager.errorMessageHandler.makeError(CURRENT_LANGUAGE.errorMessage[data.errorMessage]);
         console.log(data.errorMessage);
     } else {
-        console.table(data.leaderboard1);
-        console.table(data.leaderboard2);
-        console.table(data.leaderboard3);
+        // console.table(data.leaderboard1);
+        // console.table(data.leaderboard2);
+        // console.table(data.leaderboard3);
 
         sceneManager.leaderboard1 = data.leaderboard1;
         sceneManager.leaderboard2 = data.leaderboard2;
@@ -476,7 +480,8 @@ socket.on("perk-activated", function(data) {
 
 socket.on("recieve-profile", function(data) {
     if (data.error) {
-        console.log(data.errorMessage);
+        sceneManager.errorMessageHandler.makeError(data.errorMessage);
+        console.log(CURRENT_LANGUAGE.errorMessages[data.errorMessage]);
     } else {
         sceneManager.profilePlayer = data.player;
         sceneManager.camera.transitionTo(13,0.005);
