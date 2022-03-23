@@ -252,7 +252,7 @@ io.sockets.on("connection", function(socket) {
                 perkPoints: rankedMatchmakingQueue[0].perkPoints,
                 skillLevel: rankedMatchmakingQueue[0].skillLevel,
             };
-            console.log(rankedMatchmakingQueue[0].skillLevel, rankedMatchmakingQueue[1].skillLevel);////////////////////////////
+            // console.log(rankedMatchmakingQueue[0].skillLevel, rankedMatchmakingQueue[1].skillLevel);////////////////////////////
 
             let player2 = {
                 socket: rankedMatchmakingQueue[1].socket,
@@ -329,7 +329,7 @@ io.sockets.on("connection", function(socket) {
         if (games[player.gameID] != null || games[player.gameID] != undefined) {
             games[player.gameID].matchCancelled(socket.id);
             delete games[player.gameID];
-            console.log("match cancelled, game deleted: " + player.gameID);
+            // console.log("match cancelled, game deleted: " + player.gameID);
         }
 
         //delete player from list
@@ -569,12 +569,12 @@ function makeGameID() {
 // }, 600000);
 
 em.on("delete-game", (data) => {
-    console.log("delete this game: " + data.id);
+    // console.log("delete this game: " + data.id);
     delete games[data.id];
 });
 
 em.on("game-over", (data) => {
-    console.log("Games Over, uploading to database...: " + data.id);
+    // console.log("Games Over, uploading to database...: " + data.id);
     em.emit("delete-game", {id: data.id});
 });
 

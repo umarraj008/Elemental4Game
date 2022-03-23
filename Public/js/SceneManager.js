@@ -325,17 +325,23 @@ class SceneManager {
 
                     if (game.turn && !this.botSelected) {
                         if (game.points >= 15) {
-                            console.log("selected action(5)"); action(5);
+                            // console.log("selected action(5)"); 
+                            action(5);
                         } else if (game.points >= 6) {
-                            console.log("selected action(1)"); action(1);
+                            // console.log("selected action(1)"); 
+                            action(1);
                         } else if (game.points >= 5) {
-                            console.log("selected action(4)"); action(4);
+                            // console.log("selected action(4)"); 
+                            action(4);
                         } else if (game.points >= 4) {
-                            console.log("selected action(3)"); action(3);
+                            // console.log("selected action(3)"); 
+                            action(3);
                         } else if (game.points >= 3) {
-                            console.log("selected action(2)"); action(2);
+                            // console.log("selected action(2)"); 
+                            action(2);
                         } else if (game.points >= 0) {
-                            console.log("selected action(0)"); action(0);
+                            // console.log("selected action(0)"); 
+                            action(0);
                         }
                         this.botSelected = true;
                     }
@@ -625,9 +631,9 @@ class SceneManager {
         if (this.matchmaking) {
             ctx.font = "70px "+FONT;
             ctx.fillStyle = "black";
-            ctx.fillText(CURRENT_LANGUAGE.menu.seartchingForMatch, c.width/2+4, c.height/2-196);
+            ctx.fillText(CURRENT_LANGUAGE.menu.searchingForMatch, c.width/2+4, c.height/2-196);
             ctx.fillStyle = "white";
-            ctx.fillText(CURRENT_LANGUAGE.menu.seartchingForMatch, c.width/2, c.height/2-200);
+            ctx.fillText(CURRENT_LANGUAGE.menu.searchingForMatch, c.width/2, c.height/2-200);
             this.stopMatchmakeButton.draw(dt, mouseX, mouseY);
         } else {
             this.rankedMatchmakeButton.draw(dt, mouseX, mouseY);
@@ -635,11 +641,11 @@ class SceneManager {
             this.perkScreenButton.draw(dt,mouseX,mouseY);
             this.settingsButton.draw(dt,mouseX,mouseY);
             this.leaderboardButton.draw(dt,mouseX,mouseY);
+            this.menuBackButton.draw(dt,mouseX,mouseY);
+            this.profilePageButton.draw(dt,mouseX,mouseY);
+            this.projectWebsiteButton.draw(dt,mouseX,mouseY);
         }
 
-        this.menuBackButton.draw(dt,mouseX,mouseY);
-        this.projectWebsiteButton.draw(dt,mouseX,mouseY);
-        this.profilePageButton.draw(dt,mouseX,mouseY);
         
     }
 
@@ -926,7 +932,11 @@ class SceneManager {
             ctx.fillText(CURRENT_LANGUAGE.game.damage70,1600+148, 1000);
             
             if (game.attackButtonsDisabled) {
-                /////draw X's
+                this.drawX(336 + 148,950);
+                this.drawX(652 + 148,950);
+                this.drawX(968 + 148,950);
+                this.drawX(1284 + 148,950);
+                this.drawX(1600 + 148,950);
             }
 
         }
@@ -952,7 +962,7 @@ class SceneManager {
         ctx.fillText(min + ":" + sec, c.width/2+4, 104);
         ctx.fillStyle = "white";
         ctx.fillText(min + ":" + sec, c.width/2, 100);
-        matchTimer += dt;
+        if (!game.over) matchTimer += dt;
 
         ctx.textAlign = "left";
         ctx.font = "40px "+FONT;
@@ -1394,8 +1404,14 @@ class SceneManager {
                     } 
                     location.href = "http://cybercloudstudios.co.uk"; 
                 } else if (this.profilePageButton.mouseOver(mouseX,mouseY)) {
+                    if (this.matchmaking) {
+                        stopMatchmaking();
+                    }
                     this.camera.transitionTo(9,0.005); 
                 } else if (this.leaderboardButton.mouseOver(mouseX,mouseY)) {
+                    if (this.matchmaking) {
+                        stopMatchmaking();
+                    }
                     this.camera.transitionTo(10,0.005); 
                     requestLeaderboard();
                 }
@@ -1572,7 +1588,7 @@ class SceneManager {
         this.logoutButton.text = CURRENT_LANGUAGE.title.logout;
 
         //main menu
-        this.stopMatchmakeButton.text = CURRENT_LANGUAGE.menu.stopMatchmakeButton;
+        this.stopMatchmakeButton.text = CURRENT_LANGUAGE.menu.stopMatchmaking;
         this.rankedMatchmakeButton.text = CURRENT_LANGUAGE.menu.rankedMatchmakeButton;
         this.matchmakeButton.text = CURRENT_LANGUAGE.menu.quickMatchmakeButton;
         this.perkScreenButton.text = CURRENT_LANGUAGE.menu.perkButton;
@@ -1640,5 +1656,15 @@ class SceneManager {
         this.profileSearchForPlayer.text = CURRENT_LANGUAGE.profile.profileSearchForPlayer;
         this.profileSearchBackButton.text = CURRENT_LANGUAGE.profile.profileSearchBackButton;
         this.playerProfileBackButton.text = CURRENT_LANGUAGE.profile.playerProfileBackButton;
+    }
+    
+    drawX(x, y) {
+        ctx.fillStyle = "red";
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(45 * Math.PI / 180);
+        ctx.fillRect(-100, -15, 200, 30);
+        ctx.fillRect(-15, -100, 30, 200);
+        ctx.restore();
     }
 }
