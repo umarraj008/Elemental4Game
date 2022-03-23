@@ -105,11 +105,11 @@ io.sockets.on("connection", function(socket) {
                             socket.emit("logged-in", userData);
                         } else {
                             //2 users found with same email?
-                            socket.emit("login-failed", "Login Failed");
+                            socket.emit("login-failed", "Login Failed.");
                         }
                     } else {
                         //database error
-                        socket.emit("login-failed", "Email or Password is Incorrect");
+                        socket.emit("login-failed", "Email or Password is Incorrect.");
                     }
                 });
             } else {
@@ -140,20 +140,20 @@ io.sockets.on("connection", function(socket) {
                                 socket.emit("logged-in", userData);
                             } else {
                                 //wrong password
-                                socket.emit("login-failed", "Email or Password is Incorrect");
+                                socket.emit("login-failed", "Email or Password is Incorrect.");
                             }
                         } else {
                             //2 users found with same email?
-                            socket.emit("login-failed", "Login Failed");
+                            socket.emit("login-failed", "Login Failed.");
                         }
                     } else {
                         //database error
-                        socket.emit("login-failed", "Email or Password is Incorrect");
+                        socket.emit("login-failed", "Email or Password is Incorrect.");
                     }
                 });
             }
         } else {
-            socket.emit("login-failed", "User has already logged in somewhere else");
+            socket.emit("login-failed", "User Has Already Logged in Somewhere Else.");
         }
     });
 
@@ -348,28 +348,28 @@ io.sockets.on("connection", function(socket) {
         db.query("SELECT * FROM users WHERE email='"+data.email+"'",function(error, result) {
             if (!error) {
                 if(result.length >= 1) {
-                    socket.emit("register-failed", "Account with the same email already exists");
+                    socket.emit("register-failed", "Account With The Same Email Already Exists");
                     return;
                 }
             } else {
-                socket.emit("register-failed", "Register failed");
+                socket.emit("register-failed", "Register Failed");
                 return;
             }
         });
         db.query("SELECT * FROM users WHERE gamertag='"+data.gamerTag+"'",function(error, result) {
             if (!error) {
                 if(result.length >= 1) {
-                    socket.emit("register-failed", "Account with the same gamertag already exists");
+                    socket.emit("register-failed", "Account With The Same Gamertag Already Exists");
                     return;
                 }
             } else {
-                socket.emit("register-failed", "Register failed");
+                socket.emit("register-failed", "Register Failed");
                 return;
             }
         });
         db.query("INSERT INTO users(firstName, lastName, dob, email, password, gamertag, gamesWon, gamesLost, xpLevel, perksUnlocked, nextLevel, skillLevel) VALUES('"+data.firstName+"','"+data.lastName+"','"+data.DOB+"', '"+data.email+"', '"+data.password+"', '"+data.gamerTag+"', '0','0','0','0,0,0,0','1000','0')",function(error, result) {
             if (error) {
-                socket.emit("register-failed", "Register failed");
+                socket.emit("register-failed", "Register Failed");
                 return;
             }
         });
@@ -393,7 +393,7 @@ io.sockets.on("connection", function(socket) {
                     return;
                 } 
             } else {
-                socket.emit("register-failed", "Register failed");
+                socket.emit("register-failed", "Register Failed");
                 return;
             }
         });
@@ -479,7 +479,7 @@ io.sockets.on("connection", function(socket) {
     socket.on("request-leaderboard", function() {
         db.query("SELECT * FROM users ORDER BY gamesWon ASC", function(error, results) {
             if (error) {
-                socket.emit("recieve-leaderboard", {error: true, errorMessage: "Failed to get leaderboard data."});
+                socket.emit("recieve-leaderboard", {error: true, errorMessage: 1});
                 return;
             } else {
                 if (results.length > 0) {
@@ -512,7 +512,7 @@ io.sockets.on("connection", function(socket) {
                     socket.emit("recieve-leaderboard", {error: false, leaderboard1: leaderboard1, leaderboard2: leaderboard2, leaderboard3: leaderboard3});
                     return;
                 } else {
-                    socket.emit("recieve-leaderboard", {error: true, errorMessage: "Failed to get leaderboard data."});
+                    socket.emit("recieve-leaderboard", {error: true, errorMessage: 1});
                     return;
                 }
             }
@@ -526,11 +526,11 @@ io.sockets.on("connection", function(socket) {
     socket.on("request-profile", function(data) {
         db.query("SELECT * FROM users WHERE gamertag='"+data+"'", function(error, results) {
             if (error) {
-                socket.emit("recieve-profile", {error: true, errorMessage: "Failed to Find Player1."});
+                socket.emit("recieve-profile", {error: true, errorMessage: 2});
                 return;
             } else {
                 if (results.length <= 0) {
-                    socket.emit("recieve-profile", {error: true, errorMessage: "Failed to Find Player2."});
+                    socket.emit("recieve-profile", {error: true, errorMessage: 3});
                     return;
                 } else {
                     socket.emit("recieve-profile", {error: false, player: results[0]});

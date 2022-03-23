@@ -8,7 +8,7 @@ const LANGUAGE = {
         },
         menu: {
             title: "Main Menu",
-            leaderboardButton: "Learderboard Page",
+            leaderboardButton: "Leaderboard Page",
             perkButton: "Perk Page",
             settingsButton: "Settings Page",
             profileButton: "Profile Page",
@@ -103,6 +103,10 @@ const LANGUAGE = {
             gamesWon: "Games Won: ",
             gamesLost: "Games Lost: ",
             gamesPlayed: "Games Played: ",
+            searchForPlayerButton: "Search for Player",
+            profileSearchForPlayer: "Search for Player",
+            profileSearchBackButton: "Back",
+            playerProfileBackButton: "Back to Search",
         },
         game: {
             perkActivationButton: "Activate Perk",
@@ -145,7 +149,13 @@ const LANGUAGE = {
             water: "Water",
             earth: "Earth",
             air: "Air",
-        }
+        },
+        errorMessages: [
+            "Disconnected to Server.",
+            "Failed to Get Leaderboard Data.",
+            "Failed to Find Player 1.",
+            "Failed to Find Player 2.",
+        ]
     },
     spanish: {
         title: {
@@ -156,7 +166,7 @@ const LANGUAGE = {
         },
         menu: {
             title: 'Menú principal',
-            leaderboardButton: 'Página de la tabla de aprendices',
+            leaderboardButton: 'Página de la tabla de clasificación',
             perkButton: 'Página de beneficio',
             settingsButton: 'Página de configuración',
             profileButton: 'Página de perfil',
@@ -251,6 +261,10 @@ const LANGUAGE = {
             gamesWon: 'Juegos ganados: ',
             gamesLost: 'Juegos perdidos: ',
             gamesPlayed: 'Juegos jugados: ',
+            searchForPlayerButton: "Buscar jugador",
+            profileSearchForPlayer: "Buscar jugador",
+            profileSearchBackButton: "Atrás",
+            playerProfileBackButton: "Volver a la búsqueda",
         },
         game: {
             perkActivationButton: 'Activar el beneficio',
@@ -293,7 +307,13 @@ const LANGUAGE = {
             water: 'Agua',
             earth: 'tierra',
             air: 'Aire',
-        }
+        },
+        errorMessages: [
+            "Desconectado al servidor.",
+            "Error al obtener datos de tabla de clasificación.",
+            "Error al encontrar jugador 1.",
+            "Error al encontrar el jugador 2.",
+        ],
     },
     french: {
         title: {
@@ -304,7 +324,7 @@ const LANGUAGE = {
         },
         menu: {
             title: 'Menu principal',
-            leaderboardButton: 'Page apprenante',
+            leaderboardButton: 'Page du classement',
             perkButton: 'Pavillon',
             settingsButton: 'Page des paramètres',
             profileButton: 'Page de profil',
@@ -399,6 +419,10 @@ const LANGUAGE = {
             gamesWon: 'Jeux gagnés: ',
             gamesLost: 'Jeux perdus: ',
             gamesPlayed: 'Parties jouées: ',
+            searchForPlayerButton: "Recherche de joueur",
+            profileSearchForPlayer: "Recherche de joueur",
+            profileSearchBackButton: "Arrière",
+            playerProfileBackButton: "Retour à la recherche",
         },
         game: {
             perkActivationButton: 'Activer la perche',
@@ -442,6 +466,12 @@ const LANGUAGE = {
             earth: 'la terre',
             air: 'Air',
         },
+        errorMessages: [
+            "Déconnecté au serveur.",
+            "Impossible d'obtenir des données sur le classement.",
+            "Impossible de trouver le joueur 1.",
+            "Impossible de trouver le joueur 2.",
+        ],
     },
     italian: {
         title: {
@@ -452,7 +482,7 @@ const LANGUAGE = {
         },
         menu: {
             title: 'Menu principale',
-            leaderboardButton: 'Page Learderboard.',
+            leaderboardButton: 'Pagina delle classifiche',
             perkButton: 'Pagina perk.',
             settingsButton: 'Pagina delle impostazioni',
             profileButton: 'Pagina profilo',
@@ -547,6 +577,10 @@ const LANGUAGE = {
             gamesWon: 'Giochi vinti: ',
             gamesLost: 'Giochi persi: ',
             gamesPlayed: 'Giochi giocati: ',
+            searchForPlayerButton: "Cerca giocatore.",
+            profileSearchForPlayer: "Cerca giocatore.",
+            profileSearchBackButton: "Di ritorno",
+            playerProfileBackButton: "Torna alla ricerca.",
         },
         game: {
             perkActivationButton: 'Attiva il perk.',
@@ -590,6 +624,12 @@ const LANGUAGE = {
             earth: 'terra',
             air: 'Aria',
         },
+        errorMessages: [
+            "Disconnesso al server.",
+            "Impossibile ottenere i dati della classifica.",
+            "Impossibile trovare il giocatore 1.",
+            "Impossibile trovare il giocatore 2.",
+        ],
     },
     chinese: {
         title: {
@@ -600,7 +640,7 @@ const LANGUAGE = {
         },
         menu: {
             title: '主菜单',
-            leaderboardButton: 'Learderboard页面',
+            leaderboardButton: '排行榜页面',
             perkButton: 'Perk页面',
             settingsButton: '设置页面',
             profileButton: '个人资料页',
@@ -695,6 +735,10 @@ const LANGUAGE = {
             gamesWon: '比赛赢了：',
             gamesLost: '游戏丢失：',
             gamesPlayed: '玩过的游戏：',
+            searchForPlayerButton: "搜索玩家",
+            profileSearchForPlayer: "搜索玩家",
+            profileSearchBackButton: "后退",
+            playerProfileBackButton: "回到搜索",
         },
         game: {
             perkActivationButton: '激活Perk.',
@@ -738,6 +782,12 @@ const LANGUAGE = {
             earth: '地球',
             air: '空气',
         },
+        errorMessages: [
+            "断开到服务器。",
+            "无法获得排行榜数据。",
+            "找不到玩家1。",
+            "找不到玩家2。",
+        ],
     },
     japanese: {
         title: {
@@ -748,7 +798,7 @@ const LANGUAGE = {
         },
         menu: {
             title: 'メインメニュー',
-            leaderboardButton: '学習者ボード',
+            leaderboardButton: 'リーダーボード',
             perkButton: 'ペッグページ',
             settingsButton: '設定ページ',
             profileButton: '自己紹介ページ',
@@ -843,6 +893,10 @@ const LANGUAGE = {
             gamesWon: 'ゲームは勝ちました：',
             gamesLost: 'ゲームが失われました：',
             gamesPlayed: 'プレイしました：',
+            searchForPlayerButton: "を検索します",
+            profileSearchForPlayer: "を検索します",
+            profileSearchBackButton: "戻る",
+            playerProfileBackButton: "検索に戻る",
         },
         game: {
             perkActivationButton: 'ペッキを有効にします',
@@ -886,5 +940,11 @@ const LANGUAGE = {
             earth: '地球',
             air: '空気',
         },
+        errorMessages: [
+            "サーバーに切断されました。",
+            "リーダーボードデータを取得できませんでした。",
+            "プレーヤー1の検索に失敗しました1。",
+            "プレイヤー2の検索に失敗しました。",
+        ],
     },
 }

@@ -35,6 +35,7 @@ class SceneManager {
         this.skillLevelHealthBar.speed = 0.07;
         this.credits = new Credits();
         this.selectedPerk = 0;
+        this.errorMessageHandler = new ErrorMessageHandler();
         this.camera = new Camera();
         this.maps = new Maps();
         this.angle = 0;
@@ -346,7 +347,7 @@ class SceneManager {
                 break;
             }
         }
-
+        this.errorMessageHandler.draw();
         this.camera.drawTransition();
     }
 
@@ -1633,5 +1634,11 @@ class SceneManager {
         
         //game result
         this.resultsBackButton.text = CURRENT_LANGUAGE.results.backButton;  
+        
+        //search page
+        this.searchForPlayerButton.text = CURRENT_LANGUAGE.profile.searchForPlayerButton;
+        this.profileSearchForPlayer.text = CURRENT_LANGUAGE.profile.profileSearchForPlayer;
+        this.profileSearchBackButton.text = CURRENT_LANGUAGE.profile.profileSearchBackButton;
+        this.playerProfileBackButton.text = CURRENT_LANGUAGE.profile.playerProfileBackButton;
     }
 }
