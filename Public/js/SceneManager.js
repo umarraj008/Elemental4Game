@@ -59,11 +59,16 @@ class SceneManager {
         this.profilePageButton = new Button(c.width-350,c.height-200,300,150, "My Profile");
         this.rankedMatchmakeButton = new Button(c.width/2-150,c.height/2+100,300,150, "Ranked Matchmake")
         this.leaderboardButton = new Button(c.width/2-150,c.height/2-270,300,150, "Leaderboard");
+        this.howToPlayGuide = new Button(c.width/2+300,c.height/2-270,300,150, "How To Play");
         
         //settings buttons
         // this.settingsFullScreenButton = new Button(c.width/2-150,c.height/2-200,300,150, "Fullscreen");
         // this.settingCreditButton = new Button(c.width/2-150,c.height/2,300,150, "Credits");
         
+        //how to play buttons
+        this.howToPlayBackButton = new Button(c.width/2-300,c.height/2+420,600,80,"Back");
+        this.howToPlayNextPageButton = new Button(c.width-350,c.height-200,300,150,"Next Page");
+
         //perk screen buttons
         this.perkBackButton = new Button(c.width/2-300,c.height/2+420,600,80,"Back");
 
@@ -299,6 +304,9 @@ class SceneManager {
             case 13: //player profile page
                 this.drawPlayerProfilePage();
                 break;
+            case 15: //how to play page
+                this.drawHowToPlayPage();
+                break;
         }
 
         //tell user if they are connected to server
@@ -512,6 +520,41 @@ class SceneManager {
     }
 
     
+    drawHowToPlayPage() {
+        this.maps.drawTransition(false);
+
+        ctx.font = "100px "+FONT;
+        ctx.textAlign = "center";
+        ctx.fillStyle= "black";
+        ctx.fillText("How To Play Guide",c.width/2+4, 204);
+        ctx.fillStyle= "white";
+        ctx.fillText("How To Play Guide",c.width/2, 200);
+
+        if (currentPage == 1) {
+            let yOffSet = 300;
+            for (let i = 0; i<howToPlayGuideText.Page1.length; i++) {
+                ctx.font = "30px "+FONT;
+                ctx.textAlign = "left";
+                ctx.fillStyle= "black";
+                ctx.fillText(howToPlayGuideText.Page1[i], 50, yOffSet);
+                yOffSet += 30;
+            }
+        }
+        else if (currentPage == 2) {
+            let yOffSet = 300;
+            for (let i = 0; i<howToPlayGuideText.Page2.length; i++) {
+                ctx.font = "30px "+FONT;
+                ctx.textAlign = "left";
+                ctx.fillStyle= "black";
+                ctx.fillText(howToPlayGuideText.Page2[i], 50, yOffSet);
+                yOffSet += 30;
+            }
+        }
+
+        this.howToPlayBackButton.draw(dt,mouseX,mouseY);
+        this.howToPlayNextPageButton.draw(dt,mouseX,mouseY);
+    }
+
     drawCredits(){
         this.credits.draw();
         // ctx.fillStyle = "black";
@@ -635,6 +678,7 @@ class SceneManager {
             this.perkScreenButton.draw(dt,mouseX,mouseY);
             this.settingsButton.draw(dt,mouseX,mouseY);
             this.leaderboardButton.draw(dt,mouseX,mouseY);
+            this.howToPlayGuide.draw(dt,mouseX,mouseY);
         }
 
         this.menuBackButton.draw(dt,mouseX,mouseY);
@@ -1398,6 +1442,8 @@ class SceneManager {
                 } else if (this.leaderboardButton.mouseOver(mouseX,mouseY)) {
                     this.camera.transitionTo(10,0.005); 
                     requestLeaderboard();
+                } else if (this.howToPlayGuide.mouseOver(mouseX,mouseY)) {
+                    this.camera.transitionTo(15,0.005); 
                 }
 
                 break;
@@ -1558,6 +1604,19 @@ class SceneManager {
                 if (this.playerProfileBackButton.mouseOver(mouseX, mouseY)) {
                     this.camera.transitionTo(12, 0.005);
                     profileSearchBar(true,200);
+                }
+                break;
+            case 15: //how to play guide page
+                if (this.howToPlayBackButton.mouseOver(mouseX, mouseY)) {
+                    this.camera.transitionTo(4, 0.005);
+                } else if (this.howToPlayNextPageButton.mouseOver(mouseX, mouseY)) {
+                    if (currentPage == 1) {
+                        currentPage = 2;
+                        this.howToPlayNextPageButton.text = "Previous Page";
+                    } else if (currentPage == 2) {
+                        currentPage = 1;
+                        this.howToPlayNextPageButton.text = "Next Page";
+                    }
                 }
                 break;
         }

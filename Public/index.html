@@ -1,59 +1,64 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Elemental 4</title>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"
-            integrity="sha512-zN6KYOtONNTOGXz0RkWX2EpavN9VdIs+2w+To+fhciFv83YA9maUpi2lzZWrOfKXdFIZZomWufBznkyHi3a8oQ=="
-            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <link rel="stylesheet" href="css/main.css">
-        <link rel="shortcut icon" type="image/x-con" href="resources/images/Elemental4Logo.ico">
-    </head>
-    <body>
-        <div id="loginContainer">
-            <div id="innerContainer">
-                <h1>Login</h1>
-                <input type="text" placeholder="Email" id="email">
-                <input type="password" placeholder="Password" id="password">
-                <input type="submit" value="Login" id="login" onclick="loginButtonPressed()">
-                <input type="submit" value="Create an Account" id="register" onclick="location.href='register.html'">
-            </div>
+
+<head>
+    <title>Elemental 4</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"
+        integrity="sha512-zN6KYOtONNTOGXz0RkWX2EpavN9VdIs+2w+To+fhciFv83YA9maUpi2lzZWrOfKXdFIZZomWufBznkyHi3a8oQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="shortcut icon" type="image/x-con" href="resources/images/Elemental4Logo.ico">
+</head>
+
+<body>
+    <div id="loginContainer">
+        <div id="innerContainer">
+            <h1>Login</h1>
+            <input type="text" placeholder="Email" id="email">
+            <input type="password" placeholder="Password" id="password">
+            <input type="submit" value="Login" id="login" onclick="loginButtonPressed()">
+            <input type="submit" value="Create an Account" id="register" onclick="location.href='register.html'">
         </div>
+    </div>
 
-        <canvas id="canvas" width="1920" height="1080"></canvas>
-        <script src="js/Loader.js"></script>
-        <!-- <script src="js/client.js"></script> -->
-        <script src="js/Credits.js"></script>
-        <script src="js/Panel.js"></script>
-        <script src="js/Maps.js"></script>
-        <script src="js/Camera.js"></script>
-        <script src="js/Indicator.js"></script>
-        <script src="js/IndicatorSystem.js"></script>
-        <script src="js/HealthBar.js"></script>
-        <script src="js/WindPoint.js"></script>
-        <script src="js/WindParticleSystem.js"></script>
-        <script src="js/WindParticle.js"></script>  
-        <script src="js/Button.js"></script>
-        <script src="js/Splashscreen.js"></script>
-        <script src="js/Animator.js"></script>
-        <script src="js/ErrorMessage.js"></script> 
-        <script src="js/ErrorMessageHandler.js"></script> 
-        <script src="js/SceneManager.js"></script>
-        <script src="js/languages.js"></script>
-        <script src="js/main.js"></script>
+    <canvas id="canvas" width="1920" height="1080"></canvas>
+    <script src="js/Loader.js"></script>
+    <!-- <script src="js/client.js"></script> -->
+    <script src="js/Credits.js"></script>
+    <script src="js/Panel.js"></script>
+    <script src="js/Maps.js"></script>
+    <script src="js/Camera.js"></script>
+    <script src="js/Indicator.js"></script>
+    <script src="js/IndicatorSystem.js"></script>
+    <script src="js/HealthBar.js"></script>
+    <script src="js/WindPoint.js"></script>
+    <script src="js/WindParticleSystem.js"></script>
+    <script src="js/WindParticle.js"></script>
+    <script src="js/Button.js"></script>
+    <script src="js/Splashscreen.js"></script>
+    <script src="js/Animator.js"></script>
+    <script src="js/ErrorMessage.js"></script>
+    <script src="js/ErrorMessageHandler.js"></script>
+    <script src="js/HowToPlayGuide.js"></script>
+    <script src="js/SceneManager.js"></script>
+    <script src="js/languages.js"></script>
+    <script src="js/main.js"></script>
 
-        <div id="textChatContainer">
-            <textarea id="textChat"readonly></textarea>
-            <div id="textChatInputContainer">
-                <input type="text" id="textChatInput" placeholder="type here...">
-                <input type="button" id="textChatEnter" value="Send" onclick="sendMessageTextChat()">
-            </div>
+
+    <div id="textChatContainer">
+        <textarea id="textChat" readonly></textarea>
+        <div id="textChatInputContainer">
+            <input type="text" id="textChatInput" placeholder="type here...">
+            <input type="button" id="textChatEnter" value="Send" onclick="sendMessageTextChat()">
         </div>
+    </div>
 
-        <form id="profileSearchBarContainer">
-            <input id="profileSearchBar" type="text" placeholder="Enter Gamertag">
-        </form>
-        <input type="button" id="textChatHide" value="<" onclick="hideTextChat()">
-        <input type="button" id="textChatShow" value=">" onclick="showTextChat()">
-        <span id="notif">0</span>
-    </body>
+    <form id="profileSearchBarContainer">
+        <input id="profileSearchBar" type="text" placeholder="Enter Gamertag">
+    </form>
+    <input type="button" id="textChatHide" value="<" onclick="hideTextChat()">
+    <input type="button" id="textChatShow" value=">" onclick="showTextChat()">
+    <span id="notif">0</span>
+</body>
+
 </html>
