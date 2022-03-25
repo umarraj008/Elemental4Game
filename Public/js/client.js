@@ -53,7 +53,7 @@ var skillLevelGain = 0;
 var perkCount = 0;
 
 socket.on("connect", function() {
-    console.log("connected to server");
+    // console.log("connected to server");
     //socket.emit("join-server");
 
     if (game.id != null && game.map != 0 && sceneManager.scene != 0) {
@@ -75,7 +75,7 @@ socket.on("connect", function() {
 
             let data = {email: sessionEmail, firstName: sessionFirstName, lastName: sessionLastName, gamerTag: sessionGamerTag, DOB: sessionDOB, sessionLoggedIn: true};
             loggedIn(data);
-            console.log("Requesting to log back into same account as stored in session storage");
+            // console.log("Requesting to log back into same account as stored in session storage");
             document.getElementById("loginContainer").style.display = "none";
         } else {
             //document.getElementById("loginContainer").style.display = "flex";
@@ -88,7 +88,7 @@ socket.on("disconnect", function() {
 });
 
 socket.on("pick-character", function(data) {
-    console.log("pick your character");
+    // console.log("pick your character");
     sceneManager.scene = 6;
     game.id = data.gameID;
     game.map = data.map;
@@ -101,12 +101,12 @@ socket.on("pick-character", function(data) {
 });
 
 socket.on("player2-turn", function() {
-    console.log("player2 turn")
+    // console.log("player2 turn")
 });
 
 
 socket.on("player1-turn", function() {
-    console.log("player1 turn")
+    // console.log("player1 turn")
 });
 
 socket.on("game-update", function(data) {
@@ -256,7 +256,7 @@ socket.on("game-over", function(data) {
     game.myData.perkPoints = data.perkPoints;
     skillLevelGain = (data.skillLevel - game.myData.skillLevel >= 0) ? ("+" + (data.skillLevel - game.myData.skillLevel) + "sr") : ("-" + Math.abs(data.skillLevel - game.myData.skillLevel) + "sr");
     game.myData.skillLevel = data.skillLevel;
-    console.log(game.myData.skillLevel);
+    // console.log(game.myData.skillLevel);
     document.getElementById("textChat").value = "";
     document.getElementById("textChatInput").value = "";
     hideTextChat();
@@ -359,13 +359,14 @@ socket.on("logged-in", function(userData) {
     document.getElementById("loginContainer").style.display = "none";
     // document.getElementById("loginContainer").parentNode.removeChild(document.getElementById("loginContainer"));
     sceneManager.scene = 0;
-    console.log("Logged in as " + game.myData.gamerTag);
-    console.log(userData.skillLevel);//////////////////////////////
+    // console.log("Logged in as " + game.myData.gamerTag);
+    // console.log(userData.skillLevel);//////////////////////////////
 });
 
 socket.on("login-failed", function(message) {
     sceneManager.errorMessageHandler.makeError(CURRENT_LANGUAGE.errorMessages[message]);
     console.log(message);
+    alert(message);
     logout();
 });
 
@@ -393,7 +394,7 @@ socket.on("perk-buy-success", function(data) {
 
 socket.on("perk-buy-failed", function() {
     sceneManager.errorMessageHandler.makeError("Failed to Buy Perk.");
-    console.log("failed to buy perk");
+    // console.log("failed to buy perk");
 });
 
 socket.on("update-data", function(data) {
@@ -428,7 +429,7 @@ socket.on("removed-from-matchmaking", function() {
 socket.on("recieve-leaderboard", function(data) {
     if (data.error) {
         sceneManager.errorMessageHandler.makeError(CURRENT_LANGUAGE.errorMessage[data.errorMessage]);
-        console.log(data.errorMessage);
+        // console.log(data.errorMessage);
     } else {
         // console.table(data.leaderboard1);
         // console.table(data.leaderboard2);
@@ -481,7 +482,7 @@ socket.on("perk-activated", function(data) {
 socket.on("recieve-profile", function(data) {
     if (data.error) {
         sceneManager.errorMessageHandler.makeError(data.errorMessage);
-        console.log(CURRENT_LANGUAGE.errorMessages[data.errorMessage]);
+        // console.log(CURRENT_LANGUAGE.errorMessages[data.errorMessage]);
     } else {
         sceneManager.profilePlayer = data.player;
         sceneManager.camera.transitionTo(13,0.005);
@@ -492,7 +493,7 @@ socket.on("recieve-profile", function(data) {
 
 socket.on("just-wait-over", function() {
     game.attackButtonsDisabled = false;
-    console.log("test");
+    // console.log("test");
 });
 
 function matchmake(ranked) {
@@ -591,11 +592,11 @@ function buyPerk(perk) {
 function activatePerk(perk) {
     let up = game.myData.perksUnlocked.split(",");
     if (up[perk] == 1) {
-        console.log(up);
+        // console.log(up);
         for (i = 0; i < up.length; i++) {
             if (up[i] == 2) { up[i] = '1'; break; }
         }
-        console.log(up);
+        // console.log(up);
         up[perk] = 2;
         game.myData.perksUnlocked = up[0]+","+up[1]+","+up[2]+","+up[3]+","+up[4]+","+up[5]+","+up[6]+","+up[7]+","+up[8];
         socket.emit("activate-perk", perk);
@@ -675,7 +676,7 @@ function sendMessageTextChat(){
 }
 
 function loadSettings() {
-    console.log(SETTINGS);
+    // console.log(SETTINGS);
     //frame rate
     if (SETTINGS.frameRate == 30) {
         sceneManager.settingsButtons.frameRate30FPS.style = "selected";
@@ -817,6 +818,14 @@ function loadLanguage(which) {
         case 5: CURRENT_LANGUAGE = LANGUAGE.japanese; break;
     }
 
+    if (sceneManager.cursorHightlight) {
+        sceneManager.accessPageCursorHighlightOn.style = "selected";
+        sceneManager.accessPageCursorHighlightOff.style = "disabled";
+    } else {
+        sceneManager.accessPageCursorHighlightOn.style = "disabled";
+        sceneManager.accessPageCursorHighlightOff.style = "selected";
+    }
+
     sceneManager.updateAllText();
 }
 
@@ -825,7 +834,7 @@ function requestLeaderboard() {
 }
 
 function profileSearchBar(on, val) {
-    console.log(on)
+    // console.log(on)
     if (on) {
         setTimeout(function() {document.getElementById("profileSearchBarContainer").style.display = "flex"}, val);
     } else {
@@ -835,7 +844,7 @@ function profileSearchBar(on, val) {
 
 function searchForPlayer() {
     let gamertag = document.getElementById("profileSearchBar").value;
-    console.log("searching for player: " + gamertag);
+    // console.log("searching for player: " + gamertag);
     if (gamertag.length <= 0) { document.getElementById("profileSearchBar").value = ""; return };
     if (gamertag.length >= 15) { document.getElementById("profileSearchBar").value = ""; return };
     socket.emit("request-profile", gamertag);

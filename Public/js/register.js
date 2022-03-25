@@ -2,7 +2,7 @@ const socket = io();
 var registerPressed = false;
 
 socket.on("connect", function() {
-    console.log("connected to server");
+    // console.log("connected to server");
 
     let sessionEmail = window.sessionStorage.getItem("email");
     let sessionFirstName = window.sessionStorage.getItem("firstName");
@@ -35,13 +35,14 @@ socket.on("register-success", function(data) {
     sessionStorage.setItem("xpLevel", data.xpLevel);
     sessionStorage.setItem("perksUnlocked", data.perksUnlocked);
     
-    console.log("Successfull Account Creation");
+    // console.log("Successfull Account Creation");
     location.href = "index.html";
 });
 
 socket.on("register-failed", function(message) {
     console.log(message);
     sessionStorage.clear();
+    alert(message);
     location.href = "index.html";
 });
 

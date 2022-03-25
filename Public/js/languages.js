@@ -18,6 +18,9 @@ const LANGUAGE = {
             backButton: "Back",
             stopMatchmaking: "Stop Matchmaking",
             searchingForMatch: "Searching For Match",
+            gameOptionsButton: "Play",
+            matchmakingBackButton: "Back",
+            
         },
         leaderboard: {
             backButton: "Back",
@@ -93,6 +96,9 @@ const LANGUAGE = {
             contrast: "Contrast: ",
             colorBlindness: "Color Blindness: ",
             language: "Language: ",
+            accessPageCursorHighlightOn: "On",
+            accessPageCursorHighlightOff: "Off",
+            cursorHighlight: "Cursor Highlight",
         },
         profile: {
             backButton: "Back",

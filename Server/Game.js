@@ -160,7 +160,7 @@ module.exports = class Game {
                     if (action >= 1) {
                         return;
                     } else {
-                        console.log("test");
+                        // console.log("test");
                         this.player2.perkActivated = false;
                         this.player1.sendMessage("just-wait-over",0);
                     }
@@ -236,7 +236,7 @@ module.exports = class Game {
                     if (action >= 1) {
                         return;
                     } else {
-                        console.log("test");
+                        // console.log("test");
                         this.player1.perkActivated = false;
                         this.player2.sendMessage("just-wait-over",0);
                     }
@@ -406,7 +406,7 @@ module.exports = class Game {
             let selected = this.player1.perksUnlocked;
             selected = (selected + "").split(",");
             let perk = perks[selected.indexOf("2")];
-            console.log(perk);
+            // console.log(perk);
 
             this.player1.perkBarValue = 0;
             this.player1.currentPerk = selected.indexOf("2");
@@ -427,7 +427,7 @@ module.exports = class Game {
             let selected = this.player2.perksUnlocked;
             selected = (selected + "").split(",");
             let perk = perks[selected.indexOf("2")];
-            console.log(perk);
+            // console.log(perk);
 
             this.player2.perkBarValue = 0;
             this.player2.currentPerk = selected.indexOf("2");
