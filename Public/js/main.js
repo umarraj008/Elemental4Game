@@ -24,6 +24,14 @@ if (l != null && l != undefined) {
 }
 
 var sceneManager = new SceneManager(-2);
+
+let cursorSetting = sessionStorage.getItem("cursorSetting");
+if (cursorSetting != null && cursorSetting != undefined) {
+    sceneManager.cursorHightlight = cursorSetting;
+} else {
+    sceneManager.cursorHightlight = false;
+}
+
 const loader = new Loader(42,0);//DONT FORGET TO CHANGE THE TOTAL WHEN ADDING MORE IMAGES
 loader.audioLoadingFinished = true; //REMOVE WHEN AUDIO IS ADDED
 

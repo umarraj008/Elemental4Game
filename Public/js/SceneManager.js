@@ -46,20 +46,24 @@ class SceneManager {
         this.leaderboard2 = [];
         this.leaderboard3 = [];
 
+        this.cursorHightlight = false;
+
         //title screen buttons
         this.playButton = new Button(c.width/2-300,c.height/2-75,600,100, "Play");
         
         //main menu buttons
         this.stopMatchmakeButton = new Button(c.width/2-150,c.height/2-100,300,150, "Stop Matchmaking");
-        this.matchmakeButton = new Button(c.width/2-600,c.height/2-100,300,150, "Quick Matchmake");
         this.perkScreenButton = new Button(c.width/2-150,c.height/2-100,300,150, "Perk Screen");
-        this.settingsButton = new Button(c.width/2+300,c.height/2-100,300,150, "Settings");
+        this.settingsButton = new Button(c.width/2+170,c.height/2-100,300,150, "Settings");
         this.menuBackButton = new Button(c.width/2-300,c.height/2+300,600,100, "Back");
         this.projectWebsiteButton = new Button(50,c.height-200,300,150, "Project Website");
-        this.profilePageButton = new Button(c.width-350,c.height-200,300,150, "My Profile");
-        this.rankedMatchmakeButton = new Button(c.width/2-150,c.height/2+100,300,150, "Ranked Matchmake")
         this.leaderboardButton = new Button(c.width/2-150,c.height/2-270,300,150, "Leaderboard");
-        
+        this.profilePageButton = new Button(c.width/2-470,c.height/2-270,300,150, "My Profile");
+        this.gameOptionsButton = new Button(c.width/2-470,c.height/2-100,300,150, "Play");
+        this.matchmakingBackButton = new Button(c.width/2-300,c.height/2+300,600,100, "Back");
+        this.matchmakeButton = new Button(c.width/2-325,c.height/2-100,300,150, "Quick Matchmake");
+        this.rankedMatchmakeButton = new Button(c.width/2+25,c.height/2-100,300,150, "Ranked Matchmake");
+
         //settings buttons
         // this.settingsFullScreenButton = new Button(c.width/2-150,c.height/2-200,300,150, "Fullscreen");
         // this.settingCreditButton = new Button(c.width/2-150,c.height/2,300,150, "Credits");
@@ -196,12 +200,15 @@ class SceneManager {
         this.accessPageColorBlindness2Button = new Button(1200,350,400,100,"Green-Blind/Deuteranopia");
         this.accessPageColorBlindness3Button = new Button(400,450,400,100,"Blue-Blind/Tritanopia");
 
-        this.accessPageLanguage1 = new Button(400,600,400,100,"English");
-        this.accessPageLanguage2 = new Button(800,600,400,100,"Spanish");
-        this.accessPageLanguage3 = new Button(1200,600,400,100,"French");
-        this.accessPageLanguage4 = new Button(400,700,400,100,"Italian");
-        this.accessPageLanguage5 = new Button(800,700,400,100,"Chinese");
-        this.accessPageLanguage6 = new Button(1200,700,400,100,"Japanese");
+        this.accessPageLanguage1 = new Button(400,400,400,100,"English");
+        this.accessPageLanguage2 = new Button(800,400,400,100,"Spanish");
+        this.accessPageLanguage3 = new Button(1200,400,400,100,"French");
+        this.accessPageLanguage4 = new Button(400,500,400,100,"Italian");
+        this.accessPageLanguage5 = new Button(800,500,400,100,"Chinese");
+        this.accessPageLanguage6 = new Button(1200,500,400,100,"Japanese");
+
+        this.accessPageCursorHighlightOn = new Button(400,700,400,100,"On");
+        this.accessPageCursorHighlightOff = new Button(800,700,400,100,"Off");
 
         this.profilePlayer = {};
         this.playerProfileBackButton = new Button(c.width/2-150,c.height/2+300,300,150, "Back to Search");
@@ -299,6 +306,9 @@ class SceneManager {
             case 13: //player profile page
                 this.drawPlayerProfilePage();
                 break;
+            case 14: //game options page
+                this.drawGameOptionsPage();
+                break;    
         }
 
         //tell user if they are connected to server
@@ -325,17 +335,23 @@ class SceneManager {
 
                     if (game.turn && !this.botSelected) {
                         if (game.points >= 15) {
-                            console.log("selected action(5)"); action(5);
+                            // console.log("selected action(5)"); 
+                            action(5);
                         } else if (game.points >= 6) {
-                            console.log("selected action(1)"); action(1);
+                            // console.log("selected action(1)"); 
+                            action(1);
                         } else if (game.points >= 5) {
-                            console.log("selected action(4)"); action(4);
+                            // console.log("selected action(4)"); 
+                            action(4);
                         } else if (game.points >= 4) {
-                            console.log("selected action(3)"); action(3);
+                            // console.log("selected action(3)"); 
+                            action(3);
                         } else if (game.points >= 3) {
-                            console.log("selected action(2)"); action(2);
+                            // console.log("selected action(2)"); 
+                            action(2);
                         } else if (game.points >= 0) {
-                            console.log("selected action(0)"); action(0);
+                            // console.log("selected action(0)"); 
+                            action(0);
                         }
                         this.botSelected = true;
                     }
@@ -347,6 +363,14 @@ class SceneManager {
                 break;
             }
         }
+
+        if (this.cursorHightlight) {
+            ctx.fillStyle = "rgba(255,0,0,0.5)";
+            ctx.beginPath();
+            ctx.ellipse(mouseX+5, mouseY+5, 50, 50, 0, 0, 360*Math.PI/180);
+            ctx.fill();
+        }
+
         this.errorMessageHandler.draw();
         this.camera.drawTransition();
     }
@@ -413,25 +437,32 @@ class SceneManager {
         this.accessPageContrastAddButton.draw(dt, mouseX, mouseY);
         this.accessPageContrastSubtractButton.draw(dt, mouseX, mouseY);
         
-        //color blindness
-        ctx.font = "30px " + FONT;
-        ctx.textAlign = "left";
-        ctx.fillText(CURRENT_LANGUAGE.accessSettings.colorBlindness, 100, 450);
-        this.accessPageColorBlindnessNoneButton.draw(dt, mouseX, mouseY);
-        this.accessPageColorBlindness1Button.draw(dt, mouseX, mouseY);
-        this.accessPageColorBlindness2Button.draw(dt, mouseX, mouseY);
-        this.accessPageColorBlindness3Button.draw(dt, mouseX, mouseY);
+        // //color blindness
+        // ctx.font = "30px " + FONT;
+        // ctx.textAlign = "left";
+        // ctx.fillText(CURRENT_LANGUAGE.accessSettings.colorBlindness, 100, 450);
+        // this.accessPageColorBlindnessNoneButton.draw(dt, mouseX, mouseY);
+        // this.accessPageColorBlindness1Button.draw(dt, mouseX, mouseY);
+        // this.accessPageColorBlindness2Button.draw(dt, mouseX, mouseY);
+        // this.accessPageColorBlindness3Button.draw(dt, mouseX, mouseY);
         
         //language
         ctx.font = "30px " + FONT;
         ctx.textAlign = "left";
-        ctx.fillText(CURRENT_LANGUAGE.accessSettings.language, 100, 650);
+        ctx.fillText(CURRENT_LANGUAGE.accessSettings.language, 100, 450);
         this.accessPageLanguage1.draw(dt, mouseX, mouseY);
         this.accessPageLanguage2.draw(dt, mouseX, mouseY);
         this.accessPageLanguage3.draw(dt, mouseX, mouseY);
         this.accessPageLanguage4.draw(dt, mouseX, mouseY);
         this.accessPageLanguage5.draw(dt, mouseX, mouseY);
         this.accessPageLanguage6.draw(dt, mouseX, mouseY);
+
+
+        ctx.font = "30px " + FONT;
+        ctx.textAlign = "left";
+        ctx.fillText(CURRENT_LANGUAGE.accessSettings.cursorHighlight, 100, 650);
+        this.accessPageCursorHighlightOn.draw(dt,mouseX,mouseY);
+        this.accessPageCursorHighlightOff.draw(dt,mouseX,mouseY);
 
         //back button
         this.accessPageBackButton.draw(dt, mouseX, mouseY);
@@ -622,24 +653,25 @@ class SceneManager {
         ctx.fillStyle= "white";
         ctx.fillText(CURRENT_LANGUAGE.menu.title,c.width/2, 200);
 
-        if (this.matchmaking) {
-            ctx.font = "70px "+FONT;
-            ctx.fillStyle = "black";
-            ctx.fillText(CURRENT_LANGUAGE.menu.seartchingForMatch, c.width/2+4, c.height/2-196);
-            ctx.fillStyle = "white";
-            ctx.fillText(CURRENT_LANGUAGE.menu.seartchingForMatch, c.width/2, c.height/2-200);
-            this.stopMatchmakeButton.draw(dt, mouseX, mouseY);
-        } else {
-            this.rankedMatchmakeButton.draw(dt, mouseX, mouseY);
-            this.matchmakeButton.draw(dt, mouseX, mouseY);
+        //if (this.matchmaking) {
+            //ctx.font = "70px "+FONT;
+            //ctx.fillStyle = "black";
+            //ctx.fillText(CURRENT_LANGUAGE.menu.searchingForMatch, c.width/2+4, c.height/2-196);
+            //ctx.fillStyle = "white";
+            //ctx.fillText(CURRENT_LANGUAGE.menu.searchingForMatch, c.width/2, c.height/2-200);
+            //this.stopMatchmakeButton.draw(dt, mouseX, mouseY);
+        //} else {
+            //this.rankedMatchmakeButton.draw(dt, mouseX, mouseY);
+            //this.matchmakeButton.draw(dt, mouseX, mouseY);
             this.perkScreenButton.draw(dt,mouseX,mouseY);
             this.settingsButton.draw(dt,mouseX,mouseY);
             this.leaderboardButton.draw(dt,mouseX,mouseY);
-        }
+            this.menuBackButton.draw(dt,mouseX,mouseY);
+            this.profilePageButton.draw(dt,mouseX,mouseY);
+            this.projectWebsiteButton.draw(dt,mouseX,mouseY);
+            this.gameOptionsButton.draw(dt,mouseX,mouseY);
+        //}
 
-        this.menuBackButton.draw(dt,mouseX,mouseY);
-        this.projectWebsiteButton.draw(dt,mouseX,mouseY);
-        this.profilePageButton.draw(dt,mouseX,mouseY);
         
     }
 
@@ -926,7 +958,11 @@ class SceneManager {
             ctx.fillText(CURRENT_LANGUAGE.game.damage70,1600+148, 1000);
             
             if (game.attackButtonsDisabled) {
-                /////draw X's
+                this.drawX(336 + 148,950);
+                this.drawX(652 + 148,950);
+                this.drawX(968 + 148,950);
+                this.drawX(1284 + 148,950);
+                this.drawX(1600 + 148,950);
             }
 
         }
@@ -952,7 +988,7 @@ class SceneManager {
         ctx.fillText(min + ":" + sec, c.width/2+4, 104);
         ctx.fillStyle = "white";
         ctx.fillText(min + ":" + sec, c.width/2, 100);
-        matchTimer += dt;
+        if (!game.over) matchTimer += dt;
 
         ctx.textAlign = "left";
         ctx.font = "40px "+FONT;
@@ -1242,6 +1278,32 @@ class SceneManager {
         this.playerProfileBackButton.draw(dt, mouseX, mouseY);
     }
 
+    drawGameOptionsPage(){
+        this.maps.drawTransition(false);
+
+        //this will be draw title text 
+        ctx.font = "100px "+ FONT;
+        ctx.textAlign = "center";
+        ctx.fillStyle = "black";
+        ctx.fillText("Game Mode",c.width/2+4, 94);
+        ctx.fillStyle = "white";
+        ctx.fillText("Game Mode",c.width/2, 90);
+
+        if (this.matchmaking){
+            ctx.font = "70px "+FONT;
+            ctx.fillStyle = "black";
+            ctx.fillText(CURRENT_LANGUAGE.menu.searchingForMatch, c.width/2+4, c.height/2-196);
+            ctx.fillStyle = "white";
+            ctx.fillText(CURRENT_LANGUAGE.menu.searchingForMatch, c.width/2, c.height/2-200);
+            this.stopMatchmakeButton.draw(dt,mouseX,mouseY);
+        }else{ 
+            this.matchmakeButton.draw(dt,mouseX,mouseY);
+            this.rankedMatchmakeButton.draw(dt,mouseX,mouseY);
+
+            this.matchmakingBackButton.draw(dt, mouseX, mouseY);
+        }
+    }
+
     mouseClick() {
         switch(this.scene) {
             case 1: //title screen
@@ -1361,43 +1423,31 @@ class SceneManager {
                 }
                 break;
             case 4: //menu screen
-                if (this.matchmakeButton.mouseOver(mouseX, mouseY)) {
-                    matchmake(false);
-                } else if (this.rankedMatchmakeButton.mouseOver(mouseX, mouseY)) {
-                    matchmake(true);
-                    game.ranked = true;
-                }else if (this.matchmaking && this.stopMatchmakeButton.mouseOver(mouseX, mouseY)) {
-                    stopMatchmaking();
-                } else if (this.perkScreenButton.mouseOver(mouseX,mouseY)){     
-                    if (this.matchmaking) {
-                        stopMatchmaking();
-                    }     
+                if (this.perkScreenButton.mouseOver(mouseX,mouseY)){     
+                     
                     updatePerkButtons();
                     this.perkButtons[0].style = "selected";
                     this.camera.transitionTo(5,0.005); 
                     break;
 
                 } else if (this.settingsButton.mouseOver(mouseX,mouseY)) {
-                    if (this.matchmaking) {
-                        stopMatchmaking();
-                    } 
                     this.camera.transitionTo(2,0.005); 
                     loadSettings();
                 } else if (this.menuBackButton.mouseOver(mouseX,mouseY)) {
-                    if (this.matchmaking) {
-                        stopMatchmaking();
-                    } 
+                  
                     this.camera.transitionTo(1,0.005); 
                 } else if (this.projectWebsiteButton.mouseOver(mouseX,mouseY)) {
-                    if (this.matchmaking) {
-                        stopMatchmaking();
-                    } 
+                 
                     location.href = "http://cybercloudstudios.co.uk"; 
                 } else if (this.profilePageButton.mouseOver(mouseX,mouseY)) {
+                  
                     this.camera.transitionTo(9,0.005); 
                 } else if (this.leaderboardButton.mouseOver(mouseX,mouseY)) {
+                   
                     this.camera.transitionTo(10,0.005); 
                     requestLeaderboard();
+                } else if (this.gameOptionsButton.mouseOver(mouseX,mouseY)) {
+                    this.camera.transitionTo(14,0.005);
                 }
 
                 break;
@@ -1544,6 +1594,14 @@ class SceneManager {
                     SETTINGS.language = 5;
                     sessionStorage.setItem("language", 5);
                     loadAccessFeatures();
+                } else if (this.accessPageCursorHighlightOn.mouseOver(mouseX, mouseY)) {
+                    this.cursorHightlight = true;
+                    sessionStorage.setItem("cursorSetting", true);
+                    loadAccessFeatures();
+                } else if (this.accessPageCursorHighlightOff.mouseOver(mouseX, mouseY)) {
+                    this.cursorHightlight = false;
+                    sessionStorage.setItem("cursorSetting", false);
+                    loadAccessFeatures();
                 }
                 break;
             case 12: //profile search page
@@ -1560,6 +1618,18 @@ class SceneManager {
                     profileSearchBar(true,200);
                 }
                 break;
+            case 14: //game options
+                if (!this.matchmaking && this.matchmakeButton.mouseOver(mouseX, mouseY)) {
+                    matchmake(false);
+                } else if (!this.matchmaking && this.rankedMatchmakeButton.mouseOver(mouseX, mouseY)) {
+                    matchmake(true);
+                    game.ranked = true;
+                } else if (this.matchmaking && this.stopMatchmakeButton.mouseOver(mouseX, mouseY)) {
+                    stopMatchmaking();
+                } else if (this.matchmakingBackButton.mouseOver(mouseX, mouseY)){
+                    this.camera.transitionTo(4,0.005);
+                }
+                break;
         }
     }
 
@@ -1572,7 +1642,7 @@ class SceneManager {
         this.logoutButton.text = CURRENT_LANGUAGE.title.logout;
 
         //main menu
-        this.stopMatchmakeButton.text = CURRENT_LANGUAGE.menu.stopMatchmakeButton;
+        this.stopMatchmakeButton.text = CURRENT_LANGUAGE.menu.stopMatchmaking;
         this.rankedMatchmakeButton.text = CURRENT_LANGUAGE.menu.rankedMatchmakeButton;
         this.matchmakeButton.text = CURRENT_LANGUAGE.menu.quickMatchmakeButton;
         this.perkScreenButton.text = CURRENT_LANGUAGE.menu.perkButton;
@@ -1640,5 +1710,29 @@ class SceneManager {
         this.profileSearchForPlayer.text = CURRENT_LANGUAGE.profile.profileSearchForPlayer;
         this.profileSearchBackButton.text = CURRENT_LANGUAGE.profile.profileSearchBackButton;
         this.playerProfileBackButton.text = CURRENT_LANGUAGE.profile.playerProfileBackButton;
+
+        this.gameOptionsButton.text = CURRENT_LANGUAGE.menu.gameOptionsButton;
+        this.matchmakingBackButton.text = CURRENT_LANGUAGE.menu.matchmakingBackButton;
+
+        this.accessPageCursorHighlightOn.text = CURRENT_LANGUAGE.accessSettings.accessPageCursorHighlightOn;
+        this.accessPageCursorHighlightOff.text = CURRENT_LANGUAGE.accessSettings.accessPageCursorHighlightOff;
+    }
+    
+    drawX(x, y) {
+        ctx.fillStyle = "red";
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(45 * Math.PI / 180);
+        ctx.fillRect(-100, -15, 200, 30);
+        ctx.fillRect(-15, -100, 30, 200);
+        ctx.restore();
     }
 }
+
+
+
+
+
+
+
+
