@@ -818,6 +818,14 @@ function loadLanguage(which) {
         case 5: CURRENT_LANGUAGE = LANGUAGE.japanese; break;
     }
 
+    if (sceneManager.cursorHightlight) {
+        sceneManager.accessPageCursorHighlightOn.style = "selected";
+        sceneManager.accessPageCursorHighlightOff.style = "disabled";
+    } else {
+        sceneManager.accessPageCursorHighlightOn.style = "disabled";
+        sceneManager.accessPageCursorHighlightOff.style = "selected";
+    }
+
     sceneManager.updateAllText();
 }
 

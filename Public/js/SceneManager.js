@@ -46,18 +46,20 @@ class SceneManager {
         this.leaderboard2 = [];
         this.leaderboard3 = [];
 
+        this.cursorHightlight = false;
+
         //title screen buttons
         this.playButton = new Button(c.width/2-300,c.height/2-75,600,100, "Play");
         
         //main menu buttons
         this.stopMatchmakeButton = new Button(c.width/2-150,c.height/2-100,300,150, "Stop Matchmaking");
         this.perkScreenButton = new Button(c.width/2-150,c.height/2-100,300,150, "Perk Screen");
-        this.settingsButton = new Button(c.width/2+300,c.height/2-100,300,150, "Settings");
+        this.settingsButton = new Button(c.width/2+170,c.height/2-100,300,150, "Settings");
         this.menuBackButton = new Button(c.width/2-300,c.height/2+300,600,100, "Back");
         this.projectWebsiteButton = new Button(50,c.height-200,300,150, "Project Website");
-        this.profilePageButton = new Button(c.width/2-600,c.height/2-270,300,150, "My Profile");
         this.leaderboardButton = new Button(c.width/2-150,c.height/2-270,300,150, "Leaderboard");
-        this.gameOptionsButton = new Button(c.width/2-600,c.height/2-100,300,150, "Play");
+        this.profilePageButton = new Button(c.width/2-470,c.height/2-270,300,150, "My Profile");
+        this.gameOptionsButton = new Button(c.width/2-470,c.height/2-100,300,150, "Play");
         this.matchmakingBackButton = new Button(c.width/2-300,c.height/2+300,600,100, "Back");
         this.matchmakeButton = new Button(c.width/2-325,c.height/2-100,300,150, "Quick Matchmake");
         this.rankedMatchmakeButton = new Button(c.width/2+25,c.height/2-100,300,150, "Ranked Matchmake");
@@ -198,12 +200,15 @@ class SceneManager {
         this.accessPageColorBlindness2Button = new Button(1200,350,400,100,"Green-Blind/Deuteranopia");
         this.accessPageColorBlindness3Button = new Button(400,450,400,100,"Blue-Blind/Tritanopia");
 
-        this.accessPageLanguage1 = new Button(400,600,400,100,"English");
-        this.accessPageLanguage2 = new Button(800,600,400,100,"Spanish");
-        this.accessPageLanguage3 = new Button(1200,600,400,100,"French");
-        this.accessPageLanguage4 = new Button(400,700,400,100,"Italian");
-        this.accessPageLanguage5 = new Button(800,700,400,100,"Chinese");
-        this.accessPageLanguage6 = new Button(1200,700,400,100,"Japanese");
+        this.accessPageLanguage1 = new Button(400,400,400,100,"English");
+        this.accessPageLanguage2 = new Button(800,400,400,100,"Spanish");
+        this.accessPageLanguage3 = new Button(1200,400,400,100,"French");
+        this.accessPageLanguage4 = new Button(400,500,400,100,"Italian");
+        this.accessPageLanguage5 = new Button(800,500,400,100,"Chinese");
+        this.accessPageLanguage6 = new Button(1200,500,400,100,"Japanese");
+
+        this.accessPageCursorHighlightOn = new Button(400,700,400,100,"On");
+        this.accessPageCursorHighlightOff = new Button(800,700,400,100,"Off");
 
         this.profilePlayer = {};
         this.playerProfileBackButton = new Button(c.width/2-150,c.height/2+300,300,150, "Back to Search");
@@ -358,6 +363,14 @@ class SceneManager {
                 break;
             }
         }
+
+        if (this.cursorHightlight) {
+            ctx.fillStyle = "rgba(255,0,0,0.5)";
+            ctx.beginPath();
+            ctx.ellipse(mouseX+5, mouseY+5, 50, 50, 0, 0, 360*Math.PI/180);
+            ctx.fill();
+        }
+
         this.errorMessageHandler.draw();
         this.camera.drawTransition();
     }
@@ -424,25 +437,32 @@ class SceneManager {
         this.accessPageContrastAddButton.draw(dt, mouseX, mouseY);
         this.accessPageContrastSubtractButton.draw(dt, mouseX, mouseY);
         
-        //color blindness
-        ctx.font = "30px " + FONT;
-        ctx.textAlign = "left";
-        ctx.fillText(CURRENT_LANGUAGE.accessSettings.colorBlindness, 100, 450);
-        this.accessPageColorBlindnessNoneButton.draw(dt, mouseX, mouseY);
-        this.accessPageColorBlindness1Button.draw(dt, mouseX, mouseY);
-        this.accessPageColorBlindness2Button.draw(dt, mouseX, mouseY);
-        this.accessPageColorBlindness3Button.draw(dt, mouseX, mouseY);
+        // //color blindness
+        // ctx.font = "30px " + FONT;
+        // ctx.textAlign = "left";
+        // ctx.fillText(CURRENT_LANGUAGE.accessSettings.colorBlindness, 100, 450);
+        // this.accessPageColorBlindnessNoneButton.draw(dt, mouseX, mouseY);
+        // this.accessPageColorBlindness1Button.draw(dt, mouseX, mouseY);
+        // this.accessPageColorBlindness2Button.draw(dt, mouseX, mouseY);
+        // this.accessPageColorBlindness3Button.draw(dt, mouseX, mouseY);
         
         //language
         ctx.font = "30px " + FONT;
         ctx.textAlign = "left";
-        ctx.fillText(CURRENT_LANGUAGE.accessSettings.language, 100, 650);
+        ctx.fillText(CURRENT_LANGUAGE.accessSettings.language, 100, 450);
         this.accessPageLanguage1.draw(dt, mouseX, mouseY);
         this.accessPageLanguage2.draw(dt, mouseX, mouseY);
         this.accessPageLanguage3.draw(dt, mouseX, mouseY);
         this.accessPageLanguage4.draw(dt, mouseX, mouseY);
         this.accessPageLanguage5.draw(dt, mouseX, mouseY);
         this.accessPageLanguage6.draw(dt, mouseX, mouseY);
+
+
+        ctx.font = "30px " + FONT;
+        ctx.textAlign = "left";
+        ctx.fillText(CURRENT_LANGUAGE.accessSettings.cursorHighlight, 100, 650);
+        this.accessPageCursorHighlightOn.draw(dt,mouseX,mouseY);
+        this.accessPageCursorHighlightOff.draw(dt,mouseX,mouseY);
 
         //back button
         this.accessPageBackButton.draw(dt, mouseX, mouseY);
@@ -1574,6 +1594,14 @@ class SceneManager {
                     SETTINGS.language = 5;
                     sessionStorage.setItem("language", 5);
                     loadAccessFeatures();
+                } else if (this.accessPageCursorHighlightOn.mouseOver(mouseX, mouseY)) {
+                    this.cursorHightlight = true;
+                    sessionStorage.setItem("cursorSetting", true);
+                    loadAccessFeatures();
+                } else if (this.accessPageCursorHighlightOff.mouseOver(mouseX, mouseY)) {
+                    this.cursorHightlight = false;
+                    sessionStorage.setItem("cursorSetting", false);
+                    loadAccessFeatures();
                 }
                 break;
             case 12: //profile search page
@@ -1591,9 +1619,9 @@ class SceneManager {
                 }
                 break;
             case 14: //game options
-                if (this.matchmakeButton.mouseOver(mouseX, mouseY)) {
+                if (!this.matchmaking && this.matchmakeButton.mouseOver(mouseX, mouseY)) {
                     matchmake(false);
-                } else if (this.rankedMatchmakeButton.mouseOver(mouseX, mouseY)) {
+                } else if (!this.matchmaking && this.rankedMatchmakeButton.mouseOver(mouseX, mouseY)) {
                     matchmake(true);
                     game.ranked = true;
                 } else if (this.matchmaking && this.stopMatchmakeButton.mouseOver(mouseX, mouseY)) {
@@ -1685,6 +1713,9 @@ class SceneManager {
 
         this.gameOptionsButton.text = CURRENT_LANGUAGE.menu.gameOptionsButton;
         this.matchmakingBackButton.text = CURRENT_LANGUAGE.menu.matchmakingBackButton;
+
+        this.accessPageCursorHighlightOn.text = CURRENT_LANGUAGE.accessSettings.accessPageCursorHighlightOn;
+        this.accessPageCursorHighlightOff.text = CURRENT_LANGUAGE.accessSettings.accessPageCursorHighlightOff;
     }
     
     drawX(x, y) {
