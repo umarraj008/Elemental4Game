@@ -58,16 +58,20 @@ class SceneManager {
         this.menuBackButton = new Button(c.width/2-300,c.height/2+300,600,100, "Back");
         this.projectWebsiteButton = new Button(50,c.height-200,300,150, "Project Website");
         this.leaderboardButton = new Button(c.width/2-150,c.height/2-270,300,150, "Leaderboard");
+        this.howToPlayGuide = new Button(c.width/2+300,c.height/2-270,300,150, "How To Play");
         this.profilePageButton = new Button(c.width/2-470,c.height/2-270,300,150, "My Profile");
         this.gameOptionsButton = new Button(c.width/2-470,c.height/2-100,300,150, "Play");
         this.matchmakingBackButton = new Button(c.width/2-300,c.height/2+300,600,100, "Back");
         this.matchmakeButton = new Button(c.width/2-325,c.height/2-100,300,150, "Quick Matchmake");
         this.rankedMatchmakeButton = new Button(c.width/2+25,c.height/2-100,300,150, "Ranked Matchmake");
-
         //settings buttons
         // this.settingsFullScreenButton = new Button(c.width/2-150,c.height/2-200,300,150, "Fullscreen");
         // this.settingCreditButton = new Button(c.width/2-150,c.height/2,300,150, "Credits");
         
+        //how to play buttons
+        this.howToPlayBackButton = new Button(c.width/2-300,c.height/2+420,600,80,"Back");
+        this.howToPlayNextPageButton = new Button(c.width-350,c.height-200,300,150,"Next Page");
+
         //perk screen buttons
         this.perkBackButton = new Button(c.width/2-300,c.height/2+420,600,80,"Back");
 
@@ -308,7 +312,10 @@ class SceneManager {
                 break;
             case 14: //game options page
                 this.drawGameOptionsPage();
-                break;    
+                break;
+            case 15: //how to play page
+                this.drawHowToPlayPage();
+                break;
         }
 
         //tell user if they are connected to server
@@ -543,6 +550,41 @@ class SceneManager {
     }
 
     
+    drawHowToPlayPage() {
+        this.maps.drawTransition(false);
+
+        ctx.font = "100px "+FONT;
+        ctx.textAlign = "center";
+        ctx.fillStyle= "black";
+        ctx.fillText("How To Play Guide",c.width/2+4, 204);
+        ctx.fillStyle= "white";
+        ctx.fillText("How To Play Guide",c.width/2, 200);
+
+        if (currentPage == 1) {
+            let yOffSet = 300;
+            for (let i = 0; i<howToPlayGuideText.Page1.length; i++) {
+                ctx.font = "30px "+FONT;
+                ctx.textAlign = "left";
+                ctx.fillStyle= "black";
+                ctx.fillText(howToPlayGuideText.Page1[i], 50, yOffSet);
+                yOffSet += 30;
+            }
+        }
+        else if (currentPage == 2) {
+            let yOffSet = 300;
+            for (let i = 0; i<howToPlayGuideText.Page2.length; i++) {
+                ctx.font = "30px "+FONT;
+                ctx.textAlign = "left";
+                ctx.fillStyle= "black";
+                ctx.fillText(howToPlayGuideText.Page2[i], 50, yOffSet);
+                yOffSet += 30;
+            }
+        }
+
+        this.howToPlayBackButton.draw(dt,mouseX,mouseY);
+        this.howToPlayNextPageButton.draw(dt,mouseX,mouseY);
+    }
+
     drawCredits(){
         this.credits.draw();
         // ctx.fillStyle = "black";
@@ -666,13 +708,11 @@ class SceneManager {
             this.perkScreenButton.draw(dt,mouseX,mouseY);
             this.settingsButton.draw(dt,mouseX,mouseY);
             this.leaderboardButton.draw(dt,mouseX,mouseY);
+            this.howToPlayGuide.draw(dt,mouseX,mouseY);
             this.menuBackButton.draw(dt,mouseX,mouseY);
             this.profilePageButton.draw(dt,mouseX,mouseY);
             this.projectWebsiteButton.draw(dt,mouseX,mouseY);
             this.gameOptionsButton.draw(dt,mouseX,mouseY);
-        //}
-
-        
     }
 
     drawPerkScreen() {
@@ -1443,9 +1483,12 @@ class SceneManager {
                   
                     this.camera.transitionTo(9,0.005); 
                 } else if (this.leaderboardButton.mouseOver(mouseX,mouseY)) {
-                   
                     this.camera.transitionTo(10,0.005); 
                     requestLeaderboard();
+                  
+                } else if (this.howToPlayGuide.mouseOver(mouseX,mouseY)) {
+                    this.camera.transitionTo(15,0.005); 
+                  
                 } else if (this.gameOptionsButton.mouseOver(mouseX,mouseY)) {
                     this.camera.transitionTo(14,0.005);
                 }
@@ -1628,6 +1671,19 @@ class SceneManager {
                     stopMatchmaking();
                 } else if (this.matchmakingBackButton.mouseOver(mouseX, mouseY)){
                     this.camera.transitionTo(4,0.005);
+                }
+                break;
+            case 15: //how to play guide page
+                if (this.howToPlayBackButton.mouseOver(mouseX, mouseY)) {
+                    this.camera.transitionTo(4, 0.005);
+                } else if (this.howToPlayNextPageButton.mouseOver(mouseX, mouseY)) {
+                    if (currentPage == 1) {
+                        currentPage = 2;
+                        this.howToPlayNextPageButton.text = "Previous Page";
+                    } else if (currentPage == 2) {
+                        currentPage = 1;
+                        this.howToPlayNextPageButton.text = "Next Page";
+                    }
                 }
                 break;
         }
