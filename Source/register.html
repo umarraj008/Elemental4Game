@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Elemental 4</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"
+        integrity="sha512-zN6KYOtONNTOGXz0RkWX2EpavN9VdIs+2w+To+fhciFv83YA9maUpi2lzZWrOfKXdFIZZomWufBznkyHi3a8oQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="css/register.css">
+    <link rel="shortcut icon" type="image/x-con" href="resources/images/Elemental4Logo.ico">
+</head>
+<body>
+    <script src="js/register.js"></script>
+    <img id="characters" src="resources/images/RegisterLoginUI/AllCharacters.png">
+    <center>
+    <div id="registerContainer">
+        <div id="innerRegisterContainer">
+            <h1 id="registerHeading">Register</h1>
+            <input class="register" type="text" placeholder="First Name" id="firstName">
+            <input class="register" type="text" placeholder="Last Name" id="lastName">
+            <input class="register" type="text" placeholder="Email" id="email">
+            <input class="register" type="date" placeholder="Date Of Birth" id="DOB" style="text-indent: 5px;">
+            <input class="register" type="text" placeholder="Gamertag" id="gamerTag">
+            <input class="register" type="password" placeholder="Password" id="password">
+            <input class="register" type="password" placeholder="Confirm Password" id="confirmPassword">
+            <input class="button" type="submit" value="Register" id="register" onclick="registerButtonPressed()" placeholder="Register">
+            <input class="button" type="submit" value="Already have an account? Log in!" id="register" onclick="location.href='index.html' " placeholder="Already have an account? Login!">
+        </div>
+    </div>
+</center>
+</body>
+</html>

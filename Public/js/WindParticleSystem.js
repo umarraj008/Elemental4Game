@@ -1,15 +1,1 @@
-class WindParticleSystem{
-    constructor(offset){
-        this.windParticles=[];
-        for(let i=0;i<25;i++){
-            this.windParticles.push(new WindParticle(offset));
-        }
-    }
-    draw(){
-        this.windParticles.forEach(p=>{
-            if(p.x<=c.width && p.x>= 0){
-                p.drawParticle();
-            }
-        });
-    }
-}
+class WindParticleSystem{constructor(i){this.windParticles=[];for(let t=0;t<25;t++)this.windParticles.push(new WindParticle(i))}draw(){this.windParticles.forEach(i=>{i.x<=c.width&&i.x>=0&&i.drawParticle()})}}
