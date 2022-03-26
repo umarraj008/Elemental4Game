@@ -58,7 +58,7 @@ class SceneManager {
         this.menuBackButton = new Button(c.width/2-300,c.height/2+300,600,100, "Back");
         this.projectWebsiteButton = new Button(50,c.height-200,300,150, "Project Website");
         this.leaderboardButton = new Button(c.width/2-150,c.height/2-270,300,150, "Leaderboard");
-        this.howToPlayGuide = new Button(c.width/2+300,c.height/2-270,300,150, "How To Play");
+        this.howToPlayGuide = new Button(c.width/2+170,c.height/2-270,300,150, "How To Play");
         this.profilePageButton = new Button(c.width/2-470,c.height/2-270,300,150, "My Profile");
         this.gameOptionsButton = new Button(c.width/2-470,c.height/2-100,300,150, "Play");
         this.matchmakingBackButton = new Button(c.width/2-300,c.height/2+300,600,100, "Back");
@@ -71,12 +71,13 @@ class SceneManager {
         //how to play buttons
         this.howToPlayBackButton = new Button(c.width/2-300,c.height/2+420,600,80,"Back");
         this.howToPlayNextPageButton = new Button(c.width-350,c.height-200,300,150,"Next Page");
+        this.howToPlayPanel = new Panel(20, 240, c.width-50, 630)
 
         //perk screen buttons
         this.perkBackButton = new Button(c.width/2-300,c.height/2+420,600,80,"Back");
 
         //credits page buttons
-        this.creditBackButton = new Button(c.width/2-150,c.height/2+300,300,150, "Back");
+        this.creditBackButton = new Button(c.width-340,c.height/2+300,300,150, "Back");
         
         //profile page buttons
         this.profileBackButton = new Button(c.width/2-150,c.height/2+300,300,150, "Back");
@@ -113,6 +114,7 @@ class SceneManager {
         this.resultsBackButton = new Button(c.width/2-300,c.height/2+400,600,100, "Back");
 
         this.logoutButton = new Button(50, c.height-200,300,150, "Logout");
+        this.logoutButton.style = "back";
 
         this.perkButtonWidth = 390;
         this.perkButtonHeight = 242;
@@ -204,18 +206,36 @@ class SceneManager {
         this.accessPageColorBlindness2Button = new Button(1200,350,400,100,"Green-Blind/Deuteranopia");
         this.accessPageColorBlindness3Button = new Button(400,450,400,100,"Blue-Blind/Tritanopia");
 
-        this.accessPageLanguage1 = new Button(400,400,400,100,"English");
-        this.accessPageLanguage2 = new Button(800,400,400,100,"Spanish");
-        this.accessPageLanguage3 = new Button(1200,400,400,100,"French");
-        this.accessPageLanguage4 = new Button(400,500,400,100,"Italian");
-        this.accessPageLanguage5 = new Button(800,500,400,100,"Chinese");
-        this.accessPageLanguage6 = new Button(1200,500,400,100,"Japanese");
+        this.accessPageLanguage1 = new Button(400,320,400,100,"English");
+        this.accessPageLanguage2 = new Button(800,320,400,100,"Spanish");
+        this.accessPageLanguage3 = new Button(1200,320,400,100,"French");
+        this.accessPageLanguage4 = new Button(400,420,400,100,"Italian");
+        this.accessPageLanguage5 = new Button(800,420,400,100,"Chinese");
+        this.accessPageLanguage6 = new Button(1200,420,400,100,"Japanese");
 
-        this.accessPageCursorHighlightOn = new Button(400,700,400,100,"On");
-        this.accessPageCursorHighlightOff = new Button(800,700,400,100,"Off");
+        this.accessPageCursorHighlightOn = new Button(400,540,400,100,"On");
+        this.accessPageCursorHighlightOff = new Button(800,540,400,100,"Off");
+        
+        this.accessPageColorBlindModeOn = new Button(400,660,400,100,"On");
+        this.accessPageColorBlindModeOff = new Button(800,660,400,100,"Off");
 
         this.profilePlayer = {};
         this.playerProfileBackButton = new Button(c.width/2-150,c.height/2+300,300,150, "Back to Search");
+
+        this.menuBackButton.style = "back";
+        this.matchmakingBackButton.style = "back";
+        this.howToPlayBackButton.style = "back";
+        this.perkBackButton.style = "back";
+        this.creditBackButton.style = "back";
+        this.profileBackButton.style = "back";
+        this.profileSearchBackButton.style = "back";
+        this.leaderboardBackButton.style = "back";
+        this.resultsBackButton.style = "back";
+        this.settingsButtons.backButton.style = "back";
+        this.accessPageBackButton.style = "back";
+        this.playerProfileBackButton.style = "back";
+
+        this.volumeButton = new Button(c.width-120,20,100,100,"");
     } 
 
     run() {
@@ -378,6 +398,31 @@ class SceneManager {
             ctx.fill();
         }
 
+        if (this.scene != 6 && this.scene != 7 && this.scene != -2 && this.scene != -1 && this.scene != 0) {
+            this.volumeButton.draw(dt, mouseX, mouseY);
+            this.volumeButton.y = 20;
+
+            if (volumeSetting == 0.4) {
+                ctx.drawImage(volumeIcon2, c.width-95, 45, 50, 50);
+            } else if (volumeSetting == 0.2) {
+                ctx.drawImage(volumeIcon1, c.width-95, 45, 50, 50);
+            } else if (volumeSetting == 0.0) {
+                ctx.drawImage(volumeIcon0, c.width-95, 45, 50, 50);
+            } 
+
+        } else if (this.scene == 7) {
+            this.volumeButton.draw(dt, mouseX, mouseY);
+            this.volumeButton.y = 730;
+
+            if (volumeSetting == 0.4) {
+                ctx.drawImage(volumeIcon2, c.width-95, 750, 50, 50);
+            } else if (volumeSetting == 0.2) {
+                ctx.drawImage(volumeIcon1, c.width-95, 750, 50, 50);
+            } else if (volumeSetting == 0.0) {
+                ctx.drawImage(volumeIcon0, c.width-95, 750, 50, 50);
+            }
+        }
+
         this.errorMessageHandler.draw();
         this.camera.drawTransition();
     }
@@ -456,7 +501,8 @@ class SceneManager {
         //language
         ctx.font = "30px " + FONT;
         ctx.textAlign = "left";
-        ctx.fillText(CURRENT_LANGUAGE.accessSettings.language, 100, 450);
+        ctx.fillStyle = "black";
+        ctx.fillText(CURRENT_LANGUAGE.accessSettings.language, 100, 370);
         this.accessPageLanguage1.draw(dt, mouseX, mouseY);
         this.accessPageLanguage2.draw(dt, mouseX, mouseY);
         this.accessPageLanguage3.draw(dt, mouseX, mouseY);
@@ -467,9 +513,17 @@ class SceneManager {
 
         ctx.font = "30px " + FONT;
         ctx.textAlign = "left";
-        ctx.fillText(CURRENT_LANGUAGE.accessSettings.cursorHighlight, 100, 650);
+        ctx.fillStyle = "black";
+        ctx.fillText(CURRENT_LANGUAGE.accessSettings.cursorHighlight, 100, 600);
         this.accessPageCursorHighlightOn.draw(dt,mouseX,mouseY);
         this.accessPageCursorHighlightOff.draw(dt,mouseX,mouseY);
+
+        ctx.font = "30px " + FONT;
+        ctx.textAlign = "left";
+        ctx.fillStyle = "black";
+        ctx.fillText(CURRENT_LANGUAGE.accessSettings.colorBlindMode, 100, 720);
+        this.accessPageColorBlindModeOn.draw(dt,mouseX,mouseY);
+        this.accessPageColorBlindModeOff.draw(dt,mouseX,mouseY);
 
         //back button
         this.accessPageBackButton.draw(dt, mouseX, mouseY);
@@ -503,30 +557,35 @@ class SceneManager {
         this.settingsButtons.frameRate60FPS.draw(dt, mouseX, mouseY);
         
         ctx.font = "30px " + FONT;
+        ctx.fillStyle = "black";
         ctx.textAlign = "left";
         ctx.fillText(CURRENT_LANGUAGE.settings.windParticles, 100, 300+20+50);
         this.settingsButtons.windParticlesOn.draw(dt, mouseX, mouseY);
         this.settingsButtons.windParticlesOff.draw(dt, mouseX, mouseY);
         
         ctx.font = "30px " + FONT;
+        ctx.fillStyle = "black";
         ctx.textAlign = "left";
         ctx.fillText(CURRENT_LANGUAGE.settings.debrisParticles, 100, 400+40+50);
         this.settingsButtons.debrisParticlesOn.draw(dt, mouseX, mouseY);
         this.settingsButtons.debrisParticlesOff.draw(dt, mouseX, mouseY);
         
         ctx.font = "30px " + FONT;
+        ctx.fillStyle = "black";
         ctx.textAlign = "left";
         ctx.fillText(CURRENT_LANGUAGE.settings.movingBackground, 100, 500+60+50);
         this.settingsButtons.movingBackgroundOn.draw(dt, mouseX, mouseY);
         this.settingsButtons.movingBackgroundOff.draw(dt, mouseX, mouseY);
         
         ctx.font = "30px " + FONT;
+        ctx.fillStyle = "black";
         ctx.textAlign = "left";
         ctx.fillText(CURRENT_LANGUAGE.settings.textIndicators, 100, 600+80+50);
         this.settingsButtons.textIndicatorsOn.draw(dt, mouseX, mouseY);
         this.settingsButtons.textIndicatorsOff.draw(dt, mouseX, mouseY);
         
         ctx.font = "30px " + FONT;
+        ctx.fillStyle = "black";
         ctx.textAlign = "left";
         ctx.fillText(CURRENT_LANGUAGE.settings.fullscreen, 100, 700+100+50);
         this.settingsButtons.fullscreenOn.draw(dt, mouseX, mouseY);
@@ -552,6 +611,7 @@ class SceneManager {
     
     drawHowToPlayPage() {
         this.maps.drawTransition(false);
+        this.howToPlayPanel.draw();
 
         ctx.font = "100px "+FONT;
         ctx.textAlign = "center";
@@ -1242,7 +1302,7 @@ class SceneManager {
 
         ctx.font = "50px "+ FONT;
         ctx.fillStyle = "black";
-        
+
         for(let i = 0; i < 10; i++){
             ctx.textAlign = "left";
             ctx.fillText(this.leaderboard1[i].gamertag, this.leaderboardPanel1.x + 20, 300 + i * 50);
@@ -1325,9 +1385,9 @@ class SceneManager {
         ctx.font = "100px "+ FONT;
         ctx.textAlign = "center";
         ctx.fillStyle = "black";
-        ctx.fillText("Game Mode",c.width/2+4, 94);
+        ctx.fillText(CURRENT_LANGUAGE.menu.gameOptionsTitle,c.width/2+4, 94);
         ctx.fillStyle = "white";
-        ctx.fillText("Game Mode",c.width/2, 90);
+        ctx.fillText(CURRENT_LANGUAGE.menu.gameOptionsTitle,c.width/2, 90);
 
         if (this.matchmaking){
             ctx.font = "70px "+FONT;
@@ -1345,25 +1405,48 @@ class SceneManager {
     }
 
     mouseClick() {
+        if (this.volumeButton.mouseOver(mouseX, mouseY) && this.scene != 6) {
+            switch (volumeSetting) {
+                case 0.0: volumeSetting = 0.4; this.playSoundEffect("buttonAccept"); break;
+                case 0.2: volumeSetting = 0.0; this.playSoundEffect("buttonAccept"); break;
+                case 0.4: volumeSetting = 0.2; this.playSoundEffect("buttonAccept"); break;
+
+            }
+            gameMusic.volume = volumeSetting;
+            soundtrack.volume = volumeSetting;
+            activatePerkSoundEffect = volumeSetting;
+            buttonAcceptSoundEffect = volumeSetting;
+            buttonBackSoundEffect = volumeSetting;
+            hitSoundEffect = volumeSetting;
+            loseSoundEffect = volumeSetting;
+            winSoundEffect = volumeSetting;
+        }
+
         switch(this.scene) {
             case 1: //title screen
                 if (this.playButton.mouseOver(mouseX,mouseY)) {
                     // this.scene = 4;
-                    this.camera.transitionTo(4,0.005); 
+                    this.playSoundEffect("buttonAccept");
+                    this.camera.transitionTo(4,0.005);
+                    playMusic(); 
                 } else if (this.logoutButton.mouseOver(mouseX, mouseY)) {
+                    this.playSoundEffect("buttonBack");
                     logout();
                 }
                 break;
             case 2: //settings screen
                 if (this.settingsButtons.backButton.mouseOver(mouseX, mouseY)) {
+                    this.playSoundEffect("buttonBack");
                     this.camera.transitionTo(4,0.005); 
                     break;
                 } else if (this.settingsButtons.gameCredits.mouseOver(mouseX, mouseY)) {
                     this.credits = new Credits();      
+                    this.playSoundEffect("buttonAccept");
                     this.camera.transitionTo(3,0.005);
                     break; 
                 } else if (this.settingsButtons.accessFeatures.mouseOver(mouseX, mouseY)) {
                     loadAccessFeatures();
+                    this.playSoundEffect("buttonAccept");
                     this.camera.transitionTo(11,0.005);
                     break; 
                 }  else if (this.settingsButtons.frameRate30FPS.mouseOver(mouseX, mouseY)) {
@@ -1371,72 +1454,84 @@ class SceneManager {
                     this.settingsButtons.frameRate60FPS.style = "disabled";
                     SETTINGS.frameRate = 30;
                     sessionStorage.setItem("frameRate", 30);
+                    this.playSoundEffect("buttonAccept");
                     break;
                 } else if (this.settingsButtons.frameRate60FPS.mouseOver(mouseX, mouseY)) {
                     this.settingsButtons.frameRate60FPS.style = "selected";
                     this.settingsButtons.frameRate30FPS.style = "disabled";
                     SETTINGS.frameRate = 60;
                     sessionStorage.setItem("frameRate", 60);
+                    this.playSoundEffect("buttonAccept");
                     break;
                 } else if (this.settingsButtons.windParticlesOn.mouseOver(mouseX, mouseY)) {
                     this.settingsButtons.windParticlesOn.style = "selected";
                     this.settingsButtons.windParticlesOff.style = "disabled";
                     SETTINGS.windParticles = true;
                     sessionStorage.setItem("windParticles", true);
+                    this.playSoundEffect("buttonAccept");
                     break;
                 } else if (this.settingsButtons.windParticlesOff.mouseOver(mouseX, mouseY)) {
                     this.settingsButtons.windParticlesOff.style = "selected";
                     this.settingsButtons.windParticlesOn.style = "disabled";
                     SETTINGS.windParticles = false;
                     sessionStorage.setItem("windParticles", false);
+                    this.playSoundEffect("buttonBack");
                     break;
                 } else if (this.settingsButtons.debrisParticlesOn.mouseOver(mouseX, mouseY)) {
                     this.settingsButtons.debrisParticlesOn.style = "selected";
                     this.settingsButtons.debrisParticlesOff.style = "disabled";
                     SETTINGS.debrisParticles = true;
                     sessionStorage.setItem("debrisParticles", true);
+                    this.playSoundEffect("buttonAccept");
                     break;
                 } else if (this.settingsButtons.debrisParticlesOff.mouseOver(mouseX, mouseY)) {
                     this.settingsButtons.debrisParticlesOff.style = "selected";
                     this.settingsButtons.debrisParticlesOn.style = "disabled";
                     SETTINGS.debrisParticles = false;
                     sessionStorage.setItem("debrisParticles", false);
+                    this.playSoundEffect("buttonBack");
                     break;
                 } else if (this.settingsButtons.movingBackgroundOn.mouseOver(mouseX, mouseY)) {
                     this.settingsButtons.movingBackgroundOn.style = "selected";
                     this.settingsButtons.movingBackgroundOff.style = "disabled";
                     SETTINGS.movingBackground = true;
                     sessionStorage.setItem("movingBackground", true);
+                    this.playSoundEffect("buttonAccept");
                     break;
                 } else if (this.settingsButtons.movingBackgroundOff.mouseOver(mouseX, mouseY)) {
                     this.settingsButtons.movingBackgroundOff.style = "selected";
                     this.settingsButtons.movingBackgroundOn.style = "disabled";
                     SETTINGS.movingBackground = false;
                     sessionStorage.setItem("movingBackground", false);
+                    this.playSoundEffect("buttonBack");
                     break;
                 } else if (this.settingsButtons.textIndicatorsOn.mouseOver(mouseX, mouseY)) {
                     this.settingsButtons.textIndicatorsOn.style = "selected";
                     this.settingsButtons.textIndicatorsOff.style = "disabled";
                     SETTINGS.textIndicators = true;
                     sessionStorage.setItem("textIndicators", true);
+                    this.playSoundEffect("buttonAccept");
                     break;
                 } else if (this.settingsButtons.textIndicatorsOff.mouseOver(mouseX, mouseY)) {
                     this.settingsButtons.textIndicatorsOff.style = "selected";
                     this.settingsButtons.textIndicatorsOn.style = "disabled";
                     SETTINGS.textIndicators = false;
                     sessionStorage.setItem("textIndicators", false);
+                    this.playSoundEffect("buttonBack");
                     break;
                 } else if (this.settingsButtons.fullscreenOn.mouseOver(mouseX, mouseY)) {
                     this.settingsButtons.fullscreenOn.style = "selected";
                     this.settingsButtons.fullscreenOff.style = "disabled";
                     SETTINGS.fullscreen = true;
                     document.getElementsByTagName("body")[0].requestFullscreen();
+                    this.playSoundEffect("buttonAccept");
                     break;
                 } else if (this.settingsButtons.fullscreenOff.mouseOver(mouseX, mouseY)) {
                     this.settingsButtons.fullscreenOff.style = "selected";
                     this.settingsButtons.fullscreenOn.style = "disabled";
                     SETTINGS.fullscreen = false;
                     document.exitFullscreen();
+                    this.playSoundEffect("buttonBack");
                     break;
                 }
 
@@ -1459,64 +1554,75 @@ class SceneManager {
                 // break;
             case 3: //credits screen
                 if(this.creditBackButton.mouseOver(mouseX,mouseY)) {
+                    this.playSoundEffect("buttonBack");
                     this.camera.transitionTo(2,0.005); 
                 }
                 break;
             case 4: //menu screen
                 if (this.perkScreenButton.mouseOver(mouseX,mouseY)){     
-                     
+                    this.playSoundEffect("buttonAccept");
                     updatePerkButtons();
                     this.perkButtons[0].style = "selected";
                     this.camera.transitionTo(5,0.005); 
                     break;
 
                 } else if (this.settingsButton.mouseOver(mouseX,mouseY)) {
+                    this.playSoundEffect("buttonAccept");
                     this.camera.transitionTo(2,0.005); 
                     loadSettings();
                 } else if (this.menuBackButton.mouseOver(mouseX,mouseY)) {
-                  
+                    this.playSoundEffect("buttonBack");
                     this.camera.transitionTo(1,0.005); 
                 } else if (this.projectWebsiteButton.mouseOver(mouseX,mouseY)) {
-                 
+                    this.playSoundEffect("buttonAccept");
                     location.href = "http://cybercloudstudios.co.uk"; 
                 } else if (this.profilePageButton.mouseOver(mouseX,mouseY)) {
-                  
+                    this.playSoundEffect("buttonAccept");
                     this.camera.transitionTo(9,0.005); 
                 } else if (this.leaderboardButton.mouseOver(mouseX,mouseY)) {
+                    this.playSoundEffect("buttonAccept");
                     this.camera.transitionTo(10,0.005); 
                     requestLeaderboard();
                   
                 } else if (this.howToPlayGuide.mouseOver(mouseX,mouseY)) {
+                    this.playSoundEffect("buttonAccept");
                     this.camera.transitionTo(15,0.005); 
                   
                 } else if (this.gameOptionsButton.mouseOver(mouseX,mouseY)) {
+                    this.playSoundEffect("buttonAccept");
                     this.camera.transitionTo(14,0.005);
                 }
 
                 break;
             case 5: //perk screen
                 if(this.perkBackButton.mouseOver(mouseX,mouseY)) {
+                    this.playSoundEffect("buttonBack");
                     this.camera.transitionTo(4,0.005); 
                     break;
                 } else if (this.perkBuyButton.mouseOver(mouseX, mouseY)) {
                     if (game.myData.perkPoints >= this.perkDescription[this.selectedPerk].price) {
+                        this.playSoundEffect("buttonAccept");
                         this.perkConfirmWindow = true;
                     }
                     break;
                 } else if (this.perkConfirmWindow && this.perkConfirmCancelButton.mouseOver(mouseX, mouseY)) {
+                    this.playSoundEffect("buttonBack");
                     this.perkConfirmWindow = false;
                     break;
                 } else if (this.perkConfirmWindow && this.perkConfirmConfirmButton.mouseOver(mouseX, mouseY)) {
+                    this.playSoundEffect("buttonAccept");
                     //buy perk
                     buyPerk(this.selectedPerk);
                     break;
                 } else if (this.perkActivateButton.mouseOver(mouseX, mouseY)) {
+                    this.playSoundEffect("buttonAccept");
                     activatePerk(this.selectedPerk);
                 }
 
                 if (!this.perkConfirmWindow) {
                     for (let i= 0;i<this.perkButtons.length; i++){
                         if (this.perkButtons[i].mouseOver(mouseX,mouseY)){
+                            this.playSoundEffect("buttonAccept");
                             this.selectedPerk = i;
                             updatePerkButtons();
                             this.perkButtons[i].style = "selected";
@@ -1529,18 +1635,26 @@ class SceneManager {
                 break;
             case 6: //character select
                 if (this.characterSelect.fire.mouseOver(mouseX,mouseY)) {
+                    this.playSoundEffect("buttonAccept");
+                    startBattleMusic();
                     selectPlayer(0);
                     this.player1Animator = new Animator("fire", this.character1X,this.character1Y,this.characterWidth,this.characterHeight);
                     this.camera.transitionTo(7,0.005); 
                 } else if (this.characterSelect.water.mouseOver(mouseX,mouseY)) {
+                    this.playSoundEffect("buttonAccept");
+                    startBattleMusic();
                     selectPlayer(1);
                     this.player1Animator = new Animator("water",this.character1X,this.character1Y,this.characterWidth,this.characterHeight);
                     this.camera.transitionTo(7,0.005); 
                 } else if (this.characterSelect.earth.mouseOver(mouseX,mouseY)) {
+                    this.playSoundEffect("buttonAccept");
+                    startBattleMusic();
                     selectPlayer(2);
                     this.player1Animator = new Animator("earth",this.character1X-220,this.character1Y-270,this.characterWidth*1.4,this.characterHeight*1.4);
                     this.camera.transitionTo(7,0.005); 
                 } else if (this.characterSelect.air.mouseOver(mouseX,mouseY)) {
+                    this.playSoundEffect("buttonAccept");
+                    startBattleMusic();
                     selectPlayer(3);
                     this.player1Animator = new Animator("air",this.character1X,this.character1Y,this.characterWidth,this.characterHeight);
                     this.camera.transitionTo(7,0.005); 
@@ -1550,18 +1664,25 @@ class SceneManager {
             case 7: //game
                 if (game.turn) {
                     if (this.actionButtons.wait.mouseOver(mouseX, mouseY)) {
+                        this.playSoundEffect("buttonAccept");
                         action(0);
                     } else if (this.actionButtons.heal.mouseOver(mouseX, mouseY) && !game.attackButtonsDisabled) {
+                        this.playSoundEffect("buttonAccept");
                         action(1);
                     } else if (this.actionButtons.attack1.mouseOver(mouseX, mouseY) && !game.attackButtonsDisabled) {
+                        this.playSoundEffect("buttonAccept");
                         action(2);
                     } else if (this.actionButtons.attack2.mouseOver(mouseX, mouseY) && !game.attackButtonsDisabled) {
+                        this.playSoundEffect("buttonAccept");
                         action(3);
                     } else if (this.actionButtons.attack3.mouseOver(mouseX, mouseY) && !game.attackButtonsDisabled) {
+                        this.playSoundEffect("buttonAccept");
                         action(4);
                     } else if (this.actionButtons.ultimate.mouseOver(mouseX, mouseY) && !game.attackButtonsDisabled) {
+                        this.playSoundEffect("buttonAccept");
                         action(5);
                     }else if (game.perkBarValue >= 100 && this.perkActivationButton.mouseOver(mouseX, mouseY)) {
+                        this.playSoundEffect("activatePerk");
                         usePerk();
                     }
                 } 
@@ -1569,15 +1690,20 @@ class SceneManager {
 
             case 8://game results
                 if (this.resultsBackButton.mouseOver(mouseX,mouseY)) {
+                    this.playSoundEffect("buttonBack");
                     this.camera.transitionTo(4,0.005); 
+                    stopBattleMusic();
+                    playMusic();
                     resetGame();
                 }
                 break;  
             
             case 9://profile page
                 if(this.profileBackButton.mouseOver(mouseX,mouseY)) {
+                    this.playSoundEffect("buttonBack");
                     this.camera.transitionTo(4,0.005); 
                 } else if (this.profileSearchForPlayer.mouseOver(mouseX,mouseY)) {
+                    this.playSoundEffect("buttonAccept");
                     this.camera.transitionTo(12,0.005); 
                     profileSearchBar(true, 200);
                 }
@@ -1585,98 +1711,133 @@ class SceneManager {
 
             case 10://leaderboard
                 if(this.leaderboardBackButton.mouseOver(mouseX,mouseY)){
+                    this.playSoundEffect("buttonBack");
                     this.camera.transitionTo(4,0.005)
                 }
                 break;
             case 11: //accesibility page
                 if (this.accessPageBackButton.mouseOver(mouseX, mouseY)) {
+                    this.playSoundEffect("buttonBack");
                     this.camera.transitionTo(2, 0.005);
                 } else if (this.accessPageContrastAddButton.mouseOver(mouseX, mouseY)) {
+                    this.playSoundEffect("buttonAccept");
                     SETTINGS.contrast = SETTINGS.contrast + 5;
                     if (SETTINGS.contrast >= 200) SETTINGS.contrast = 200;
                 } else if (this.accessPageContrastSubtractButton.mouseOver(mouseX, mouseY)) {
+                    this.playSoundEffect("buttonAccept");
                     SETTINGS.contrast = SETTINGS.contrast - 5;
                     if (SETTINGS.contrast <= 0) SETTINGS.contrast = 0;
                 } else if (this.accessPageColorBlindnessNoneButton.mouseOver(mouseX,mouseY)) {
+                    this.playSoundEffect("buttonAccept");
                     SETTINGS.colorBlindness = 0;
                     sessionStorage.setItem("colorBlindness", 0);
                     loadAccessFeatures();
                 } else if (this.accessPageColorBlindness1Button.mouseOver(mouseX,mouseY)) {
+                    this.playSoundEffect("buttonAccept");
                     SETTINGS.colorBlindness = 1;
                     sessionStorage.setItem("colorBlindness", 1);
                     loadAccessFeatures();
                 } else if (this.accessPageColorBlindness2Button.mouseOver(mouseX,mouseY)) {
+                    this.playSoundEffect("buttonAccept");
                     SETTINGS.colorBlindness = 2;
                     sessionStorage.setItem("colorBlindness", 2);
                     loadAccessFeatures();
                 } else if (this.accessPageColorBlindness3Button.mouseOver(mouseX,mouseY)) {
+                    this.playSoundEffect("buttonAccept");
                     SETTINGS.colorBlindness = 3;
                     sessionStorage.setItem("colorBlindness", 3);
                     loadAccessFeatures();
                 } else if (this.accessPageLanguage1.mouseOver(mouseX,mouseY)) {
+                    this.playSoundEffect("buttonAccept");
                     SETTINGS.language = 0;
                     sessionStorage.setItem("language", 0);
                     loadAccessFeatures();
                 } else if (this.accessPageLanguage2.mouseOver(mouseX,mouseY)) {
+                    this.playSoundEffect("buttonAccept");
                     SETTINGS.language = 1;
                     sessionStorage.setItem("language", 1);
                     loadAccessFeatures();
                 } else if (this.accessPageLanguage3.mouseOver(mouseX,mouseY)) {
+                    this.playSoundEffect("buttonAccept");
                     SETTINGS.language = 2;
                     sessionStorage.setItem("language", 2);
                     loadAccessFeatures();
                 } else if (this.accessPageLanguage4.mouseOver(mouseX,mouseY)) {
+                    this.playSoundEffect("buttonAccept");
                     SETTINGS.language = 3;
                     sessionStorage.setItem("language", 3);
                     loadAccessFeatures();
                 } else if (this.accessPageLanguage5.mouseOver(mouseX,mouseY)) {
+                    this.playSoundEffect("buttonAccept");
                     SETTINGS.language = 4;
                     sessionStorage.setItem("language", 4);
                     loadAccessFeatures();
                 } else if (this.accessPageLanguage6.mouseOver(mouseX,mouseY)) {
+                    this.playSoundEffect("buttonAccept");
                     SETTINGS.language = 5;
                     sessionStorage.setItem("language", 5);
                     loadAccessFeatures();
                 } else if (this.accessPageCursorHighlightOn.mouseOver(mouseX, mouseY)) {
+                    this.playSoundEffect("buttonAccept");
                     this.cursorHightlight = true;
                     sessionStorage.setItem("cursorSetting", true);
                     loadAccessFeatures();
                 } else if (this.accessPageCursorHighlightOff.mouseOver(mouseX, mouseY)) {
+                    this.playSoundEffect("buttonAccept");
                     this.cursorHightlight = false;
                     sessionStorage.setItem("cursorSetting", false);
                     loadAccessFeatures();
-                }
+                } else if (this.accessPageColorBlindModeOn.mouseOver(mouseX, mouseY)) {
+                    this.playSoundEffect("buttonAccept");
+                    colorBlindMode = true;
+                    sessionStorage.setItem("colorBlindMode", true);
+                    loadAccessFeatures();
+                } else if (this.accessPageColorBlindModeOff.mouseOver(mouseX, mouseY)) {
+                    this.playSoundEffect("buttonAccept");
+                    colorBlindMode = false;
+                    sessionStorage.setItem("colorBlindMode", false);
+                    loadAccessFeatures();
+                } 
                 break;
             case 12: //profile search page
                 if (this.profileSearchBackButton.mouseOver(mouseX, mouseY)) {
+                    this.playSoundEffect("buttonBack");
                     this.camera.transitionTo(9, 0.005);
                     profileSearchBar(false, 50);
                 } else if (this.searchForPlayerButton.mouseOver(mouseX, mouseY)) {
+                    this.playSoundEffect("buttonAccept");
                     searchForPlayer();
                 }
                 break;
             case 13: //player profile page
                 if (this.playerProfileBackButton.mouseOver(mouseX, mouseY)) {
+                    this.playSoundEffect("buttonBack");
                     this.camera.transitionTo(12, 0.005);
                     profileSearchBar(true,200);
                 }
                 break;
             case 14: //game options
                 if (!this.matchmaking && this.matchmakeButton.mouseOver(mouseX, mouseY)) {
+                    this.playSoundEffect("buttonAccept");
                     matchmake(false);
                 } else if (!this.matchmaking && this.rankedMatchmakeButton.mouseOver(mouseX, mouseY)) {
+                    this.playSoundEffect("buttonAccept");
                     matchmake(true);
                     game.ranked = true;
                 } else if (this.matchmaking && this.stopMatchmakeButton.mouseOver(mouseX, mouseY)) {
+                    this.playSoundEffect("buttonAccept");
                     stopMatchmaking();
                 } else if (this.matchmakingBackButton.mouseOver(mouseX, mouseY)){
+                    this.playSoundEffect("buttonBack");
                     this.camera.transitionTo(4,0.005);
                 }
                 break;
             case 15: //how to play guide page
                 if (this.howToPlayBackButton.mouseOver(mouseX, mouseY)) {
+                    this.playSoundEffect("buttonBack");
                     this.camera.transitionTo(4, 0.005);
                 } else if (this.howToPlayNextPageButton.mouseOver(mouseX, mouseY)) {
+                    this.playSoundEffect("buttonAccept");
                     if (currentPage == 1) {
                         currentPage = 2;
                         this.howToPlayNextPageButton.text = "Previous Page";
@@ -1767,11 +1928,16 @@ class SceneManager {
         this.profileSearchBackButton.text = CURRENT_LANGUAGE.profile.profileSearchBackButton;
         this.playerProfileBackButton.text = CURRENT_LANGUAGE.profile.playerProfileBackButton;
 
-        this.gameOptionsButton.text = CURRENT_LANGUAGE.menu.gameOptionsButton;
-        this.matchmakingBackButton.text = CURRENT_LANGUAGE.menu.matchmakingBackButton;
+        this.gameOptionsButton.text = CURRENT_LANGUAGE.title.playButton;
+        this.matchmakingBackButton.text = CURRENT_LANGUAGE.menu.backButton;
 
-        this.accessPageCursorHighlightOn.text = CURRENT_LANGUAGE.accessSettings.accessPageCursorHighlightOn;
-        this.accessPageCursorHighlightOff.text = CURRENT_LANGUAGE.accessSettings.accessPageCursorHighlightOff;
+        this.accessPageCursorHighlightOn.text = CURRENT_LANGUAGE.settings.windParticlesOn;
+        this.accessPageCursorHighlightOff.text = CURRENT_LANGUAGE.settings.windParticlesOff;
+        this.accessPageColorBlindModeOn.text = CURRENT_LANGUAGE.settings.windParticlesOn;
+        this.accessPageColorBlindModeOff.text = CURRENT_LANGUAGE.settings.windParticlesOff;
+
+        this.howToPlayGuide.text = CURRENT_LANGUAGE.menu.howToPlayGuide;
+        this.howToPlayBackButton.text = CURRENT_LANGUAGE.menu.backButton;
     }
     
     drawX(x, y) {
@@ -1783,6 +1949,36 @@ class SceneManager {
         ctx.fillRect(-15, -100, 30, 200);
         ctx.restore();
     }
+
+    playSoundEffect(which) {
+        switch(which) {
+            case "buttonAccept":
+                buttonAcceptSoundEffect.volume = volumeSetting;
+                buttonAcceptSoundEffect.play();
+                break;
+            case "buttonBack":
+                buttonBackSoundEffect.volume = volumeSetting;
+                buttonBackSoundEffect.play();
+                break;
+            case "activatePerk":
+                activatePerkSoundEffect.volume = volumeSetting;
+                activatePerkSoundEffect.play();
+                break;
+            case "hit":
+                hitSoundEffect.volume = volumeSetting;
+                hitSoundEffect.play();
+                break;
+            case "win":
+                winSoundEffect.volume = volumeSetting;
+                winSoundEffect.play();
+                break;
+            case "lose":
+                loseSoundEffect.volume = volumeSetting;
+                loseSoundEffect.play();
+                break;    
+        }
+    }
+
 }
 
 

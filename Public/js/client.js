@@ -89,6 +89,7 @@ socket.on("disconnect", function() {
 
 socket.on("pick-character", function(data) {
     // console.log("pick your character");
+    stopMusic();
     sceneManager.scene = 6;
     game.id = data.gameID;
     game.map = data.map;
@@ -224,6 +225,13 @@ socket.on("game-over", function(data) {
         game.over = true;
         game.turn = false;
         game.win = data.winner;
+        if (data.winner) {
+            stopBattleMusic();
+            sceneManager.playSoundEffect("win");
+        } else {
+            stopBattleMusic();
+            sceneManager.playSoundEffect("lose");
+        }
     },3000);
 
     setTimeout(function(){
@@ -367,23 +375,24 @@ socket.on("login-failed", function(message) {
     sceneManager.errorMessageHandler.makeError(CURRENT_LANGUAGE.errorMessages[message]);
     console.log(message);
     alert(message);
+    console.log(sessionStorage);
     logout();
 });
 
-socket.on("register-success", function(data) {
-    sessionStorage.setItem("firstName", data.firstName);
-    sessionStorage.setItem("lastName", data.lastName);
-    sessionStorage.setItem("DOB", data.DOB);
-    sessionStorage.setItem("email", data.email);
-    sessionStorage.setItem("gamerTag", data.gamerTag);
-    sessionStorage.setItem("gamesWon", data.gamesWon);
-    sessionStorage.setItem("gamesLost", data.gamesLost);
-    sessionStorage.setItem("xpLevel", data.xpLevel);
-    sessionStorage.setItem("perksUnlocked", data.perksUnlocked);
-    sessionStorage.setItem("perkPoints", data.perkPoints);
+// socket.on("register-success", function(data) {
+//     sessionStorage.setItem("firstName", data.firstName);
+//     sessionStorage.setItem("lastName", data.lastName);
+//     sessionStorage.setItem("DOB", data.DOB);
+//     sessionStorage.setItem("email", data.email);
+//     sessionStorage.setItem("gamerTag", data.gamerTag);
+//     sessionStorage.setItem("gamesWon", data.gamesWon);
+//     sessionStorage.setItem("gamesLost", data.gamesLost);
+//     sessionStorage.setItem("xpLevel", data.xpLevel);
+//     sessionStorage.setItem("perksUnlocked", data.perksUnlocked);
+//     sessionStorage.setItem("perkPoints", data.perkPoints);
 
-    location.href = "index.html";
-});
+//     location.href = "index.html";
+// });
 
 socket.on("perk-buy-success", function(data) {
     game.myData.perkPoints = data.perkPoints;
@@ -434,6 +443,12 @@ socket.on("recieve-leaderboard", function(data) {
         // console.table(data.leaderboard1);
         // console.table(data.leaderboard2);
         // console.table(data.leaderboard3);
+        
+        if (sceneManager.leaderboard1.length <= 0 || sceneManager.leaderboard2.length <= 0 || sceneManager.leaderboard3.length <= 0 || 
+            sceneManager.leaderboard1[0].gamertag == undefined || sceneManager.leaderboard2[0].gamertag == undefined || sceneManager.leaderboard3[0].gamertag == undefined) {
+            sceneManager.errorMessageHandler.makeError("Error Loading Leaderboard");
+            sceneManager.camera.transitionTo(4, 0.005);
+        }
 
         sceneManager.leaderboard1 = data.leaderboard1;
         sceneManager.leaderboard2 = data.leaderboard2;
@@ -476,12 +491,13 @@ socket.on("perk-activated", function(data) {
         }
     }
 
+    sceneManager.playSoundEffect("activatePerk");
     setTimeout(function() {game.showPerkActivated.toggle = false}, 4000);
 });
 
 socket.on("recieve-profile", function(data) {
     if (data.error) {
-        sceneManager.errorMessageHandler.makeError(data.errorMessage);
+        sceneManager.errorMessageHandler.makeError(CURRENT_LANGUAGE.profile.errorMessage);
         // console.log(CURRENT_LANGUAGE.errorMessages[data.errorMessage]);
     } else {
         sceneManager.profilePlayer = data.player;
@@ -806,6 +822,22 @@ function loadAccessFeatures() {
         sceneManager.accessPageLanguage6.style = "selected";
         loadLanguage(5);
     }
+
+    if (sceneManager.cursorHightlight) {
+        sceneManager.accessPageCursorHighlightOn.style = "selected";
+        sceneManager.accessPageCursorHighlightOff.style = "disabled";
+    } else {
+        sceneManager.accessPageCursorHighlightOn.style = "disabled";
+        sceneManager.accessPageCursorHighlightOff.style = "selected";
+    }
+
+    if (colorBlindMode) {
+        sceneManager.accessPageColorBlindModeOn.style = "selected";
+        sceneManager.accessPageColorBlindModeOff.style = "disabled";
+    } else {
+        sceneManager.accessPageColorBlindModeOn.style = "disabled";
+        sceneManager.accessPageColorBlindModeOff.style = "selected";
+    }
 }
 
 function loadLanguage(which) {
@@ -816,14 +848,6 @@ function loadLanguage(which) {
         case 3: CURRENT_LANGUAGE = LANGUAGE.italian; break;
         case 4: CURRENT_LANGUAGE = LANGUAGE.chinese; break;
         case 5: CURRENT_LANGUAGE = LANGUAGE.japanese; break;
-    }
-
-    if (sceneManager.cursorHightlight) {
-        sceneManager.accessPageCursorHighlightOn.style = "selected";
-        sceneManager.accessPageCursorHighlightOff.style = "disabled";
-    } else {
-        sceneManager.accessPageCursorHighlightOn.style = "disabled";
-        sceneManager.accessPageCursorHighlightOff.style = "selected";
     }
 
     sceneManager.updateAllText();

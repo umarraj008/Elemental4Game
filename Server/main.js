@@ -350,50 +350,53 @@ io.sockets.on("connection", function(socket) {
                 if(result.length >= 1) {
                     socket.emit("register-failed", "Account With The Same Email Already Exists");
                     return;
+                } else {
+                    db.query("SELECT * FROM users WHERE gamertag='"+data.gamerTag+"'",function(error, result) {
+                        if (!error) {
+                            if(result.length >= 1) {
+                                socket.emit("register-failed", "Account With The Same Gamertag Already Exists");
+                                return;
+                            } else {
+                                db.query("INSERT INTO users(firstName, lastName, dob, email, password, gamertag, gamesWon, gamesLost, xpLevel, perksUnlocked, nextLevel, skillLevel) VALUES('"+data.firstName+"','"+data.lastName+"','"+data.DOB+"', '"+data.email+"', '"+data.password+"', '"+data.gamerTag+"', '0','0','0','0,0,0,0','1000','0')",function(error, result) {
+                                    if (error) {
+                                        socket.emit("register-failed", "Register Failed Error Code: 3");
+                                        return;
+                                    } else {
+                                        db.query("SELECT * FROM users WHERE email='"+data.email+"'",function(error, result) {
+                                            if (!error) {
+                                                if(result.length == 1) {
+                                                    let data = {
+                                                        firstName: result[0].firstName,
+                                                        lastName: result[0].lastName,
+                                                        DOB: result[0].dob,
+                                                        email: result[0].email,
+                                                        gamerTag: result[0].gamertag,
+                                                        gamesWon: result[0].gamesWon,
+                                                        gamesLost: result[0].gamesLost,
+                                                        xpLevel: result[0].xpLevel,
+                                                        perksUnlocked: result[0].perksUnlocked,
+                                                        nextLevel: result[0].nextLevel,
+                                                        skillLevel: result[0].skillLevel,
+                                                    }
+                                                    socket.emit("register-success", data);
+                                                    return;
+                                                } 
+                                            } else {
+                                                socket.emit("register-failed", "Register Failed Error Code: 4");
+                                                return;
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        } else {
+                            socket.emit("register-failed", "Register Failed Error Code: 2");
+                            return;
+                        }
+                    });
                 }
             } else {
-                socket.emit("register-failed", "Register Failed");
-                return;
-            }
-        });
-        db.query("SELECT * FROM users WHERE gamertag='"+data.gamerTag+"'",function(error, result) {
-            if (!error) {
-                if(result.length >= 1) {
-                    socket.emit("register-failed", "Account With The Same Gamertag Already Exists");
-                    return;
-                }
-            } else {
-                socket.emit("register-failed", "Register Failed");
-                return;
-            }
-        });
-        db.query("INSERT INTO users(firstName, lastName, dob, email, password, gamertag, gamesWon, gamesLost, xpLevel, perksUnlocked, nextLevel, skillLevel) VALUES('"+data.firstName+"','"+data.lastName+"','"+data.DOB+"', '"+data.email+"', '"+data.password+"', '"+data.gamerTag+"', '0','0','0','0,0,0,0','1000','0')",function(error, result) {
-            if (error) {
-                socket.emit("register-failed", "Register Failed");
-                return;
-            }
-        });
-        db.query("SELECT * FROM users WHERE email='"+data.email+"'",function(error, result) {
-            if (!error) {
-                if(result.length == 1) {
-                    let data = {
-                        firstName: result[0].firstName,
-                        lastName: result[0].lastName,
-                        DOB: result[0].dob,
-                        email: result[0].email,
-                        gamerTag: result[0].gamertag,
-                        gamesWon: result[0].gamesWon,
-                        gamesLost: result[0].gamesLost,
-                        xpLevel: result[0].xpLevel,
-                        perksUnlocked: result[0].perksUnlocked,
-                        nextLevel: result[0].nextLevel,
-                        skillLevel: result[0].skillLevel,
-                    }
-                    socket.emit("register-success", data);
-                    return;
-                } 
-            } else {
-                socket.emit("register-failed", "Register Failed");
+                socket.emit("register-failed", "Register Failed Error Code: 1");
                 return;
             }
         });
@@ -477,6 +480,8 @@ io.sockets.on("connection", function(socket) {
     });
 
     socket.on("request-leaderboard", function() {
+        let data = {l1: [], l2: [], l3: []};
+
         db.query("SELECT * FROM users ORDER BY gamesWon ASC", function(error, results) {
             if (error) {
                 socket.emit("recieve-leaderboard", {error: true, errorMessage: 1});
@@ -491,7 +496,7 @@ io.sockets.on("connection", function(socket) {
                     let rawLeaderboard1 = [];
                     results.forEach(element => {rawLeaderboard1.unshift(element)});
 
-                    let rawLeaderboard2 = results.sort((b,a) => {return a.skillLevel - b.skillLevel;}); //////THIS IS BROKEN
+                    //let rawLeaderboard2 = results.sort((b,a) => {return a.skillLevel - b.skillLevel;}); //////THIS IS BROKEN
                     let rawLeaderboard3 = results.sort((b,a) => {return (a.nextLevel-1000 + a.xpLevel) - (b.nextLevel-1000 + b.xpLevel);}); 
                     
                     let leaderboard1 = [];
@@ -503,20 +508,44 @@ io.sockets.on("connection", function(socket) {
                     
                     for (i = 0; i < 10; i++) {
                         leaderboard1[i] = {gamertag: rawLeaderboard1[i].gamertag, data: rawLeaderboard1[i].gamesWon};
-                        leaderboard2[i] = {gamertag: rawLeaderboard2[i].gamertag, data: rawLeaderboard2[i].skillLevel + "sr"};
+                        //leaderboard2[i] = {gamertag: rawLeaderboard2[i].gamertag, data: rawLeaderboard2[i].skillLevel + "sr"};
                         leaderboard3[i] = {gamertag: rawLeaderboard3[i].gamertag, data: (rawLeaderboard3[i].nextLevel-1000 + rawLeaderboard3[i].xpLevel) + "xp"};
                     }
                     // console.table(leaderboard1);
                     // console.log("//////////////////////////////");
                     
-                    socket.emit("recieve-leaderboard", {error: false, leaderboard1: leaderboard1, leaderboard2: leaderboard2, leaderboard3: leaderboard3});
-                    return;
+                    data.l1 = leaderboard1;
+                    data.l3 = leaderboard3;
+
+                    db.query("SELECT * FROM users ORDER BY skillLevel ASC", function(error, results) {
+                        if (error) {
+                            socket.emit("recieve-leaderboard", {error: true, errorMessage: 1});
+                            return;
+                        } else {
+                            if (results.length > 0) {
+                                let rawLeaderboard2 = [];
+                                results.forEach(element => {rawLeaderboard2.unshift(element)});
+                                let leaderboard2 = [];
+                                for (i = 0; i < 10; i++) {
+                                    leaderboard2[i] = {gamertag: rawLeaderboard2[i].gamertag, data: rawLeaderboard2[i].skillLevel + "sr"};
+                                }
+                                data.l2 = leaderboard2;
+                                socket.emit("recieve-leaderboard", {error: false, leaderboard1: data.l1, leaderboard2: data.l2, leaderboard3: data.l3});
+                                return;
+                            } else {
+                                socket.emit("recieve-leaderboard", {error: true, errorMessage: 1});
+                                return;
+                            }
+                        }
+                    });
+
                 } else {
                     socket.emit("recieve-leaderboard", {error: true, errorMessage: 1});
                     return;
                 }
             }
         });
+
     });
 
     socket.on("use-perk", function(data) {
@@ -526,11 +555,11 @@ io.sockets.on("connection", function(socket) {
     socket.on("request-profile", function(data) {
         db.query("SELECT * FROM users WHERE gamertag='"+data+"'", function(error, results) {
             if (error) {
-                socket.emit("recieve-profile", {error: true, errorMessage: 2});
+                socket.emit("recieve-profile", {error: true});
                 return;
             } else {
                 if (results.length <= 0) {
-                    socket.emit("recieve-profile", {error: true, errorMessage: 3});
+                    socket.emit("recieve-profile", {error: true});
                     return;
                 } else {
                     socket.emit("recieve-profile", {error: false, player: results[0]});

@@ -24,59 +24,89 @@ if (l != null && l != undefined) {
 }
 
 var sceneManager = new SceneManager(-2);
-
+var volumeSetting = 0.4;
 let cursorSetting = sessionStorage.getItem("cursorSetting");
 if (cursorSetting != null && cursorSetting != undefined) {
-    sceneManager.cursorHightlight = cursorSetting;
+    if (cursorSetting == "true") {
+        sceneManager.cursorHightlight = true;
+    } else {
+        sceneManager.cursorHightlight = false;
+    }
 } else {
     sceneManager.cursorHightlight = false;
 }
 
-const loader = new Loader(42,0);//DONT FORGET TO CHANGE THE TOTAL WHEN ADDING MORE IMAGES
-loader.audioLoadingFinished = true; //REMOVE WHEN AUDIO IS ADDED
 
-const airBackground =        loader.loadImage("resources/images/AirMapFull.png");
-const earthBackground =      loader.loadImage("resources/images/EarthMapFull.png");
-const fireBackground =       loader.loadImage("resources/images/FireMapFull.png");
-const waterBackground =      loader.loadImage("resources/images/WaterMapFull.png");
-const wizards =              loader.loadImage("resources/images/wizards.png");
-const platform =             loader.loadImage("resources/images/platform1.png");
-var fireSpriteSheet =        loader.loadImage("resources/images/fireSpriteSheet.png");
-var waterSpriteSheet =       loader.loadImage("resources/images/waterSpriteSheet.png");
-var earthSpriteSheet =       loader.loadImage("resources/images/earthSpriteSheet.png");
-var airSpriteSheet =         loader.loadImage("resources/images/airSpriteSheet.png");
-const fireCharacter =        loader.loadImage("resources/images/fireCharacter.png");
-const waterCharacter =       loader.loadImage("resources/images/waterCharacter.png");
-const earthCharacter =       loader.loadImage("resources/images/earthCharacter.png");
-const airCharacter =         loader.loadImage("resources/images/airCharacter.png");
-const earthMapCloud1 =       loader.loadImage("resources/images/EarthMap/EarthMap_Cloud1.png");
-const earthMapCloud2 =       loader.loadImage("resources/images/EarthMap/EarthMap_Cloud2.png");
-const earthMapHill1 =        loader.loadImage("resources/images/EarthMap/EarthMap_Hill1.png");
-const earthMapHill2 =        loader.loadImage("resources/images/EarthMap/EarthMap_Hill2.png");
-const earthMapHill3 =        loader.loadImage("resources/images/EarthMap/EarthMap_Hill3.png");
-const fireMapCloudSingle =   loader.loadImage("resources/images/FireMap/FireMap_Cloud_Single.png");
-const fireMapCloud1 =        loader.loadImage("resources/images/FireMap/FireMap_Cloud1.png");
-const fireMapCloud2 =        loader.loadImage("resources/images/FireMap/FireMap_Cloud2.png");
-const fireMapCloud3 =        loader.loadImage("resources/images/FireMap/FireMap_Cloud3.png");
-const fireMapCloud4 =        loader.loadImage("resources/images/FireMap/FireMap_Cloud4.png");
-const fireMapVolcanoLava =   loader.loadImage("resources/images/FireMap/FireMap_Volcano_Lava.png");
-const fireMapVolcano =       loader.loadImage("resources/images/FireMap/FireMap_Volcano.png");
-const waterMapCloudSingle =  loader.loadImage("resources/images/WaterMap/WaterMap_Cloud_Single.png");
-const waterMapCloud1 =       loader.loadImage("resources/images/WaterMap/WaterMap_Cloud1.png");
-const waterMapCloud2 =       loader.loadImage("resources/images/WaterMap/WaterMap_Cloud2.png");
-const waterMapCloud3 =       loader.loadImage("resources/images/WaterMap/WaterMap_Cloud3.png");
-const waterMapCloud4 =       loader.loadImage("resources/images/WaterMap/WaterMap_Cloud4.png");
-const waterMapMountains =    loader.loadImage("resources/images/WaterMap/WaterMap_Mountains.png");
-const titleImage =           loader.loadImage("resources/images/elemental4LTitle.png");
-const buttonSpriteSheet =    loader.loadImage("resources/images/buttonSpriteSheet.png");
-const rocks =                loader.loadImage("resources/images/rocks.png");
-const panelSpriteSheet =     loader.loadImage("resources/images/panelSpriteSheet.png");
-const waterMapBlur =         loader.loadImage("resources/images/WaterMapFullBlur.png");
-const fireMapBlur =          loader.loadImage("resources/images/FireMapFullBlur.png");
-const earthMapBlur =         loader.loadImage("resources/images/EarthMapFullBlur.png");
-const airMapBlur =           loader.loadImage("resources/images/AirMapFullBlur.png");
-const allCharacters =        loader.loadImage("resources/images/AllCharacters.png");
-const icons =                loader.loadImage("resources/images/icons.png");
+var colorBlindMode = false;
+let colorBlindModeStorage = sessionStorage.getItem("colorBlindMode");
+console.log(colorBlindModeStorage);
+if (colorBlindModeStorage != null && colorBlindModeStorage != undefined) {
+    if (colorBlindModeStorage == "true") {
+        colorBlindMode = true;
+    } else {
+        colorBlindMode = false;
+    }
+} else {
+    colorBlindMode = false;
+}
+
+const loader = new Loader(45,8);//DONT FORGET TO CHANGE THE TOTAL WHEN ADDING MORE IMAGES
+// loader.audioLoadingFinished = true; //REMOVE WHEN AUDIO IS ADDED
+
+const airBackground =           loader.loadImage("resources/images/AirMapFull.png");
+const earthBackground =         loader.loadImage("resources/images/EarthMapFull.png");
+const fireBackground =          loader.loadImage("resources/images/FireMapFull.png");
+const waterBackground =         loader.loadImage("resources/images/WaterMapFull.png");
+const wizards =                 loader.loadImage("resources/images/wizards.png");
+const platform =                loader.loadImage("resources/images/platform1.png");
+var fireSpriteSheet =           loader.loadImage("resources/images/fireSpriteSheet.png");
+var waterSpriteSheet =          loader.loadImage("resources/images/waterSpriteSheet.png");
+var earthSpriteSheet =          loader.loadImage("resources/images/earthSpriteSheet.png");
+var airSpriteSheet =            loader.loadImage("resources/images/airSpriteSheet.png");
+const fireCharacter =           loader.loadImage("resources/images/fireCharacter.png");
+const waterCharacter =          loader.loadImage("resources/images/waterCharacter.png");
+const earthCharacter =          loader.loadImage("resources/images/earthCharacter.png");
+const airCharacter =            loader.loadImage("resources/images/airCharacter.png");
+const earthMapCloud1 =          loader.loadImage("resources/images/EarthMap/EarthMap_Cloud1.png");
+const earthMapCloud2 =          loader.loadImage("resources/images/EarthMap/EarthMap_Cloud2.png");
+const earthMapHill1 =           loader.loadImage("resources/images/EarthMap/EarthMap_Hill1.png");
+const earthMapHill2 =           loader.loadImage("resources/images/EarthMap/EarthMap_Hill2.png");
+const earthMapHill3 =           loader.loadImage("resources/images/EarthMap/EarthMap_Hill3.png");
+const fireMapCloudSingle =      loader.loadImage("resources/images/FireMap/FireMap_Cloud_Single.png");
+const fireMapCloud1 =           loader.loadImage("resources/images/FireMap/FireMap_Cloud1.png");
+const fireMapCloud2 =           loader.loadImage("resources/images/FireMap/FireMap_Cloud2.png");
+const fireMapCloud3 =           loader.loadImage("resources/images/FireMap/FireMap_Cloud3.png");
+const fireMapCloud4 =           loader.loadImage("resources/images/FireMap/FireMap_Cloud4.png");
+const fireMapVolcanoLava =      loader.loadImage("resources/images/FireMap/FireMap_Volcano_Lava.png");
+const fireMapVolcano =          loader.loadImage("resources/images/FireMap/FireMap_Volcano.png");
+const waterMapCloudSingle =     loader.loadImage("resources/images/WaterMap/WaterMap_Cloud_Single.png");
+const waterMapCloud1 =          loader.loadImage("resources/images/WaterMap/WaterMap_Cloud1.png");
+const waterMapCloud2 =          loader.loadImage("resources/images/WaterMap/WaterMap_Cloud2.png");
+const waterMapCloud3 =          loader.loadImage("resources/images/WaterMap/WaterMap_Cloud3.png");
+const waterMapCloud4 =          loader.loadImage("resources/images/WaterMap/WaterMap_Cloud4.png");
+const waterMapMountains =       loader.loadImage("resources/images/WaterMap/WaterMap_Mountains.png");
+const titleImage =              loader.loadImage("resources/images/elemental4LTitle.png");
+const buttonSpriteSheet =       loader.loadImage("resources/images/buttonSpriteSheet.png");
+const rocks =                   loader.loadImage("resources/images/rocks.png");
+const panelSpriteSheet =        loader.loadImage("resources/images/panelSpriteSheet.png");
+const waterMapBlur =            loader.loadImage("resources/images/WaterMapFullBlur.png");
+const fireMapBlur =             loader.loadImage("resources/images/FireMapFullBlur.png");
+const earthMapBlur =            loader.loadImage("resources/images/EarthMapFullBlur.png");
+const airMapBlur =              loader.loadImage("resources/images/AirMapFullBlur.png");
+const allCharacters =           loader.loadImage("resources/images/AllCharacters.png");
+const icons =                   loader.loadImage("resources/images/icons.png");
+const volumeIcon0 =             loader.loadImage("resources/images/speakerIcon0.png");
+const volumeIcon1 =             loader.loadImage("resources/images/speakerIcon1.png");
+const volumeIcon2 =             loader.loadImage("resources/images/speakerIcon2.png");
+
+const soundtrack =              loader.loadAudio("resources/audio/soundtrack.mp3");
+const activatePerkSoundEffect = loader.loadAudio("resources/audio/activatePerk.wav");
+const buttonAcceptSoundEffect = loader.loadAudio("resources/audio/buttonAccept.wav");
+const buttonBackSoundEffect =   loader.loadAudio("resources/audio/buttonBack.wav");
+const hitSoundEffect =          loader.loadAudio("resources/audio/hit.wav");
+const loseSoundEffect =         loader.loadAudio("resources/audio/lose.wav");
+const winSoundEffect =          loader.loadAudio("resources/audio/win.wav");
+const gameMusic =               loader.loadAudio("resources/audio/gameMusic.mp3");
 
 var dt = 0;
 var mouseX, mouseY;
@@ -122,6 +152,18 @@ function setup() {
     if (contrast         != null && contrast         != undefined) SETTINGS.contrast =         contrast; 
     if (colorBlindness   != null && colorBlindness   != undefined) SETTINGS.colorBlindness =   colorBlindness; 
     if (language         != null && language         != undefined) SETTINGS.language =         language; 
+
+    if (SETTINGS.windParticles == "true") SETTINGS.windParticles = true;
+    if (SETTINGS.debrisParticles == "true") SETTINGS.debrisParticles = true;
+    if (SETTINGS.movingBackground == "true") SETTINGS.movingBackground = true;
+    if (SETTINGS.textIndicators == "true") SETTINGS.textIndicators = true;
+    if (SETTINGS.fullscreen == "true") SETTINGS.fullscreen = true;
+
+    if (SETTINGS.windParticles == "false") SETTINGS.windParticles = false;
+    if (SETTINGS.debrisParticles == "false") SETTINGS.debrisParticles = false;
+    if (SETTINGS.movingBackground == "false") SETTINGS.movingBackground = false;
+    if (SETTINGS.textIndicators == "false") SETTINGS.textIndicators = false;
+    if (SETTINGS.fullscreen == "false") SETTINGS.fullscreen = false;
     // if (fullscreen       != null && fullscreen       != undefined) SETTINGS.fullscreen =       fullscreen; 
 
     ctx.imageSmoothingEnabled = false;
@@ -207,6 +249,58 @@ function loginButtonPressed() {
     let email = document.getElementById("email").value;
     let password = document.getElementById("password").value;
     login(email, password);
+}
+
+function playMusic() {
+    soundtrack.currentTime = 0;
+    soundtrack.loop = true;
+    soundtrack.muted = false;
+    soundtrack.volume = 0;
+    soundtrack.play();
+
+    let fade1 = setInterval(function() {
+        if ((soundtrack.currentTime <= 2) && (soundtrack.volume < volumeSetting)) {
+            soundtrack.volume += 0.01;
+            if (soundtrack.volume >= volumeSetting) {soundtrack.volume = volumeSetting; clearInterval(fade1);}
+        }
+    }, 10);
+}
+
+function stopMusic() {
+    let fade2 = setInterval(function() {
+        if (soundtrack.volume > 0.0) {
+            let volume = soundtrack.volume;
+            volume -= 0.01;
+            if (volume <= 0.0) {volume = 0; soundtrack.pause(); clearInterval(fade2);}
+            soundtrack.volume = volume;
+        }
+    }, 10);
+}
+
+function startBattleMusic() {
+    gameMusic.currentTime = 0;
+    gameMusic.loop = true;
+    gameMusic.muted = false;
+    gameMusic.volume = 0;
+    gameMusic.play();
+
+    let fade3 = setInterval(function() {
+        if ((gameMusic.currentTime <= 2) && (gameMusic.volume < volumeSetting)) {
+            gameMusic.volume += 0.01;
+            if (gameMusic.volume >= volumeSetting) {gameMusic.volume = volumeSetting; clearInterval(fade3);}
+        }
+    }, 10);
+}
+
+function stopBattleMusic() {
+    let fade4 = setInterval(function() {
+        if (gameMusic.volume > 0.0) {
+            let volume = gameMusic.volume;
+            volume -= 0.01;
+            if (volume <= 0.0) {volume = 0; clearInterval(fade4);}
+            gameMusic.volume = volume;
+        }
+    }, 10);
 }
 
 setup();
