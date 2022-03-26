@@ -1,5 +1,5 @@
 {
-  "name": "elemental4game",
+  "name": "@umarraj008/elemental4game",
   "version": "1.0.0",
   "description": "Web Game",
   "main": "Server/main.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/umarraj008/Elemental4Game.git"
+    "url": "git://github.com/umarraj008/Elemental4Game.git"
   },
   "keywords": [
     "Web",
