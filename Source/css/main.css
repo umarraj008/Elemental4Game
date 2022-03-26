@@ -1,0 +1,163 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: pixel;
+}
+
+@font-face {
+    font-family: pixel;
+    src: url("../resources/fonts/pixel-font-7.ttf");
+}
+
+canvas {
+    position: absolute;
+    overflow: hidden;
+    height: 100%;
+    margin-left: 0%;
+    margin-top: 0px;
+}
+
+body {
+    background-color: black;
+}
+
+h1 {
+    font-size: 50px;
+    color: white;
+    text-shadow: 3px 3px black;
+}
+
+#registerPage {
+
+    height: 100vh;
+    overflow: hidden;
+
+    /* background-image: url("resources/images/RegisterLoginUI/WaterMapFullBlur.png");
+    width: 200px; */
+
+}
+
+#loginContainer {
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    z-index: 10;
+}
+
+#innerContainer {
+    margin-top: 100px;
+    display: block;
+    width: 300px;
+    height: 220px;
+    justify-content: center;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    border: solid 2px black;
+    padding: 10px;
+    color: white;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+#innerContainer input,
+p {
+    display: block;
+    width: 100%;
+    float: left;
+    height: 30px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+#textChatContainer{
+    width: 30%;
+    display: none;
+    height: 100%;
+    position: absolute;
+    float: left;
+}
+
+#textChat{
+    width: 100%;
+    height: 20%;
+    resize: none;
+    outline: none;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#textChatInputContainer{
+    width: 100%;
+    height: 30px;
+    display: flex;   
+}
+
+#textChatInput{
+    width: 70%;
+    outline: none;
+    transform: translateY(-5px);
+}
+
+#textChatEnter{
+    width: 30%;
+    outline: none;
+    transform: translateY(-5px);
+}
+
+#textChatHide{
+    position: absolute;
+    width: 30px;
+    height: calc(20% + 31px);
+    margin-left: 30%;
+    display: none;
+}
+
+#textChatShow{
+    position: absolute;
+    width: 30px;
+    height: calc(20% + 31px);
+    display: none;
+}
+
+#notif{
+    position: absolute;
+    top: calc(20% + calc(31px-10px));
+    left: calc(30px-10px);
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 8px;
+    padding-right: 8px;
+    border-radius: 50%;
+    background: red;
+    color: white;
+    display: none;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#profileSearchBarContainer {
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    position: relative;
+    transition: 0.4s ease-in-out;
+}
+
+#profileSearchBar::placeholder {
+    text-align: center;
+    text-indent: 0;
+}
+
+#profileSearchBar {
+    z-index: 10;
+    margin-top: 40vh;
+    width: 200px;
+    height: 30px;
+    font-size: 18px;
+    border: black solid 2px;
+    outline: none;
+    text-indent: 10px;
+}
