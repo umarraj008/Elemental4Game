@@ -36,14 +36,19 @@ socket.on("register-success", function(data) {
     sessionStorage.setItem("perksUnlocked", data.perksUnlocked);
     
     // console.log("Successfull Account Creation");
-    location.href = "index.html";
+    if (window.confirm("Register Successful!")) {
+        location.href = "index.html";    
+    }
+    // if (!alert("")) location.href = ;
 });
 
 socket.on("register-failed", function(message) {
     console.log(message);
     sessionStorage.clear();
     alert(message);
-    location.href = "index.html";
+    //location.href = "index.html";
+    // location.reload();
+    registerPressed = false;
 });
 
 function register(firstName,lastName,email,DOB,gamerTag,password) {
@@ -61,9 +66,19 @@ function registerButtonPressed() {
     let password = document.getElementById("password").value;
     let confirmPassword = document.getElementById("confirmPassword").value;
     
+    if (firstName.length <= 0) { alert("Please Enter All Information!"); return;}
+    if (lastName.length <= 0) { alert("Please Enter All Information!"); return;}
+    if (email.length <= 0) { alert("Please Enter All Information!"); return;}
+    if (DOB.length <= 0) { alert("Please Enter All Information!"); return;}
+    if (gamerTag.length <= 0) { alert("Please Enter All Information!"); return;}
+    if (password.length <= 0) { alert("Please Enter All Information!"); return;}
+    if (confirmPassword.length <= 0) { alert("Please Enter All Information!"); return;}
+    if (!email.includes("@")) { alert("Email is incorrect!"); return; };
+    if (password != confirmPassword) { alert("Passwords Don't Match!"); return; };
+
     register(firstName,lastName,email,DOB,gamerTag,password);
     registerPressed = true;
-    location.href = "index.html";
+    // location.href = "index.html";
     // register();
     // if(password == confirmPassword) {
     //     register(firstName,lastName,email,DOB,gamerTag,password);

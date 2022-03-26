@@ -53,8 +53,8 @@
         </div>
     </div>
 
-    <form id="profileSearchBarContainer">
-        <input id="profileSearchBar" type="text" placeholder="Enter Gamertag">
+    <form id="profileSearchBarContainer" onkeydown="return event.key != 'Enter';">
+        <input id="profileSearchBar" type="text" placeholder="Enter Gamertag" onkeydown="if (event.key == 'Enter') searchForPlayer();">
     </form>
     <input type="button" id="textChatHide" value="<" onclick="hideTextChat()">
     <input type="button" id="textChatShow" value=">" onclick="showTextChat()">

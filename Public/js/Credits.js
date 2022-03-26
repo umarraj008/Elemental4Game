@@ -1,5 +1,10 @@
 class Credits {
     constructor() {
+        this.gradient = ctx.createLinearGradient(0, 0, c.width, 0);
+        this.gradient.addColorStop(0, "rgba(0,0,0,0.9)");
+        this.gradient.addColorStop(0.5, "rgba(0,0,0,0.9)");
+        this.gradient.addColorStop(1, "rgba(0,0,0,0)");
+
         this.text = [
             {string: "Cybercloud Studios", font: "80px pixel"},
             {string: "", font: "30px pixel"},
@@ -16,7 +21,8 @@ class Credits {
             {string: "Shadman Hoque", font: "30px pixel"},
             {string: "Umar Rajput", font: "30px pixel"},
             {string: "", font: "30px pixel"},
-            {string: "Programmers", font: "30px pixel"},
+            {string: "PROGRAMMERS", font: "30px pixel"},
+            {string: "", font: "30px pixel"},
             {string: "Satbir Lidder", font: "30px pixel"},
             {string: "Shadman Hoque", font: "30px pixel"},
             {string: "Umar Rajput", font: "30px pixel"},
@@ -78,15 +84,56 @@ class Credits {
             {string: "Licensed under Creative Commons Zero v1.0 Universal", font: "30px pixel"},
             {string: "https://creativecommons.org/publicdomain/zero/1.0/", font: "30px pixel"},
             {string: "Parts of this work was remixed.", font: "30px pixel"},
+            {string: "", font: "30px pixel"},
+            {string: "SOUNDTRACK", font: "30px pixel"},
+            {string: "", font: "30px pixel"},
+            {string: "Menu Music", font: "30px pixel"},
+            {string: "Music: [Tavern Loop One] by Alexander Nakarada (www.serpentsoundstudios.com)", font: "30px pixel"},
+            {string: "Licensed under Creative Commons BY Attribution 4.0 License", font: "30px pixel"},
+            {string: "http://creativecommons.org/licenses/by/4.0/", font: "30px pixel"},
+            {string: "", font: "30px pixel"},
+            {string: "Game Music", font: "30px pixel"},
+            {string: "Music: [Mjolnir] by Alexander Nakarada (www.serpentsoundstudios.com)", font: "30px pixel"},
+            {string: "Licensed under Creative Commons BY Attribution 4.0 License", font: "30px pixel"},
+            {string: "http://creativecommons.org/licenses/by/4.0/", font: "30px pixel"},
+            {string: "", font: "30px pixel"},
+            {string: "This game uses these sounds from freesound:", font: "30px pixel"},
+            {string: "", font: "30px pixel"},
+            {string: "Win", font: "30px pixel"},
+            {string: "Jingle_Achievement_00.wav by LittleRobotSoundFactory ( http://freesound.org/270404/ ) licensed under CCBYNC 3.0", font: "30px pixel"},
+            {string: "", font: "30px pixel"},
+            {string: "Lose", font: "30px pixel"},
+            {string: "Jingle_Lose_00.wav by LittleRobotSoundFactory ( http://freesound.org/s/270403/ ) licensed under CCBYNC 3.0", font: "30px pixel"},
+            {string: "", font: "30px pixel"},
+            {string: "SOUND EFFECTS", font: "30px pixel"},
+            {string: "", font: "30px pixel"},
+            {string: "Activate Perk", font: "30px pixel"},
+            {string: "Button Press", font: "30px pixel"},
+            {string: "Button Back", font: "30px pixel"},
+            {string: "Hit", font: "30px pixel"},
+            {string: "These sound effects were from (https://sfxr.me/) licensed under Public Domain Mark 1.0", font: "30px pixel"},
+            {string: "https://creativecommons.org/publicdomain/mark/1.0/", font: "30px pixel"},
+            {string: "", font: "30px pixel"},
+            {string: "Sound Icon", font: "30px pixel"},
+            {string: "Image: speaker-filled-audio-tool.com", font: "30px pixel"},
+            {string: "This cover has been designed using resources from Flaticon.com", font: "30px pixel"},
+            {string: "https://www.flaticon.com/free-icons/speaker", font: "30px pixel"},
+            {string: "", font: "30px pixel"},
+            {string: "Full Credits Can be Found On Github:", font: "30px pixel"},
+            {string: "https://github.com/umarraj008/Elemental4Game", font: "30px pixel"},
+            {string: "", font: "30px pixel"},
+            {string: "Thanks For Playing!", font: "30px pixel"},
         ];
 
         this.scrollOffset = 0;
     }
 
     draw() {
-        ctx.fillStyle = "black";
+        sceneManager.maps.drawTransition(false);
+        
+        ctx.fillStyle = this.gradient;
         ctx.fillRect(0,0,c.width,c.height);
-
+        ctx.textAlign = "left";
         let offY = 0;
         for (let i = 0; i < this.text.length; i++) {
             if (this.text[i].string <= 0) {
@@ -96,7 +143,7 @@ class Credits {
 
             ctx.fillStyle = "white";
             ctx.font = this.text[i].font;
-            ctx.fillText(this.text[i].string, c.width/2, c.height/2 + offY + this.scrollOffset);
+            ctx.fillText(this.text[i].string, 50, c.height/2 + offY + this.scrollOffset);
 
             offY += 30;
         }
@@ -104,7 +151,7 @@ class Credits {
         this.scrollOffset -= 0.07 * dt;
         sceneManager.creditBackButton.draw(dt, mouseX, mouseY);
 
-        if (this.scrollOffset <= -3300) {
+        if (this.scrollOffset <= -4400) {
             sceneManager.camera.transitionTo(2,0.005); 
         }
     }

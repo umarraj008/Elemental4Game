@@ -18,9 +18,8 @@ const LANGUAGE = {
             backButton: "Back",
             stopMatchmaking: "Stop Matchmaking",
             searchingForMatch: "Searching For Match",
-            gameOptionsButton: "Play",
-            matchmakingBackButton: "Back",
-            
+            howToPlayGuide: "How To Play",
+            gameOptionsTitle: "Game Mode",
         },
         leaderboard: {
             backButton: "Back",
@@ -98,7 +97,8 @@ const LANGUAGE = {
             language: "Language: ",
             accessPageCursorHighlightOn: "On",
             accessPageCursorHighlightOff: "Off",
-            cursorHighlight: "Cursor Highlight",
+            cursorHighlight: "Cursor Highlight:",
+            colorBlindMode: "Color Blind Mode:",
         },
         profile: {
             backButton: "Back",
@@ -113,6 +113,7 @@ const LANGUAGE = {
             profileSearchForPlayer: "Search for Player",
             profileSearchBackButton: "Back",
             playerProfileBackButton: "Back to Search",
+            errorMessage: "Failed to find Player (Check Spelling)",
         },
         game: {
             perkActivationButton: "Activate Perk",
@@ -161,7 +162,12 @@ const LANGUAGE = {
             "Failed to Get Leaderboard Data.",
             "Failed to Find Player 1.",
             "Failed to Find Player 2.",
-        ]
+        ],
+        button: {
+            clickable: "[Clickable]",
+            disabled: "[Disabled]",
+            selected: "[Selected]",
+        }
     },
     spanish: {
         title: {
@@ -182,6 +188,8 @@ const LANGUAGE = {
             backButton: 'Atrás',
             stopMatchmaking: 'Detener el emparejamiento',
             searchingForMatch: 'Buscando coincidencia',
+            howToPlayGuide: "Cómo jugar",
+            gameOptionsTitle: "Modo de juego",
         },
         leaderboard: {
             backButton: 'Atrás',
@@ -257,6 +265,8 @@ const LANGUAGE = {
             contrast: 'Contraste:',
             colorBlindness: 'Daltonismo:',
             language: 'Idioma:',
+            cursorHighlight: "Resaltado del cursor:",
+            colorBlindMode: "Modo daltónico:"
         },
         profile: {
             backButton: 'Atrás',
@@ -271,6 +281,7 @@ const LANGUAGE = {
             profileSearchForPlayer: "Buscar jugador",
             profileSearchBackButton: "Atrás",
             playerProfileBackButton: "Volver a la búsqueda",
+            errorMessage: "Error al encontrar jugador (verificar la ortografía)",
         },
         game: {
             perkActivationButton: 'Activar el beneficio',
@@ -320,6 +331,11 @@ const LANGUAGE = {
             "Error al encontrar jugador 1.",
             "Error al encontrar el jugador 2.",
         ],
+        button: {
+            clickable: "[Clickable]",
+            disabled: "[Discapacitado]",
+            selected: "[Seleccionado]",
+        }
     },
     french: {
         title: {
@@ -340,6 +356,8 @@ const LANGUAGE = {
             backButton: 'Arrière',
             stopMatchmaking: 'Arrêtez le matchmaking',
             searchingForMatch: 'Recherche de match',
+            howToPlayGuide: "Comment jouer",
+            gameOptionsTitle: "Mode de jeu",
         },
         leaderboard: {
             backButton: 'Arrière',
@@ -415,6 +433,8 @@ const LANGUAGE = {
             contrast: 'Contraste:',
             colorBlindness: 'Daltonisme:',
             language: 'Langue:',
+            cursorHighlight: "Curseur:",
+            colorBlindMode: "Mode store de couleur:"
         },
         profile: {
             backButton: 'Arrière',
@@ -429,6 +449,7 @@ const LANGUAGE = {
             profileSearchForPlayer: "Recherche de joueur",
             profileSearchBackButton: "Arrière",
             playerProfileBackButton: "Retour à la recherche",
+            errorMessage: "Impossible de trouver le joueur (vérifier l'orthographe)",
         },
         game: {
             perkActivationButton: 'Activer la perche',
@@ -478,6 +499,11 @@ const LANGUAGE = {
             "Impossible de trouver le joueur 1.",
             "Impossible de trouver le joueur 2.",
         ],
+        button: {
+            clickable: "[Cliquable]",
+            disabled: "[Désactivé]",
+            selected: "[Choisi]",
+        }
     },
     italian: {
         title: {
@@ -498,6 +524,8 @@ const LANGUAGE = {
             backButton: 'Di ritorno',
             stopMatchmaking: 'Smetti di matchmaking.',
             searchingForMatch: 'Ricerca di partita',
+            howToPlayGuide:"Come giocare",
+            gameOptionsTitle: "Modalità di gioco",
         },
         leaderboard: {
             backButton: 'Di ritorno',
@@ -573,6 +601,8 @@ const LANGUAGE = {
             contrast: 'Contrasto:',
             colorBlindness: 'Cecità dei colori:',
             language: 'Lingua:',
+            cursorHighlight:"Cursore Highlight:",
+            colorBlindMode: "Modalità Blind color:"
         },
         profile: {
             backButton: 'Di ritorno',
@@ -587,6 +617,7 @@ const LANGUAGE = {
             profileSearchForPlayer: "Cerca giocatore.",
             profileSearchBackButton: "Di ritorno",
             playerProfileBackButton: "Torna alla ricerca.",
+            errorMessage:"Impossibile trovare il giocatore (controllare l'ortografia)",
         },
         game: {
             perkActivationButton: 'Attiva il perk.',
@@ -636,6 +667,11 @@ const LANGUAGE = {
             "Impossibile trovare il giocatore 1.",
             "Impossibile trovare il giocatore 2.",
         ],
+        button: {
+            clickable: "[Cliccabile]",
+            disabled: "[Disabilitato]",
+            selected: "[Selezionato]",
+        }
     },
     chinese: {
         title: {
@@ -656,6 +692,8 @@ const LANGUAGE = {
             backButton: '后退',
             stopMatchmaking: '停止搭配',
             searchingForMatch: '寻找比赛',
+            howToPlayGuide: "怎么玩",
+            gameOptionsTitle: "游戏模式",
         },
         leaderboard: {
             backButton: '后退',
@@ -731,6 +769,8 @@ const LANGUAGE = {
             contrast: '对比：',
             colorBlindness: '色盲：',
             language: '语言：',
+            cursorHighlight: "光标亮点:",
+            colorBlindMode: "彩色盲模式:"
         },
         profile: {
             backButton: '后退',
@@ -745,6 +785,7 @@ const LANGUAGE = {
             profileSearchForPlayer: "搜索玩家",
             profileSearchBackButton: "后退",
             playerProfileBackButton: "回到搜索",
+            errorMessage: "找不到玩家（检查拼写）",
         },
         game: {
             perkActivationButton: '激活Perk.',
@@ -794,6 +835,11 @@ const LANGUAGE = {
             "找不到玩家1。",
             "找不到玩家2。",
         ],
+        button: {
+            clickable: "[可点击]",
+            disabled: "[禁用]",
+            selected: "[选择]",
+        }
     },
     japanese: {
         title: {
@@ -814,6 +860,8 @@ const LANGUAGE = {
             backButton: '戻る',
             stopMatchmaking: '断片を止める',
             searchingForMatch: '一致を探す',
+            howToPlayGuide: "遊び方",
+            gameOptionsTitle: "ゲームモード",
         },
         leaderboard: {
             backButton: '戻る',
@@ -889,6 +937,8 @@ const LANGUAGE = {
             contrast: '対比：',
             colorBlindness: '色覚異常：',
             language: '言語：',
+            cursorHighlight: "カーソルハイライト:",
+            colorBlindMode: "カラーブラインドモード:"
         },
         profile: {
             backButton: '戻る',
@@ -903,6 +953,7 @@ const LANGUAGE = {
             profileSearchForPlayer: "を検索します",
             profileSearchBackButton: "戻る",
             playerProfileBackButton: "検索に戻る",
+            errorMessage: "プレイヤーの検索に失敗しました（スペルチェック）",
         },
         game: {
             perkActivationButton: 'ペッキを有効にします',
@@ -952,5 +1003,10 @@ const LANGUAGE = {
             "プレーヤー1の検索に失敗しました1。",
             "プレイヤー2の検索に失敗しました。",
         ],
+        button: {
+            clickable: "[クリック可能です]",
+            disabled: "[無効]",
+            selected: "[選択ボタン]",
+        }
     },
 }
