@@ -357,7 +357,7 @@ io.sockets.on("connection", function(socket) {
                                 socket.emit("register-failed", "Account With The Same Gamertag Already Exists");
                                 return;
                             } else {
-                                db.query("INSERT INTO users(firstName, lastName, dob, email, password, gamertag, gamesWon, gamesLost, xpLevel, perksUnlocked, nextLevel, skillLevel) VALUES('"+data.firstName+"','"+data.lastName+"','"+data.DOB+"', '"+data.email+"', '"+data.password+"', '"+data.gamerTag+"', '0','0','0','0,0,0,0','1000','0')",function(error, result) {
+                                db.query("INSERT INTO users(firstName, lastName, dob, email, password, gamertag, gamesWon, gamesLost, xpLevel, perksUnlocked, nextLevel, skillLevel) VALUES('"+data.firstName+"','"+data.lastName+"','"+data.DOB+"', '"+data.email+"', '"+data.password+"', '"+data.gamerTag+"', '0','0','0','0,0,0,0,0,0,0,0,0','1000','0')",function(error, result) {
                                     if (error) {
                                         socket.emit("register-failed", "Register Failed Error Code: 3");
                                         return;
