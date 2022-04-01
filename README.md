@@ -35,6 +35,15 @@ This is an online action-fantasy turn based game!
 - Amazing Graphics
 - Epic Soundtrack
 
+## Changing languages
+As the language buttons in the accesibility opttions are buggy, you might want to change the current language easier. You can do this by pressing the number keys, as each key represents a language.
+- 1 = english
+- 2 = spanish
+- 3 = french
+- 4 = italian
+- 5 = chinese
+- 6 = japanese
+
 ## FAQ
 #### Do you need an account to play the game?
 Yes, the game requires you to create an account in order for you to play the game.
